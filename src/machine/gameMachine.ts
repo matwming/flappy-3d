@@ -1,6 +1,6 @@
 // CRITICAL: Zero Three.js imports — machine context holds only primitive values.
 
-import { setup, assign, createActor } from 'xstate'
+import { setup, assign } from 'xstate'
 import { StorageManager } from '../storage/StorageManager'
 
 export type GameContext = {
@@ -43,15 +43,14 @@ export const gameMachine = setup({
   states: {
     title: {
       on: {
-        START: { target: 'playing' },
+        START: {
+          target: 'playing',
+          actions: assign({ score: 0, runDuration: 0 }),
+        },
       },
     },
 
     playing: {
-      entry: assign({
-        score: 0,
-        runDuration: 0,
-      }),
       on: {
         HIT: { target: 'dying' },
         SCORE: {
@@ -59,11 +58,16 @@ export const gameMachine = setup({
             score: ({ context }) => context.score + 1,
           }),
         },
-        // PAUSE / RESUME stubbed for Phase 3 — no-op transitions
-        PAUSE: {},
-        RESUME: {},
+        PAUSE: { target: 'paused' },
         // FLAP handled externally (PhysicsSystem reads state)
         FLAP: {},
+      },
+    },
+
+    paused: {
+      on: {
+        RESUME: { target: 'playing' },
+        START: { target: 'title' },
       },
     },
 
@@ -98,30 +102,12 @@ export const gameMachine = setup({
         },
       ],
       on: {
-        RESTART: { target: 'playing' },
+        RESTART: {
+          target: 'playing',
+          actions: assign({ score: 0, runDuration: 0 }),
+        },
       },
     },
   },
 })
 
-/**
- * Schedule an auto-RESTART after 1500ms for the Phase 2 demo loop.
- * Call this from main.ts after actor.start().
- * Phase 3 replaces this with the game-over screen DOM.
- *
- * Pitfall 8 guard: checks actor status before sending to avoid
- * sending events to a stopped actor.
- */
-export function scheduleAutoRestart(
-  actor: ReturnType<typeof createActor<typeof gameMachine>>,
-): void {
-  actor.subscribe((snapshot) => {
-    if (snapshot.value === 'gameOver') {
-      setTimeout(() => {
-        if (actor.getSnapshot().status !== 'stopped') {
-          actor.send({ type: 'RESTART' })
-        }
-      }, 1500)
-    }
-  })
-}

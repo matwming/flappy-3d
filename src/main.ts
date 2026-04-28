@@ -15,7 +15,7 @@ import { ScoreSystem } from './systems/ScoreSystem'
 import { ObjectPool } from './pools/ObjectPool'
 import { ObstaclePair } from './entities/ObstaclePair'
 import { Background } from './entities/Background'
-import { gameMachine, scheduleAutoRestart } from './machine/gameMachine'
+import { gameMachine } from './machine/gameMachine'
 import { StorageManager } from './storage/StorageManager'
 import { AudioManager } from './audio/AudioManager'
 import { UIBridge } from './ui/UIBridge'
@@ -116,8 +116,6 @@ if (!WebGL.isWebGL2Available()) {
     }
     lastScore = snapshot.context.score
   })
-
-  scheduleAutoRestart(actor)
 
   loop.start()
 }
