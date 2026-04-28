@@ -99,8 +99,8 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Scaffold + Core Loop | 4/4 | Complete | 2026-04-28 |
-| 2. Game Machine + Obstacles + Rendering | 0/3 | Not started | - |
-| 3. UI + Audio + Polish | 0/? | Not started | - |
+| 2. Game Machine + Obstacles + Rendering | 3/3 | Complete | 2026-04-29 |
+| 3. UI + Audio + Polish | 3/4 | In progress | - |
 | 4. PWA + Accessibility + Bundle Audit | 0/? | Not started | - |
 | 5. Hardening + Ship | 0/? | Not started | - |
 

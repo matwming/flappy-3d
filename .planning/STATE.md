@@ -8,8 +8,8 @@ progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 11
-  completed_plans: 5
-  percent: 45
+  completed_plans: 6
+  percent: 55
 ---
 
 # Project State — Flappy 3D
@@ -29,7 +29,7 @@ progress:
 ## Current Position
 
 Phase: 03 (ui-audio-polish) — EXECUTING
-Plan: 3 of 4
+Plan: 4 of 4
 | Field | Value |
 |-------|-------|
 | Phase | 3 |
@@ -44,7 +44,7 @@ Plan: 3 of 4
 ```
 Phase 1 [██████████] 100% ✓ (user-verified 2026-04-28)
 Phase 2 [██████████] 100% ✓ (user-verified 2026-04-29)
-Phase 3 [██▒▒▒▒▒▒▒▒]  20% (CONTEXT.md + 4 PLAN.md files committed; awaiting execute)
+Phase 3 [███████▒▒▒]  75% (03-01 audio ✓, 03-02 ui-infra ✓, 03-03 screens ✓, 03-04 juice pending)
 Phase 4 [          ] 0%
 Phase 5 [          ] 0%
 ```
@@ -69,6 +69,10 @@ Phase 5 [          ] 0%
 | Endless mode only (v1) | Focus on core loop polish |
 | Local-only leaderboard | Zero infra; localStorage sufficient for solo play |
 | Named Three.js imports only | Mandatory — `import * as THREE` = 128KB gzip penalty |
+| HUD uses .hud-screen (not .screen) | Avoids blocking canvas pointer events during play |
+| gameMachine paused state real (not stub) | PauseScreen requires actor.value==='paused' to activate |
+| Score reset on START/RESTART actions (not playing entry) | Allows resume-from-pause without resetting score |
+| scheduleAutoRestart removed | GameOverScreen tap → actor.send(RESTART) is the restart path |
 
 ### Pre-Phase Flags
 
@@ -89,18 +93,13 @@ Phase 5 [          ] 0%
 
 **What was done last (this session):**
 
-- Phase 2 fully shipped: all 3 plans executed inline; 6 atomic feat commits; user-verified ✓
-- Phase 3 discussed: `03-CONTEXT.md` committed with 36 decisions (D-01 through D-36). Audio source decision: **CC0 free libraries via WebFetch** (user-confirmed). Cadence: **plan-now-execute-fresh** (user-confirmed).
-- Phase 3 planned: 4 PLAN.md files committed (audio, ui-infra, screens, juice). 21 REQs distributed across the 4 plans.
+- Phase 3 Plan 03 (screens) executed: 5 screens + 4 shared components built; scheduleAutoRestart removed; real paused state added to gameMachine; UIBridge App fully wired.
+- 3 atomic feat commits: 66a0c38 (shared components), 5336a15 (5 screens), 18613a0 (UIBridge + main.ts + machine cleanup)
+- Build green at 166.10 KB gzip (under 250 KB budget)
 
-**What's next (resume in FRESH session — recommend `/clear` first):**
+**What's next:**
 
-```
-/clear
-/gsd-execute-phase 03 --auto --no-transition
-```
-
-This will execute Phase 3 plans in 4 sequential waves. Audio plan (03-01) will WebFetch CC0 samples from Pixabay (or fall back to placeholder synth markers). Each plan ends with atomic commit.
+Execute Plan 04 (03-04-juice): GSAP install, squash/shake/score-pop helpers, ParticleEmitter (ANIM-01..06 + A11Y-01 motion gate)
 
 **Phase 3 plan summary:**
 
@@ -134,6 +133,7 @@ This will execute Phase 3 plans in 4 sequential waves. Audio plan (03-01) will W
 ---
 | Phase 03 P01 | 218 | 2 tasks | 9 files |
 | Phase 03 P02 | 420 | 3 tasks | 9 files |
+| Phase 03 P03 | 1089 | 3 tasks | 13 files |
 
 ## Phase Log
 
