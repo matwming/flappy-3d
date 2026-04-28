@@ -12,15 +12,21 @@ export class GameLoop {
   private systems: UpdatableSystem[] = []
   private accumulator = 0
   private lastTime = 0
+  private renderFn: () => void
 
   constructor(renderer: WebGLRenderer, scene: Scene, camera: PerspectiveCamera) {
     this.renderer = renderer
     this.scene = scene
     this.camera = camera
+    this.renderFn = () => this.renderer.render(this.scene, this.camera)
   }
 
   add(system: UpdatableSystem): void {
     this.systems.push(system)
+  }
+
+  setRenderFn(fn: () => void): void {
+    this.renderFn = fn
   }
 
   start(): void {
@@ -47,6 +53,6 @@ export class GameLoop {
       this.accumulator -= FIXED_DT
     }
 
-    this.renderer.render(this.scene, this.camera)
+    this.renderFn()
   }
 }

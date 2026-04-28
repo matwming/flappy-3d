@@ -1,7 +1,9 @@
 import { createActor } from 'xstate'
-import { BoxGeometry, MeshStandardMaterial } from 'three'
+import { BoxGeometry } from 'three'
 import WebGL from 'three/addons/capabilities/WebGL.js'
 import { createRenderer } from './render/createRenderer'
+import { createComposer } from './render/createComposer'
+import { createToonGradient, createToonMaterial } from './render/toonMaterial'
 import { GameLoop } from './loop/GameLoop'
 import { InputManager } from './input/InputManager'
 import { Bird } from './entities/Bird'
@@ -12,6 +14,7 @@ import { ScrollSystem } from './systems/ScrollSystem'
 import { ScoreSystem } from './systems/ScoreSystem'
 import { ObjectPool } from './pools/ObjectPool'
 import { ObstaclePair } from './entities/ObstaclePair'
+import { Background } from './entities/Background'
 import { gameMachine, scheduleAutoRestart } from './machine/gameMachine'
 import { StorageManager } from './storage/StorageManager'
 import { PIPE_WIDTH, PIPE_DEPTH, PIPE_COLOR, POOL_SIZE } from './constants'
@@ -25,29 +28,34 @@ if (!WebGL.isWebGL2Available()) {
     'Sorry, this game needs WebGL 2. Please try a recent version of Chrome, Firefox, or Safari.'
   document.body.appendChild(msg)
 } else {
-  const storage = new StorageManager()
-  const bestScore = storage.getBestScore()
-  const actor = createActor(gameMachine, { input: { bestScore } })
-
   const { renderer, scene, camera } = createRenderer()
   const canvas = renderer.domElement
 
-  // Shared pipe geometry + material (placeholder — Plan 02-03 swaps to MeshToonMaterial)
-  const pipeGeometry = new BoxGeometry(PIPE_WIDTH, 6, PIPE_DEPTH)
-  const pipeMaterial = new MeshStandardMaterial({ color: PIPE_COLOR })
+  const storage = new StorageManager()
+  const actor = createActor(gameMachine, {
+    input: { bestScore: storage.getBestScore() },
+  })
 
-  // Object pool: pre-warmed at boot (D-22)
+  const gradient = createToonGradient()
+  const birdMaterial = createToonMaterial(gradient, 0xff7043)
+  const pipeMaterial = createToonMaterial(gradient, PIPE_COLOR)
+
+  const bird = new Bird(scene)
+  bird.mesh.material = birdMaterial
+
+  const pipeGeometry = new BoxGeometry(PIPE_WIDTH, 6, PIPE_DEPTH)
   const obstaclePool = new ObjectPool<ObstaclePair>(
     () => new ObstaclePair(pipeGeometry, pipeMaterial, scene),
     POOL_SIZE,
   )
 
-  const bird = new Bird(scene)
+  const background = new Background(scene)
+
   const loop = new GameLoop(renderer, scene, camera)
   const input = new InputManager(canvas)
   const physics = new PhysicsSystem(bird, actor)
+  const scrollSystem = new ScrollSystem(obstaclePool, actor, background)
   const spawner = new ObstacleSpawner(obstaclePool, actor)
-  const scrollSystem = new ScrollSystem(obstaclePool, actor)
   const scoreSystem = new ScoreSystem(obstaclePool, actor)
   const collision = new CollisionSystem(bird, obstaclePool, actor)
 
@@ -63,17 +71,28 @@ if (!WebGL.isWebGL2Available()) {
     }
   })
 
-  // System order per D-29: physics → scroll → spawner → score → collision
   loop.add(physics)
   loop.add(scrollSystem)
   loop.add(spawner)
   loop.add(scoreSystem)
   loop.add(collision)
 
+  const composerResult = createComposer(renderer, scene, camera)
+  if (composerResult !== null) {
+    loop.setRenderFn(composerResult.render)
+  }
+
   actor.start()
 
   actor.subscribe((snapshot) => {
-    console.log('[machine]', snapshot.value, snapshot.context.score)
+    console.log(
+      '[machine]',
+      snapshot.value,
+      'score:',
+      snapshot.context.score,
+      'best:',
+      snapshot.context.bestScore,
+    )
   })
 
   scheduleAutoRestart(actor)
