@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-04-28T22:15:00.000Z"
+last_updated: "2026-04-28T22:55:00.000Z"
 progress:
   total_phases: 5
   completed_phases: 1
-  total_plans: 4
-  completed_plans: 4
-  percent: 20
+  total_plans: 7
+  completed_plans: 5
+  percent: 28
 ---
 
 # Project State — Flappy 3D
@@ -22,7 +22,7 @@ progress:
 ## Project Reference
 
 **Core value:** The game must feel palpably more crafted than `guiguan/flappy-anna-3d` within 30 seconds of play — polished motion, real menus, real audio, 60fps on a mid-tier phone.
-**Current focus:** Phase 2 — Game Machine + Obstacles + Rendering (ready to discuss)
+**Current focus:** Phase 2 — Game Machine + Obstacles + Rendering (in progress; Plan 02-01 done; Plans 02-02 + 02-03 remaining)
 
 ---
 
@@ -32,15 +32,16 @@ progress:
 |-------|-------|
 | Phase | 2 |
 | Phase name | Game Machine + Obstacles + Rendering |
-| Plan | None (ready to discuss/plan) |
-| Status | Ready to discuss |
+| Plans complete | 02-01 (xstate machine + StorageManager + actor wiring) |
+| Plans remaining | 02-02 (ObjectPool + obstacles + systems mods), 02-03 (toon + composer + parallax bg + main.ts rewire) |
+| Status | Ready to execute remaining plans |
 | Phase goal | Full playable loop; XState machine; pooled obstacles; toon materials; difficulty ramp |
 
 **Progress bar:**
 
 ```
 Phase 1 [██████████] 100% ✓ (user-verified 2026-04-28)
-Phase 2 [          ] 0%
+Phase 2 [███       ] 33% (1/3 plans done — 02-01)
 Phase 3 [          ] 0%
 Phase 4 [          ] 0%
 Phase 5 [          ] 0%
@@ -86,18 +87,25 @@ Phase 5 [          ] 0%
 
 **What was done last:**
 
-- Phase 1 COMPLETE (user-verified). 4 atomic feat commits: 01-01 renderer hardening, 01-02 TS strict + visualizer, 01-03 GameLoop + InputManager, 01-04 Bird + Physics + Collision.
-- Bird falls, flaps via Space/click/tap, collides with test obstacle and floor/ceiling — all working in browser.
-- Build green; tsc strict clean; no `import * as THREE` anywhere.
+- Phase 2 discussed → 02-CONTEXT.md (32 decisions D-01 through D-32) committed
+- Phase 2 planned → 3 PLAN.md files (02-01, 02-02, 02-03) committed
+- Plan 02-01 EXECUTED: xstate@5.20.1 installed; `src/machine/gameMachine.ts` (flat 5-state, zero three imports); `src/storage/StorageManager.ts` (versioned localStorage); `src/main.ts` rewired to read bestScore → create actor → route flap based on state
+- 3 atomic feat commits for 02-01: a5c7ad6, bbcd80a, 3c5d6dc
+- tsc strict clean
 
-**What's next:**
+**What's next (resume in fresh session — recommend `/clear`):**
 
-- Run `/gsd-discuss-phase 2 --auto --chain` to start Phase 2 (XState game machine, obstacle pool, toon materials, difficulty ramp).
-- Phase 2 will replace the death stub (`console.warn` + `loop.stop()`) with `actor.send({ type: 'HIT' })`.
+- Plan 02-02: ObjectPool + ObstaclePair + Difficulty + ObstacleSpawner + ScrollSystem + ScoreSystem; modify PhysicsSystem (add actor + dying-rotation) + CollisionSystem (replace console.warn/loop.stop with actor.send HIT; switch from static obstacle to pool)
+- Plan 02-03: toon materials + EffectComposer (mobile-gated) + parallax bg (sky/mountains/trees) + GameLoop modification + full main.ts rewire to register all new systems and pre-warm pool
+
+**Resume commands:**
+
+- `/gsd-execute-phase 02 --auto --no-transition` (executes both remaining plans)
+- OR `cat .planning/phases/02-machine-obstacles-rendering/02-02-PLAN.md` then implement inline manually
 
 **Blockers:**
 
-- None
+- None functional. Recommendation is fresh `/clear` — current Phase 2 plans are large (28K + 35K tokens each); fresh context yields cleaner xstate + shader code.
 
 ---
 
@@ -117,10 +125,10 @@ Phase 5 [          ] 0%
 | Phase | Status | Completed | Notes |
 |-------|--------|-----------|-------|
 | 1 | ✓ Complete | 2026-04-28 | 4 plans, 4 commits, user-verified in browser |
-| 2 | Not started | - | Ready to discuss |
-| 3 | Not started | - | Blocked on Phase 2 (XState is load-bearing for all screens) |
-| 4 | Not started | - | Blocked on Phase 3 (SW must cache final feature set) |
-| 5 | Not started | - | Blocked on Phase 4 (needs deployed URL) |
+| 2 | In progress (1/3 plans) | - | Plan 02-01 done; 02-02 and 02-03 remaining; recommend `/clear` before resuming |
+| 3 | Not started | - | Blocked on Phase 2 |
+| 4 | Not started | - | Blocked on Phase 3 |
+| 5 | Not started | - | Blocked on Phase 4 |
 
 ---
 
