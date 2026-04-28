@@ -29,7 +29,12 @@
   3. `tsc --noEmit` exits 0 with `strict: true` and `noUncheckedIndexedAccess: true` in tsconfig; no `import * as THREE` anywhere in `src/`
   4. Canvas has `touch-action: none`; DPR is capped to `Math.min(devicePixelRatio, 2)`; shadow maps are disabled; sRGB color space is explicit
   5. Event listeners use `AbortController` so repeated bootstrap calls do not accumulate listeners; dt is clamped to ≤100ms
-**Plans**: TBD
+**Plans**: 4 plans
+Plans:
+- [ ] 01-01-renderer-scene-PLAN.md — Hardened WebGLRenderer factory, lighting, sky-blue scene, WebGL2 gate
+- [ ] 01-02-ts-hygiene-bundle-PLAN.md — strict tsconfig, noUncheckedIndexedAccess, rollup-plugin-visualizer
+- [ ] 01-03-game-loop-input-PLAN.md — GameLoop fixed-timestep accumulator, InputManager with AbortController
+- [ ] 01-04-bird-physics-collision-PLAN.md — Bird entity, PhysicsSystem, CollisionSystem, static test obstacle
 **UI hint**: yes
 
 ### Phase 2: Game Machine + Obstacles + Rendering
@@ -89,7 +94,7 @@
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Scaffold + Core Loop | 0/? | Not started | - |
+| 1. Scaffold + Core Loop | 0/4 | Not started | - |
 | 2. Game Machine + Obstacles + Rendering | 0/? | Not started | - |
 | 3. UI + Audio + Polish | 0/? | Not started | - |
 | 4. PWA + Accessibility + Bundle Audit | 0/? | Not started | - |
@@ -126,4 +131,4 @@
 
 ---
 
-*Last updated: 2026-04-28 after roadmap initialization*
+*Last updated: 2026-04-28 after Phase 1 planning*
