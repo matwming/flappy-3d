@@ -1,5 +1,7 @@
 import WebGL from 'three/addons/capabilities/WebGL.js'
 import { createRenderer } from './render/createRenderer'
+import { GameLoop } from './loop/GameLoop'
+import { InputManager } from './input/InputManager'
 import './style.css'
 
 if (!WebGL.isWebGL2Available()) {
@@ -11,8 +13,14 @@ if (!WebGL.isWebGL2Available()) {
   document.body.appendChild(msg)
 } else {
   const { renderer, scene, camera } = createRenderer()
+  const canvas = renderer.domElement
 
-  renderer.setAnimationLoop(() => {
-    renderer.render(scene, camera)
+  const loop = new GameLoop(renderer, scene, camera)
+  const input = new InputManager(canvas)
+
+  input.onFlap(() => {
+    console.log('[InputManager] flap received')
   })
+
+  loop.start()
 }
