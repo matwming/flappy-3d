@@ -9,7 +9,7 @@
 
 ## Phases
 
-- [ ] **Phase 1: Scaffold + Core Loop** — Bird falls, flaps, and collides; renderer hardened against mobile pitfalls; TypeScript strict mode enforced from commit 1
+- [x] **Phase 1: Scaffold + Core Loop** — Bird falls, flaps, and collides; renderer hardened against mobile pitfalls; TypeScript strict mode enforced from commit 1 ✓ (2026-04-28)
 - [ ] **Phase 2: Game Machine + Obstacles + Rendering** — Full playable loop with XState state machine, pooled obstacle system, toon rendering, and difficulty ramp
 - [ ] **Phase 3: UI + Audio + Polish** — All four screens, Howler audio, GSAP juice (squash, shake, particles), persistence, leaderboard
 - [ ] **Phase 4: PWA + Accessibility + Bundle Audit** — Lighthouse PWA ≥90, offline play, colorblind mode, <250KB confirmed, deploy target locked
@@ -31,10 +31,10 @@
   5. Event listeners use `AbortController` so repeated bootstrap calls do not accumulate listeners; dt is clamped to ≤100ms
 **Plans**: 4 plans
 Plans:
-- [ ] 01-01-renderer-scene-PLAN.md — Hardened WebGLRenderer factory, lighting, sky-blue scene, WebGL2 gate
-- [ ] 01-02-ts-hygiene-bundle-PLAN.md — strict tsconfig, noUncheckedIndexedAccess, rollup-plugin-visualizer
-- [ ] 01-03-game-loop-input-PLAN.md — GameLoop fixed-timestep accumulator, InputManager with AbortController
-- [ ] 01-04-bird-physics-collision-PLAN.md — Bird entity, PhysicsSystem, CollisionSystem, static test obstacle
+- [x] 01-01-renderer-scene-PLAN.md — Hardened WebGLRenderer factory, lighting, sky-blue scene, WebGL2 gate ✓
+- [x] 01-02-ts-hygiene-bundle-PLAN.md — strict tsconfig, noUncheckedIndexedAccess, rollup-plugin-visualizer ✓
+- [x] 01-03-game-loop-input-PLAN.md — GameLoop fixed-timestep accumulator, InputManager with AbortController ✓
+- [x] 01-04-bird-physics-collision-PLAN.md — Bird entity, PhysicsSystem, CollisionSystem, static test obstacle ✓
 **UI hint**: yes
 
 ### Phase 2: Game Machine + Obstacles + Rendering

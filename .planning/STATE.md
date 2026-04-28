@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-04-28T12:07:39.589Z"
+last_updated: "2026-04-28T22:15:00.000Z"
 progress:
   total_phases: 5
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 4
-  completed_plans: 0
-  percent: 0
+  completed_plans: 4
+  percent: 20
 ---
 
 # Project State — Flappy 3D
@@ -22,7 +22,7 @@ progress:
 ## Project Reference
 
 **Core value:** The game must feel palpably more crafted than `guiguan/flappy-anna-3d` within 30 seconds of play — polished motion, real menus, real audio, 60fps on a mid-tier phone.
-**Current focus:** Phase 1 — Scaffold + Core Loop
+**Current focus:** Phase 2 — Game Machine + Obstacles + Rendering (ready to discuss)
 
 ---
 
@@ -30,16 +30,16 @@ progress:
 
 | Field | Value |
 |-------|-------|
-| Phase | 1 |
-| Phase name | Scaffold + Core Loop |
-| Plan | None (ready to plan) |
-| Status | Ready to plan |
-| Phase goal | Bird falls, flaps, collides; renderer hardened; strict TS enforced |
+| Phase | 2 |
+| Phase name | Game Machine + Obstacles + Rendering |
+| Plan | None (ready to discuss/plan) |
+| Status | Ready to discuss |
+| Phase goal | Full playable loop; XState machine; pooled obstacles; toon materials; difficulty ramp |
 
 **Progress bar:**
 
 ```
-Phase 1 [          ] 0%
+Phase 1 [██████████] 100% ✓ (user-verified 2026-04-28)
 Phase 2 [          ] 0%
 Phase 3 [          ] 0%
 Phase 4 [          ] 0%
@@ -86,12 +86,14 @@ Phase 5 [          ] 0%
 
 **What was done last:**
 
-- Roadmap initialized. Scaffold is at commit cccfe9c (Vite + TS + Three.js spinning cube).
+- Phase 1 COMPLETE (user-verified). 4 atomic feat commits: 01-01 renderer hardening, 01-02 TS strict + visualizer, 01-03 GameLoop + InputManager, 01-04 Bird + Physics + Collision.
+- Bird falls, flaps via Space/click/tap, collides with test obstacle and floor/ceiling — all working in browser.
+- Build green; tsc strict clean; no `import * as THREE` anywhere.
 
 **What's next:**
 
-- Run `/gsd-plan-phase 1` to decompose Phase 1 into executable tasks.
-- First commit of Phase 1 must: replace `import * as THREE` with named imports, enable `"strict": true` in tsconfig, add `touch-action: none` to canvas.
+- Run `/gsd-discuss-phase 2 --auto --chain` to start Phase 2 (XState game machine, obstacle pool, toon materials, difficulty ramp).
+- Phase 2 will replace the death stub (`console.warn` + `loop.stop()`) with `actor.send({ type: 'HIT' })`.
 
 **Blockers:**
 
@@ -103,10 +105,10 @@ Phase 5 [          ] 0%
 
 | Metric | Target | Current |
 |--------|--------|---------|
-| JS bundle gzipped | <250KB | ~128KB (Three.js only, naive import — fix in Phase 1) |
-| FPS on Pixel 6 class | 60fps | Unmeasured |
-| Lighthouse PWA | ≥90 | 0 (not yet a PWA) |
-| tsc --noEmit | 0 errors | Unknown (strict mode not yet enabled) |
+| JS bundle gzipped | <250KB | 128.59KB (named imports, no tree-shake yet — Phase 4 PERF-01 will tighten) |
+| FPS on Pixel 6 class | 60fps | Unmeasured (Phase 4 PERF-03) |
+| Lighthouse PWA | ≥90 | 0 (Phase 4 PWA-05) |
+| tsc --noEmit | 0 errors | ✓ 0 errors (strict + noUncheckedIndexedAccess) |
 
 ---
 
@@ -114,8 +116,8 @@ Phase 5 [          ] 0%
 
 | Phase | Status | Completed | Notes |
 |-------|--------|-----------|-------|
-| 1 | Not started | - | Ready to plan |
-| 2 | Not started | - | Blocked on Phase 1 |
+| 1 | ✓ Complete | 2026-04-28 | 4 plans, 4 commits, user-verified in browser |
+| 2 | Not started | - | Ready to discuss |
 | 3 | Not started | - | Blocked on Phase 2 (XState is load-bearing for all screens) |
 | 4 | Not started | - | Blocked on Phase 3 (SW must cache final feature set) |
 | 5 | Not started | - | Blocked on Phase 4 (needs deployed URL) |
