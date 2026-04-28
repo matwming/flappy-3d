@@ -17,6 +17,7 @@ import { ObstaclePair } from './entities/ObstaclePair'
 import { Background } from './entities/Background'
 import { gameMachine, scheduleAutoRestart } from './machine/gameMachine'
 import { StorageManager } from './storage/StorageManager'
+import { AudioManager } from './audio/AudioManager'
 import { PIPE_WIDTH, PIPE_DEPTH, PIPE_COLOR, POOL_SIZE } from './constants'
 import './style.css'
 
@@ -59,6 +60,8 @@ if (!WebGL.isWebGL2Available()) {
   const scoreSystem = new ScoreSystem(obstaclePool, actor)
   const collision = new CollisionSystem(bird, obstaclePool, actor)
 
+  const audio = new AudioManager()
+
   input.onFlap(() => {
     const state = actor.getSnapshot().value
     if (state === 'title') {
@@ -66,6 +69,7 @@ if (!WebGL.isWebGL2Available()) {
     } else if (state === 'playing') {
       physics.queueFlap()
       actor.send({ type: 'FLAP' })
+      audio.playFlap()
     } else if (state === 'gameOver') {
       actor.send({ type: 'RESTART' })
     }
@@ -84,15 +88,27 @@ if (!WebGL.isWebGL2Available()) {
 
   actor.start()
 
+  let lastScore = 0
+
   actor.subscribe((snapshot) => {
-    console.log(
-      '[machine]',
-      snapshot.value,
-      'score:',
-      snapshot.context.score,
-      'best:',
-      snapshot.context.bestScore,
-    )
+    const s = snapshot.value as string
+    console.log('[machine]', s, 'score:', snapshot.context.score, 'best:', snapshot.context.bestScore)
+
+    // Music control: play in 'playing', fade on 'dying', stop elsewhere
+    if (s === 'playing') {
+      audio.setMusicPlaying(true)
+    } else if (s === 'dying') {
+      audio.fadeMusicOut(600)
+      audio.playDeath()
+    } else if (s === 'gameOver' || s === 'title') {
+      audio.setMusicPlaying(false)
+    }
+
+    // Score SFX on each increment
+    if (s === 'playing' && snapshot.context.score > lastScore) {
+      audio.playScore()
+    }
+    lastScore = snapshot.context.score
   })
 
   scheduleAutoRestart(actor)
