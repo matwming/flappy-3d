@@ -42,11 +42,16 @@
 
 ### Audio (AUD)
 
-- [ ] **AUD-01**: Audio plays via Howler.js; AudioContext is resumed inside the first `pointerup` handler synchronously (iOS unlock pattern)
-- [ ] **AUD-02**: Sound effects: flap, score, death — recorded samples (not synthesized oscillators), packaged as audio sprite if size-favorable
-- [ ] **AUD-03**: Background music plays in `playing` state, loops seamlessly, fades out on `dying`/`gameOver` and pauses on `paused`/tab-blur
-- [ ] **AUD-04**: Sound on/off toggle in settings instantly mutes/unmutes (no reload); state persisted to localStorage
-- [ ] **AUD-05**: All Howl instances created once at app init (singletons), never recreated on restart
+- [x] **AUD-01
+**: Audio plays via Howler.js; AudioContext is resumed inside the first `pointerup` handler synchronously (iOS unlock pattern)
+- [x] **AUD-02
+**: Sound effects: flap, score, death — recorded samples (not synthesized oscillators), packaged as audio sprite if size-favorable
+- [x] **AUD-03
+**: Background music plays in `playing` state, loops seamlessly, fades out on `dying`/`gameOver` and pauses on `paused`/tab-blur
+- [x] **AUD-04
+**: Sound on/off toggle in settings instantly mutes/unmutes (no reload); state persisted to localStorage
+- [x] **AUD-05
+**: All Howl instances created once at app init (singletons), never recreated on restart
 
 ### Animation & game feel (ANIM)
 
