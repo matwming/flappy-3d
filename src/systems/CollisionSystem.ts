@@ -1,65 +1,50 @@
-import {
-  Mesh,
-  BoxGeometry,
-  MeshStandardMaterial,
-  Box3,
-  Scene,
-  Vector3,
-} from 'three'
+import type { Actor } from 'xstate'
+import type { gameMachine } from '../machine/gameMachine'
 import { WORLD_FLOOR_Y, WORLD_CEILING_Y } from '../constants'
 import type { Bird } from '../entities/Bird'
-import type { GameLoop } from '../loop/GameLoop'
+import type { ObjectPool } from '../pools/ObjectPool'
+import type { ObstaclePair } from '../entities/ObstaclePair'
+
+type GameActor = Actor<typeof gameMachine>
 
 export class CollisionSystem {
   private bird: Bird
-  private loop: GameLoop
-  private obstacleBox: Box3
-  private obstacleMesh: Mesh<BoxGeometry, MeshStandardMaterial>
-  private dead = false
+  private pool: ObjectPool<ObstaclePair>
+  private actor: GameActor
 
-  constructor(bird: Bird, loop: GameLoop, scene: Scene) {
+  constructor(bird: Bird, pool: ObjectPool<ObstaclePair>, actor: GameActor) {
     this.bird = bird
-    this.loop = loop
-
-    const geo = new BoxGeometry(0.6, 1.5, 0.6)
-    const mat = new MeshStandardMaterial({ color: 0xff5722, wireframe: false })
-    this.obstacleMesh = new Mesh(geo, mat)
-    this.obstacleMesh.position.set(2, 0, 0)
-    scene.add(this.obstacleMesh)
-
-    this.obstacleBox = new Box3().setFromObject(this.obstacleMesh)
+    this.pool = pool
+    this.actor = actor
   }
 
   step(_dt: number): void {
-    if (this.dead) return
+    if (this.actor.getSnapshot().value !== 'playing') return
 
     const birdBox = this.bird.getBoundingBox()
     const pos = this.bird.position
-    const vel = this.bird.velocity
 
-    if (birdBox.intersectsBox(this.obstacleBox)) {
-      this.die('OBSTACLE', pos, vel)
+    if (pos.y < WORLD_FLOOR_Y || pos.y > WORLD_CEILING_Y) {
+      this.hit()
       return
     }
 
-    if (pos.y < WORLD_FLOOR_Y || pos.y > WORLD_CEILING_Y) {
-      this.die('BOUNDS', pos, vel)
+    let collided = false
+    this.pool.forEachActive((pair) => {
+      if (collided) return
+      const [topBox, bottomBox] = pair.getAABBs()
+      if (birdBox.intersectsBox(topBox) || birdBox.intersectsBox(bottomBox)) {
+        collided = true
+      }
+    })
+
+    if (collided) {
+      this.hit()
     }
   }
 
-  private die(reason: string, pos: Vector3, vel: Vector3): void {
-    this.dead = true
-    console.warn(
-      `[CollisionSystem] COLLISION (${reason}) at`,
-      pos.clone(),
-      vel.clone(),
-    )
-    this.loop.stop()
-  }
-
-  dispose(scene: Scene): void {
-    scene.remove(this.obstacleMesh)
-    this.obstacleMesh.geometry.dispose()
-    this.obstacleMesh.material.dispose()
+  private hit(): void {
+    if (this.actor.getSnapshot().status !== 'active') return
+    this.actor.send({ type: 'HIT' })
   }
 }

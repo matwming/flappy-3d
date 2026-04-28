@@ -1,12 +1,18 @@
+import type { Actor } from 'xstate'
+import type { gameMachine } from '../machine/gameMachine'
 import { GRAVITY, FLAP_IMPULSE, MAX_FALL_SPEED } from '../constants'
 import type { Bird } from '../entities/Bird'
 
+type GameActor = Actor<typeof gameMachine>
+
 export class PhysicsSystem {
   private bird: Bird
+  private actor: GameActor
   private flapQueued = false
 
-  constructor(bird: Bird) {
+  constructor(bird: Bird, actor: GameActor) {
     this.bird = bird
+    this.actor = actor
   }
 
   queueFlap(): void {
@@ -14,6 +20,19 @@ export class PhysicsSystem {
   }
 
   step(dt: number): void {
+    const state = this.actor.getSnapshot().value
+
+    if (state === 'dying') {
+      this.bird.mesh.rotation.z += 1.5 * dt
+    } else if (state === 'playing' || state === 'title') {
+      this.bird.mesh.rotation.z = 0
+    }
+
+    if (state !== 'playing' && state !== 'dying') {
+      this.bird.syncMesh()
+      return
+    }
+
     if (this.flapQueued) {
       this.bird.velocity.y = FLAP_IMPULSE
       this.flapQueued = false
