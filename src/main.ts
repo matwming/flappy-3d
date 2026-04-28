@@ -2,6 +2,9 @@ import WebGL from 'three/addons/capabilities/WebGL.js'
 import { createRenderer } from './render/createRenderer'
 import { GameLoop } from './loop/GameLoop'
 import { InputManager } from './input/InputManager'
+import { Bird } from './entities/Bird'
+import { PhysicsSystem } from './systems/PhysicsSystem'
+import { CollisionSystem } from './systems/CollisionSystem'
 import './style.css'
 
 if (!WebGL.isWebGL2Available()) {
@@ -15,12 +18,16 @@ if (!WebGL.isWebGL2Available()) {
   const { renderer, scene, camera } = createRenderer()
   const canvas = renderer.domElement
 
+  const bird = new Bird(scene)
   const loop = new GameLoop(renderer, scene, camera)
   const input = new InputManager(canvas)
+  const physics = new PhysicsSystem(bird)
+  const collision = new CollisionSystem(bird, loop, scene)
 
-  input.onFlap(() => {
-    console.log('[InputManager] flap received')
-  })
+  input.onFlap(() => physics.queueFlap())
+
+  loop.add(physics)
+  loop.add(collision)
 
   loop.start()
 }
