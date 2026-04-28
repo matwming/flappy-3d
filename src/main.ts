@@ -19,6 +19,9 @@ import { gameMachine } from './machine/gameMachine'
 import { StorageManager } from './storage/StorageManager'
 import { AudioManager } from './audio/AudioManager'
 import { UIBridge } from './ui/UIBridge'
+import { squashStretch, screenShake } from './anim/anim'
+import { createParticles } from './particles/createParticles'
+import { prefersReducedMotion } from './a11y/motion'
 import { PIPE_WIDTH, PIPE_DEPTH, PIPE_COLOR, POOL_SIZE } from './constants'
 import './style.css'
 import './ui/styles.css'
@@ -64,6 +67,7 @@ if (!WebGL.isWebGL2Available()) {
 
   const audio = new AudioManager()
   const ui = new UIBridge(actor, audio, storage)
+  const particles = createParticles(scene)
 
   input.onFlap(() => {
     const state = actor.getSnapshot().value
@@ -73,6 +77,7 @@ if (!WebGL.isWebGL2Available()) {
       physics.queueFlap()
       actor.send({ type: 'FLAP' })
       audio.playFlap()
+      squashStretch(bird.mesh)
     } else if (state === 'gameOver') {
       actor.send({ type: 'RESTART' })
     }
@@ -83,6 +88,7 @@ if (!WebGL.isWebGL2Available()) {
   loop.add(spawner)
   loop.add(scoreSystem)
   loop.add(collision)
+  loop.add({ step: (dt: number) => particles.step(dt) })
 
   const composerResult = createComposer(renderer, scene, camera)
   if (composerResult !== null) {
@@ -93,6 +99,7 @@ if (!WebGL.isWebGL2Available()) {
   ui.mount()
 
   let lastScore = 0
+  let prevState: string | undefined
 
   actor.subscribe((snapshot) => {
     const s = snapshot.value as string
@@ -110,11 +117,20 @@ if (!WebGL.isWebGL2Available()) {
       audio.setMusicPlaying(false)
     }
 
+    // Juice on dying transition (screen shake + particle burst) — gated behind reduced motion
+    if (s === 'dying' && prevState !== 'dying') {
+      if (!prefersReducedMotion(storage)) {
+        screenShake(camera)
+        particles.burst({ x: bird.position.x, y: bird.position.y, z: bird.position.z })
+      }
+    }
+
     // Score SFX on each increment
     if (s === 'playing' && snapshot.context.score > lastScore) {
       audio.playScore()
     }
     lastScore = snapshot.context.score
+    prevState = s
   })
 
   loop.start()
