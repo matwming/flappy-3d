@@ -28,8 +28,8 @@ progress:
 
 ## Current Position
 
-Phase: 03 (ui-audio-polish) — EXECUTING
-Plan: 4 of 4
+Phase: 03 (ui-audio-polish) — COMPLETE
+Plan: 4 of 4 (all complete)
 | Field | Value |
 |-------|-------|
 | Phase | 3 |
@@ -44,7 +44,7 @@ Plan: 4 of 4
 ```
 Phase 1 [██████████] 100% ✓ (user-verified 2026-04-28)
 Phase 2 [██████████] 100% ✓ (user-verified 2026-04-29)
-Phase 3 [███████▒▒▒]  75% (03-01 audio ✓, 03-02 ui-infra ✓, 03-03 screens ✓, 03-04 juice pending)
+Phase 3 [██████████] 100% ✓ (03-01 audio ✓, 03-02 ui-infra ✓, 03-03 screens ✓, 03-04 juice ✓)
 Phase 4 [          ] 0%
 Phase 5 [          ] 0%
 ```
@@ -93,13 +93,14 @@ Phase 5 [          ] 0%
 
 **What was done last (this session):**
 
-- Phase 3 Plan 03 (screens) executed: 5 screens + 4 shared components built; scheduleAutoRestart removed; real paused state added to gameMachine; UIBridge App fully wired.
-- 3 atomic feat commits: 66a0c38 (shared components), 5336a15 (5 screens), 18613a0 (UIBridge + main.ts + machine cleanup)
-- Build green at 166.10 KB gzip (under 250 KB budget)
+- Phase 3 Plan 04 (juice) executed: GSAP installed, anim.ts helpers (squashStretch, screenShake, scorePop), bespoke ParticleEmitter, all wired into main.ts.
+- 3 atomic feat commits: 851b26f (GSAP + anim.ts), 20bc7fa (ParticleEmitter + createParticles), 576cd6d (main.ts wiring)
+- Build green at 194.40 KB gzip (+28.3 KB for GSAP, under 250 KB budget)
+- Phase 3 COMPLETE — all 21 requirements closed (AUD-01..05, HUD-01..08, ANIM-01..06, SAVE-03..04)
 
 **What's next:**
 
-Execute Plan 04 (03-04-juice): GSAP install, squash/shake/score-pop helpers, ParticleEmitter (ANIM-01..06 + A11Y-01 motion gate)
+Execute Phase 4 (PWA + Accessibility + Bundle Audit): vite-plugin-pwa, manifest, offline SW, Lighthouse ≥90, colorblind palette, keyboard nav, bundle audit
 
 **Phase 3 plan summary:**
 
@@ -125,7 +126,7 @@ Execute Plan 04 (03-04-juice): GSAP install, squash/shake/score-pop helpers, Par
 
 | Metric | Target | Current |
 |--------|--------|---------|
-| JS bundle gzipped | <250KB | 128.59KB (named imports, no tree-shake yet — Phase 4 PERF-01 will tighten) |
+| JS bundle gzipped | <250KB | 194.40KB (Phase 3 complete; +65.8KB for Howler+Preact+GSAP; Phase 4 PERF-01 will audit) |
 | FPS on Pixel 6 class | 60fps | Unmeasured (Phase 4 PERF-03) |
 | Lighthouse PWA | ≥90 | 0 (Phase 4 PWA-05) |
 | tsc --noEmit | 0 errors | ✓ 0 errors (strict + noUncheckedIndexedAccess) |
@@ -134,6 +135,7 @@ Execute Plan 04 (03-04-juice): GSAP install, squash/shake/score-pop helpers, Par
 | Phase 03 P01 | 218 | 2 tasks | 9 files |
 | Phase 03 P02 | 420 | 3 tasks | 9 files |
 | Phase 03 P03 | 1089 | 3 tasks | 13 files |
+| Phase 03 P04 | 119 | 3 tasks | 6 files |
 
 ## Phase Log
 
@@ -141,7 +143,7 @@ Execute Plan 04 (03-04-juice): GSAP install, squash/shake/score-pop helpers, Par
 |-------|--------|-----------|-------|
 | 1 | ✓ Complete | 2026-04-28 | 4 plans, 4 commits, user-verified in browser |
 | 2 | ✓ Complete | 2026-04-29 | 3 plans, 6 atomic commits; user-verified in browser |
-| 3 | Planned | - | CONTEXT (36 decisions) + 4 PLAN.md committed; ready to execute |
+| 3 | ✓ Complete | 2026-04-29 | 4 plans, 10 atomic commits; 21 reqs closed; 194.40 KB gzip |
 | 4 | Not started | - | Blocked on Phase 3 |
 | 5 | Not started | - | Blocked on Phase 4 |
 

@@ -11,7 +11,7 @@
 
 - [x] **Phase 1: Scaffold + Core Loop** — Bird falls, flaps, and collides; renderer hardened against mobile pitfalls; TypeScript strict mode enforced from commit 1 ✓ (2026-04-28)
 - [x] **Phase 2: Game Machine + Obstacles + Rendering** — Full playable loop with XState state machine, pooled obstacle system, toon rendering, and difficulty ramp ✓ (2026-04-29)
-- [ ] **Phase 3: UI + Audio + Polish** — All four screens, Howler audio, GSAP juice (squash, shake, particles), persistence, leaderboard
+- [x] **Phase 3: UI + Audio + Polish** — All four screens, Howler audio, GSAP juice (squash, shake, particles), persistence, leaderboard ✓ (2026-04-29)
 - [ ] **Phase 4: PWA + Accessibility + Bundle Audit** — Lighthouse PWA ≥90, offline play, colorblind mode, <250KB confirmed, deploy target locked
 - [ ] **Phase 5: Hardening + Ship** — Memory stability across 10 restarts, iOS audio verified on device, tab-blur music pause, production URL live
 
@@ -100,7 +100,7 @@ Plans:
 |-------|----------------|--------|-----------|
 | 1. Scaffold + Core Loop | 4/4 | Complete | 2026-04-28 |
 | 2. Game Machine + Obstacles + Rendering | 3/3 | Complete | 2026-04-29 |
-| 3. UI + Audio + Polish | 3/4 | In progress | - |
+| 3. UI + Audio + Polish | 4/4 | Complete | 2026-04-29 |
 | 4. PWA + Accessibility + Bundle Audit | 0/? | Not started | - |
 | 5. Hardening + Ship | 0/? | Not started | - |
 
