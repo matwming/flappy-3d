@@ -18,8 +18,10 @@ import { Background } from './entities/Background'
 import { gameMachine, scheduleAutoRestart } from './machine/gameMachine'
 import { StorageManager } from './storage/StorageManager'
 import { AudioManager } from './audio/AudioManager'
+import { UIBridge } from './ui/UIBridge'
 import { PIPE_WIDTH, PIPE_DEPTH, PIPE_COLOR, POOL_SIZE } from './constants'
 import './style.css'
+import './ui/styles.css'
 
 if (!WebGL.isWebGL2Available()) {
   const msg = document.createElement('div')
@@ -61,6 +63,7 @@ if (!WebGL.isWebGL2Available()) {
   const collision = new CollisionSystem(bird, obstaclePool, actor)
 
   const audio = new AudioManager()
+  const ui = new UIBridge(actor, audio, storage)
 
   input.onFlap(() => {
     const state = actor.getSnapshot().value
@@ -87,12 +90,15 @@ if (!WebGL.isWebGL2Available()) {
   }
 
   actor.start()
+  ui.mount()
 
   let lastScore = 0
 
   actor.subscribe((snapshot) => {
     const s = snapshot.value as string
-    console.log('[machine]', s, 'score:', snapshot.context.score, 'best:', snapshot.context.bestScore)
+    if (import.meta.env.DEV) {
+      console.log('[machine]', s, 'score:', snapshot.context.score)
+    }
 
     // Music control: play in 'playing', fade on 'dying', stop elsewhere
     if (s === 'playing') {
