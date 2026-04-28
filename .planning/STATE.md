@@ -3,11 +3,11 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-04-29T08:30:00.000Z"
+last_updated: "2026-04-29T09:00:00.000Z"
 progress:
   total_phases: 5
   completed_phases: 2
-  total_plans: 7
+  total_plans: 11
   completed_plans: 7
   percent: 40
 ---
@@ -22,7 +22,7 @@ progress:
 ## Project Reference
 
 **Core value:** The game must feel palpably more crafted than `guiguan/flappy-anna-3d` within 30 seconds of play — polished motion, real menus, real audio, 60fps on a mid-tier phone.
-**Current focus:** Phase 3 — UI + Audio + Polish (ready to discuss)
+**Current focus:** Phase 3 — UI + Audio + Polish (DISCUSSED + PLANNED; ready to execute in fresh session)
 
 ---
 
@@ -32,16 +32,17 @@ progress:
 |-------|-------|
 | Phase | 3 |
 | Phase name | UI + Audio + Polish |
-| Plans complete | All Phase 2 plans (02-01, 02-02, 02-03) |
-| Status | Ready to discuss Phase 3 |
-| Phase goal | DOM overlay screens, Howler audio, GSAP juice, particles, leaderboard |
+| Plans complete | All Phase 1 + Phase 2 |
+| Plans planned not executed | Phase 3 (4 plans: audio, ui-infra, screens, juice) |
+| Status | Ready to execute in fresh /clear session |
+| Phase goal | DOM overlay screens (Preact), Howler audio + iOS unlock, GSAP juice, particle burst, leaderboard |
 
 **Progress bar:**
 
 ```
 Phase 1 [██████████] 100% ✓ (user-verified 2026-04-28)
-Phase 2 [██████████] 100% ✓ (all 3 plans complete; needs browser verify)
-Phase 3 [          ] 0%
+Phase 2 [██████████] 100% ✓ (user-verified 2026-04-29)
+Phase 3 [██▒▒▒▒▒▒▒▒]  20% (CONTEXT.md + 4 PLAN.md files committed; awaiting execute)
 Phase 4 [          ] 0%
 Phase 5 [          ] 0%
 ```
@@ -84,27 +85,37 @@ Phase 5 [          ] 0%
 
 ### Session Continuity
 
-**What was done last:**
+**What was done last (this session):**
 
-- Phase 2 discussed → 02-CONTEXT.md (32 decisions D-01 through D-32) committed
-- Phase 2 planned → 3 PLAN.md files (02-01, 02-02, 02-03) committed
-- Plan 02-01 EXECUTED: xstate@5.20.1 installed; `src/machine/gameMachine.ts` (flat 5-state, zero three imports); `src/storage/StorageManager.ts` (versioned localStorage); `src/main.ts` rewired to read bestScore → create actor → route flap based on state
-- 3 atomic feat commits for 02-01: a5c7ad6, bbcd80a, 3c5d6dc
-- tsc strict clean
+- Phase 2 fully shipped: all 3 plans executed inline; 6 atomic feat commits; user-verified ✓
+- Phase 3 discussed: `03-CONTEXT.md` committed with 36 decisions (D-01 through D-36). Audio source decision: **CC0 free libraries via WebFetch** (user-confirmed). Cadence: **plan-now-execute-fresh** (user-confirmed).
+- Phase 3 planned: 4 PLAN.md files committed (audio, ui-infra, screens, juice). 21 REQs distributed across the 4 plans.
 
-**What's next (resume in fresh session — recommend `/clear`):**
+**What's next (resume in FRESH session — recommend `/clear` first):**
 
-- Plan 02-02: ObjectPool + ObstaclePair + Difficulty + ObstacleSpawner + ScrollSystem + ScoreSystem; modify PhysicsSystem (add actor + dying-rotation) + CollisionSystem (replace console.warn/loop.stop with actor.send HIT; switch from static obstacle to pool)
-- Plan 02-03: toon materials + EffectComposer (mobile-gated) + parallax bg (sky/mountains/trees) + GameLoop modification + full main.ts rewire to register all new systems and pre-warm pool
+```
+/clear
+/gsd-execute-phase 03 --auto --no-transition
+```
+
+This will execute Phase 3 plans in 4 sequential waves. Audio plan (03-01) will WebFetch CC0 samples from Pixabay (or fall back to placeholder synth markers). Each plan ends with atomic commit.
+
+**Phase 3 plan summary:**
+- `03-01-audio-PLAN.md` — Howler install, fetch 4 audio assets, AudioManager singleton with iOS unlock, music fade-out (AUD-01..05)
+- `03-02-ui-infra-PLAN.md` — Preact install, #ui-root in index.html, UIBridge mount, StorageManager v2 schema (HUD-01, HUD-08, SAVE-03, SAVE-04)
+- `03-03-screens-PLAN.md` — 5 Preact screens (Title, HUD, Pause, GameOver, Settings) + 4 shared components (HUD-02..07)
+- `03-04-juice-PLAN.md` — GSAP install, squash/shake/score-pop helpers, ParticleEmitter (bespoke fallback) (ANIM-01..06 + A11Y-01 motion gate)
+
+**Bundle target:** Phase 3 should land at ~210KB gzipped (was 143KB after Phase 2; +60-70KB for Howler + Preact + GSAP + game code). Still under 250KB Phase 4 budget.
 
 **Resume commands:**
 
-- `/gsd-execute-phase 02 --auto --no-transition` (executes both remaining plans)
-- OR `cat .planning/phases/02-machine-obstacles-rendering/02-02-PLAN.md` then implement inline manually
+- `/gsd-execute-phase 03 --auto --no-transition` (recommended — auto-execute all 4 plans sequentially)
+- OR `cat .planning/phases/03-ui-audio-polish/03-01-audio-PLAN.md` then implement inline
 
 **Blockers:**
 
-- None functional. Recommendation is fresh `/clear` — current Phase 2 plans are large (28K + 35K tokens each); fresh context yields cleaner xstate + shader code.
+- None functional. Audio sourcing is the only realtime-dependent step (WebFetch from Pixabay needs working internet); plan has fallback to TODO-marked placeholder if fetch fails.
 
 ---
 
@@ -124,8 +135,8 @@ Phase 5 [          ] 0%
 | Phase | Status | Completed | Notes |
 |-------|--------|-----------|-------|
 | 1 | ✓ Complete | 2026-04-28 | 4 plans, 4 commits, user-verified in browser |
-| 2 | ✓ Complete | 2026-04-29 | 3 plans, 6 atomic commits; tsc clean, build green; needs browser verify |
-| 3 | Not started | - | Ready to discuss (HUD/menus, Howler audio, GSAP juice, particles, leaderboard) |
+| 2 | ✓ Complete | 2026-04-29 | 3 plans, 6 atomic commits; user-verified in browser |
+| 3 | Planned | - | CONTEXT (36 decisions) + 4 PLAN.md committed; ready to execute |
 | 4 | Not started | - | Blocked on Phase 3 |
 | 5 | Not started | - | Blocked on Phase 4 |
 
