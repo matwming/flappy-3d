@@ -1,3 +1,16 @@
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: unknown
+last_updated: "2026-04-28T11:55:59.056Z"
+progress:
+  total_phases: 5
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+---
+
 # Project State — Flappy 3D
 
 **Last updated:** 2026-04-28
@@ -23,6 +36,7 @@
 | Phase goal | Bird falls, flaps, collides; renderer hardened; strict TS enforced |
 
 **Progress bar:**
+
 ```
 Phase 1 [          ] 0%
 Phase 2 [          ] 0%
@@ -70,13 +84,16 @@ Phase 5 [          ] 0%
 ### Session Continuity
 
 **What was done last:**
+
 - Roadmap initialized. Scaffold is at commit cccfe9c (Vite + TS + Three.js spinning cube).
 
 **What's next:**
+
 - Run `/gsd-plan-phase 1` to decompose Phase 1 into executable tasks.
 - First commit of Phase 1 must: replace `import * as THREE` with named imports, enable `"strict": true` in tsconfig, add `touch-action: none` to canvas.
 
 **Blockers:**
+
 - None
 
 ---
