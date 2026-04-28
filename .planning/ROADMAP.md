@@ -10,7 +10,7 @@
 ## Phases
 
 - [x] **Phase 1: Scaffold + Core Loop** — Bird falls, flaps, and collides; renderer hardened against mobile pitfalls; TypeScript strict mode enforced from commit 1 ✓ (2026-04-28)
-- [ ] **Phase 2: Game Machine + Obstacles + Rendering** — Full playable loop with XState state machine, pooled obstacle system, toon rendering, and difficulty ramp
+- [x] **Phase 2: Game Machine + Obstacles + Rendering** — Full playable loop with XState state machine, pooled obstacle system, toon rendering, and difficulty ramp ✓ (2026-04-29)
 - [ ] **Phase 3: UI + Audio + Polish** — All four screens, Howler audio, GSAP juice (squash, shake, particles), persistence, leaderboard
 - [ ] **Phase 4: PWA + Accessibility + Bundle Audit** — Lighthouse PWA ≥90, offline play, colorblind mode, <250KB confirmed, deploy target locked
 - [ ] **Phase 5: Hardening + Ship** — Memory stability across 10 restarts, iOS audio verified on device, tab-blur music pause, production URL live
@@ -49,9 +49,9 @@ Plans:
   5. Personal best score seeds XState context from `StorageManager` on actor init; `StorageManager` versioned schema (v1) is readable/writable
 **Plans**: 3 plans
 Plans:
-- [ ] 02-01-PLAN.md — XState v5 machine + StorageManager + actor wiring in main.ts (CORE-07, CORE-08, SAVE-01, SAVE-02)
-- [ ] 02-02-PLAN.md — ObjectPool + ObstaclePair + obstacle/score/difficulty systems + actor-integrated PhysicsSystem + CollisionSystem (CORE-05, CORE-06, PERF-04)
-- [ ] 02-03-PLAN.md — Toon materials + EffectComposer (mobile-gated) + parallax background + full main.ts wiring (VIS-01, VIS-03, VIS-04, VIS-07, CORE-05–08)
+- [x] 02-01-PLAN.md — XState v5 machine + StorageManager + actor wiring in main.ts (CORE-07, CORE-08, SAVE-01, SAVE-02) ✓
+- [x] 02-02-PLAN.md — ObjectPool + ObstaclePair + obstacle/score/difficulty systems + actor-integrated PhysicsSystem + CollisionSystem (CORE-05, CORE-06, PERF-04) ✓
+- [x] 02-03-PLAN.md — Toon materials + EffectComposer (mobile-gated) + parallax background + full main.ts wiring (VIS-01, VIS-03, VIS-04, VIS-07, CORE-05–08) ✓
 **UI hint**: yes
 
 ### Phase 3: UI + Audio + Polish
