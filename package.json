@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@types/howler": "^2.2.12",
+    "gsap": "^3.15.0",
     "howler": "^2.2.4",
     "preact": "^10.29.1",
     "three": "^0.184.0",
