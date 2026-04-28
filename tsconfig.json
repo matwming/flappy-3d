@@ -18,6 +18,8 @@
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact",
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true
   },
