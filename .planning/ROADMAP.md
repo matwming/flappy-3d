@@ -47,7 +47,11 @@ Plans:
   3. All obstacle and particle objects come from pre-warmed `ObjectPool<T>`; no `new THREE.Mesh()` executes during active gameplay
   4. Bird and pipes render with `MeshToonMaterial` + gradient ramp; EffectComposer + UnrealBloomPass active on desktop, reduced/disabled when `navigator.hardwareConcurrency <= 4`
   5. Personal best score seeds XState context from `StorageManager` on actor init; `StorageManager` versioned schema (v1) is readable/writable
-**Plans**: TBD
+**Plans**: 3 plans
+Plans:
+- [ ] 02-01-PLAN.md — XState v5 machine + StorageManager + actor wiring in main.ts (CORE-07, CORE-08, SAVE-01, SAVE-02)
+- [ ] 02-02-PLAN.md — ObjectPool + ObstaclePair + obstacle/score/difficulty systems + actor-integrated PhysicsSystem + CollisionSystem (CORE-05, CORE-06, PERF-04)
+- [ ] 02-03-PLAN.md — Toon materials + EffectComposer (mobile-gated) + parallax background + full main.ts wiring (VIS-01, VIS-03, VIS-04, VIS-07, CORE-05–08)
 **UI hint**: yes
 
 ### Phase 3: UI + Audio + Polish
@@ -94,8 +98,8 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Scaffold + Core Loop | 0/4 | Not started | - |
-| 2. Game Machine + Obstacles + Rendering | 0/? | Not started | - |
+| 1. Scaffold + Core Loop | 4/4 | Complete | 2026-04-28 |
+| 2. Game Machine + Obstacles + Rendering | 0/3 | Not started | - |
 | 3. UI + Audio + Polish | 0/? | Not started | - |
 | 4. PWA + Accessibility + Bundle Audit | 0/? | Not started | - |
 | 5. Hardening + Ship | 0/? | Not started | - |
@@ -131,4 +135,4 @@ Plans:
 
 ---
 
-*Last updated: 2026-04-28 after Phase 1 planning*
+*Last updated: 2026-04-28 after Phase 2 planning*

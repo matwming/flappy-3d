@@ -5,3 +5,33 @@ export const WORLD_FLOOR_Y = -4
 export const WORLD_CEILING_Y = 4
 export const FIXED_DT = 1 / 60
 export const DT_CLAMP_MAX = 0.1
+
+// Phase 2 — spatial layout (per D-12, D-32)
+export const BIRD_X = 0                     // bird stays at world x=0 (fixed camera)
+export const OBSTACLE_SPAWN_X = 6           // obstacles spawn here (right edge)
+export const OBSTACLE_DESPAWN_X = -6        // obstacles released to pool past here (left edge)
+
+// Phase 2 — obstacle geometry (per D-11, D-32)
+export const PIPE_WIDTH = 0.8
+export const PIPE_DEPTH = 0.6
+export const PIPE_COLOR = 0x4caf50          // green placeholder; refined in Phase 3
+
+// Phase 2 — difficulty ramp (per D-13, D-32)
+export const BASE_SPAWN_INTERVAL = 1.6      // seconds between spawns at score 0
+export const MIN_SPAWN_INTERVAL = 1.0       // seconds between spawns at score 40
+export const BASE_SCROLL_SPEED = 3.5        // units/sec at score 0
+export const MAX_SCROLL_SPEED = 6.0         // units/sec at score 40
+export const BASE_GAP_HEIGHT = 2.6          // pipe gap (world units) at score 0
+export const MIN_GAP_HEIGHT = 1.6           // pipe gap (world units) at score 40
+export const GAP_CENTER_RANGE = 1.0         // gap center randomized in [-1.0, +1.0]
+export const DIFFICULTY_SCORE_CAP = 40      // score at which difficulty plateaus
+
+// Phase 2 — object pool (per D-07, D-22)
+export const POOL_SIZE = 8                  // pre-warmed ObstaclePair instances
+
+// Phase 2 — post-processing (per D-17, D-32)
+export const BLOOM_STRENGTH = 0.7
+export const BLOOM_RADIUS = 0.6
+export const BLOOM_THRESHOLD = 0.85
+export const VIGNETTE_OFFSET = 1.0
+export const VIGNETTE_DARKNESS = 0.4
