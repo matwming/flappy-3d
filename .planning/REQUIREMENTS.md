@@ -31,14 +31,16 @@
 
 ### UI / HUD / menus (HUD)
 
-- [ ] **HUD-01**: DOM overlay layer (`#ui-root`) sits above the canvas with `pointer-events: none` on root and `auto` on interactive children
+- [x] **HUD-01
+**: DOM overlay layer (`#ui-root`) sits above the canvas with `pointer-events: none` on root and `auto` on interactive children
 - [ ] **HUD-02**: Title screen displays game name, "tap to start" CTA, top-3 personal-best leaderboard, settings icon
 - [ ] **HUD-03**: In-game HUD displays current score top-center, readable at 375px viewport width, updates in real time
 - [ ] **HUD-04**: Pause screen shows when player taps a pause button; offers resume + back-to-title; auto-shown on `visibilitychange` (tab blur)
 - [ ] **HUD-05**: Game-over screen displays final score, personal best (with "New best!" badge if exceeded), restart CTA, back-to-title CTA
 - [ ] **HUD-06**: Settings screen offers sound on/off, music on/off, motion-reduce override, colorblind palette toggle; all persisted to localStorage
 - [ ] **HUD-07**: All menu transitions take <150ms (CSS transitions), no canvas pause stutter
-- [ ] **HUD-08**: UI uses Preact for reactive bits (score, leaderboard list, settings toggles); static screen HTML is plain DOM
+- [x] **HUD-08
+**: UI uses Preact for reactive bits (score, leaderboard list, settings toggles); static screen HTML is plain DOM
 
 ### Audio (AUD)
 
@@ -66,8 +68,10 @@
 
 - [ ] **SAVE-01**: `StorageManager` wraps localStorage with versioned schema (v1: settings + top-10 leaderboard) and migration scaffolding
 - [ ] **SAVE-02**: Personal best score persists across sessions; seeds xstate context at actor init
-- [ ] **SAVE-03**: Local leaderboard stores top-5 scores with timestamp; visible on title screen and game-over
-- [ ] **SAVE-04**: All settings (sound, music, motion-reduce override, colorblind palette) persist to localStorage and load on app start
+- [x] **SAVE-03
+**: Local leaderboard stores top-5 scores with timestamp; visible on title screen and game-over
+- [x] **SAVE-04
+**: All settings (sound, music, motion-reduce override, colorblind palette) persist to localStorage and load on app start
 
 ### Performance (PERF)
 
