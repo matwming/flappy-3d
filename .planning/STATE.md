@@ -3,19 +3,19 @@ gsd_state_version: 1.0
 milestone: v1.0.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-04-29T05:41:06.496Z"
+last_updated: "2026-04-29T05:46:25.107Z"
 progress:
   total_phases: 5
   completed_phases: 2
   total_plans: 20
-  completed_plans: 14
-  percent: 70
+  completed_plans: 15
+  percent: 75
 ---
 
 # Project State — Flappy 3D
 
 **Last updated:** 2026-04-29
-**Updated by:** gsd-executor (04-04)
+**Updated by:** gsd-executor (05-01)
 
 ---
 
@@ -29,15 +29,15 @@ progress:
 ## Current Position
 
 Phase: 5
-Plan: Not started
+Plan: 1 → COMPLETE
 | Field | Value |
 |-------|-------|
-| Phase | 4 → COMPLETE |
-| Phase name | PWA + Accessibility + Bundle Audit |
-| Plans complete | 04-01 (pwa-setup), 04-02 (a11y), 04-03 (bundle-audit), 04-04 (deploy) |
-| Plans planned not executed | none |
-| Status | All 4 plans complete ✓ |
-| Phase goal | Lighthouse PWA ≥90, offline play, colorblind mode, <250KB confirmed, deploy target locked |
+| Phase | 5 — in progress |
+| Phase name | Hardening + Ship |
+| Plans complete | 05-01 (hardening-audit) |
+| Plans planned not executed | 05-02 (ios-audio), 05-03 (final-qa) |
+| Status | 1/3 plans complete |
+| Phase goal | Memory stable, event listeners clean, iOS audio unlock, final QA |
 
 **Progress bar:**
 
@@ -46,7 +46,7 @@ Phase 1 [██████████] 100% ✓ (user-verified 2026-04-28)
 Phase 2 [██████████] 100% ✓ (user-verified 2026-04-29)
 Phase 3 [██████████] 100% ✓ (03-01 audio ✓, 03-02 ui-infra ✓, 03-03 screens ✓, 03-04 juice ✓, 03-05 fix-ui-state ✓, 03-06 fix-audio-motion ✓)
 Phase 4 [██████████] 100% ✓ (04-01 pwa-setup ✓, 04-02 a11y ✓, 04-03 bundle-audit ✓, 04-04 deploy ✓)
-Phase 5 [          ] 0%
+Phase 5 [███       ] 33% (05-01 hardening-audit ✓)
 ```
 
 ---
@@ -142,6 +142,7 @@ Phase 5 — Hardening + Ship (iOS on-device audio, memory stability, final QA).
 | Phase 04 P03 | 87 | 2 tasks | 3 files |
 | Phase 04 P02 | 258 | 2 tasks | 9 files |
 | Phase 04 P04 | 6 | 2 tasks | 2 files |
+| Phase 05 P01 | 2 | 3 tasks | 6 files |
 
 ## Phase Log
 
@@ -151,7 +152,7 @@ Phase 5 — Hardening + Ship (iOS on-device audio, memory stability, final QA).
 | 2 | ✓ Complete | 2026-04-29 | 3 plans, 6 atomic commits; user-verified in browser |
 | 3 | ✓ Complete | 2026-04-29 | 6 plans, 12 atomic commits; HUD-04, AUD-03, ANIM-06 closed; 194.49 KB gzip |
 | 4 | ✓ Complete | 2026-04-29 | 4 plans, 8 atomic commits; PWA-05, DEPLOY-02, DEPLOY-03 closed; 188.01 KB gzip |
-| 5 | Not started | - | Blocked on Phase 4 |
+| 5 | In progress | - | 05-01 hardening-audit ✓; AbortController resize, DEV memory probe, actor.send audit |
 
 ---
 

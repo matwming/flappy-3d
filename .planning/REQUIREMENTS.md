@@ -81,7 +81,8 @@
 - [x] **PERF-03
 **: Sustained 60fps on iPhone 12 / Pixel 6 class device during normal play (measured via Chrome DevTools FPS meter on real device)
 - [ ] **PERF-04**: Object pooling: obstacles, particles, score-popups all use `ObjectPool<T>`; no `new THREE.Mesh()` calls during gameplay
-- [ ] **PERF-05**: `disposeMesh()` utility called at teardown; `renderer.info.memory` does not grow across 10 restart cycles
+- [x] **PERF-05
+**: `disposeMesh()` utility called at teardown; `renderer.info.memory` does not grow across 10 restart cycles
 - [ ] **PERF-06**: Variable timestep accumulator clamps raw dt to ≤100ms (absorbs tab-return spikes)
 - [ ] **PERF-07**: Event listeners use `AbortController` so they don't accumulate on restart
 
