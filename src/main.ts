@@ -149,7 +149,9 @@ if (!WebGL.isWebGL2Available()) {
   // Reset bird + clear obstacles when the machine emits 'roundStarted'
   // (i.e. on START or RESTART, but not on RESUME). Driven by the machine's
   // emitted event so main.ts doesn't need to track state-transition history.
+  let roundCount = 0
   actor.on('roundStarted', () => {
+    roundCount++
     bird.position.set(0, 0, 0)
     bird.velocity.set(0, 0, 0)
     bird.mesh.rotation.z = 0
@@ -160,6 +162,16 @@ if (!WebGL.isWebGL2Available()) {
       toRelease.push(pair)
     })
     for (const p of toRelease) obstaclePool.release(p)
+
+    if (import.meta.env.DEV) {
+      const mem = renderer.info.memory
+      console.log(
+        `[mem probe] round=${roundCount} geometries=${mem.geometries} textures=${mem.textures}`,
+      )
+      if (roundCount >= 3 && mem.geometries > roundCount + 5) {
+        console.warn('[mem probe] geometry count growing — possible leak')
+      }
+    }
   })
 
   let lastScore = 0
