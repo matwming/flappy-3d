@@ -1,3 +1,17 @@
+/* ── Press Start 2P arcade font (BEAUTY-09) ── */
+@font-face {
+  font-family: 'Press Start 2P';
+  src: url('/flappy-3d/fonts/press-start-2p.woff2') format('woff2');
+  font-display: swap;
+  font-weight: 400;
+  font-style: normal;
+}
+
+h1,
+h2 {
+  font-family: 'Press Start 2P', ui-monospace, monospace;
+}
+
 #ui-root {
   position: fixed;
   inset: 0;
