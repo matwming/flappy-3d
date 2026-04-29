@@ -1,5 +1,5 @@
 import { h, render } from 'preact'
-import { useState, useEffect } from 'preact/hooks'
+import { useState, useEffect, useRef } from 'preact/hooks'
 import type { Actor, SnapshotFrom } from 'xstate'
 import type { gameMachine } from '../machine/gameMachine'
 import type { AudioManager } from '../audio/AudioManager'
@@ -53,15 +53,19 @@ function App(props: AppProps) {
     props.storage.getLeaderboard(),
   )
   const [priorBest, setPriorBest] = useState<number>(() => props.storage.getBestScore())
+  const priorBestRef = useRef<number>(props.storage.getBestScore())
 
   useEffect(() => {
     let prevValue = props.actor.getSnapshot().value as string
     const sub = props.actor.subscribe((s) => {
       const nextValue = s.value as string
-      // When entering gameOver, capture priorBest BEFORE leaderboard push, then push
+      // Snapshot best before round starts; gameMachine writes best synchronously on gameOver
+      // so we must capture here, not in the gameOver branch
+      if (nextValue === 'playing' && prevValue !== 'playing') {
+        priorBestRef.current = props.storage.getBestScore()
+      }
       if (nextValue === 'gameOver' && prevValue !== 'gameOver') {
-        const pb = props.storage.getBestScore()
-        setPriorBest(pb)
+        setPriorBest(priorBestRef.current)
         props.storage.pushLeaderboard(s.context.score)
         setLeaderboard(props.storage.getLeaderboard())
       }
