@@ -3,41 +3,41 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: — Beauty Pass
 status: milestone_complete
-last_updated: "2026-04-29T12:18:04.680Z"
+last_updated: "2026-04-30T00:20:00.000Z"
 progress:
   total_phases: 5
   completed_phases: 4
   total_plans: 20
-  completed_plans: 17
-  percent: 80
+  completed_plans: 18
+  percent: 90
 ---
 
 # Project State — Flappy 3D
 
-**Last updated:** 2026-04-29
-**Updated by:** gsd-executor (06-02)
+**Last updated:** 2026-04-30
+**Updated by:** gsd-executor (08-01)
 
 ---
 
 ## Project Reference
 
 **Core value:** The game must feel palpably more crafted than `guiguan/flappy-anna-3d` within 30 seconds of play — polished motion, real menus, real audio, 60fps on a mid-tier phone.
-**Current focus:** Phase 07 — in-game-juice (v1.1 Beauty Pass)
+**Current focus:** Phase 08 — Glass UI Refresh (v1.1 Beauty Pass final)
 
 ---
 
 ## Current Position
 
-Phase: 07
-Plan: Not started
+Phase: 08
+Plan: Complete
 | Field | Value |
 |-------|-------|
-| Phase | 7 — Complete |
-| Phase name | In-Game Juice |
-| Plans complete | 07-01 (+1 popup + milestone celebrations) ✓, 07-02 (flap trail + pipe color cycling) ✓ |
+| Phase | 8 — Complete |
+| Phase name | Glass UI Refresh |
+| Plans complete | 08-01 (arcade font + glass overlays + gradient buttons + focus ring) ✓ |
 | Plans in progress | None |
-| Status | 2/2 plans complete |
-| Phase goal | Scoring feels visceral: +1 popups, flap trail, milestone bursts, pipe color cycling |
+| Status | 1/1 plans complete |
+| Phase goal | DOM screens match 3D scene polish — arcade font, frosted glass, gradient buttons, 2-layer focus ring |
 | Blocked on | None |
 
 **Progress bar:**
@@ -50,6 +50,7 @@ Phase 4 [██████████] 100% ✓ (04-01 pwa-setup ✓, 04-02 a1
 Phase 5 [████████  ] 80% (05-01 ✓, 05-02 ✓, 05-03 tasks 1-3 ✓ | tasks 4-5 awaiting human)
 Phase 6 [██████████] 100% ✓ (06-01 bird-bob+demo-pipes ✓ | 06-02 logo+CTA ✓)
 Phase 7 [██████████] 100% ✓ (07-01 +1 popup + milestones ✓ | 07-02 flap trail + pipe colors ✓)
+Phase 8 [██████████] 100% ✓ (08-01 glass UI refresh ✓ | BEAUTY-09..12 closed)
 ```
 
 ---
@@ -96,16 +97,17 @@ Phase 7 [██████████] 100% ✓ (07-01 +1 popup + milestones �
 
 **What was done last (this session):**
 
-- Phase 7 Plan 02 (flap trail + pipe color cycling) executed: 2 tasks, 2 commits.
-  - Task 1 (0b04817): PIPE_COLOR_CYCLE (4 colors) in constants.ts; ObstaclePair per-pair material clone + setColor(); ObstacleSpawner spawnIndex + resetColorIndex() + setColorblindMode() + color cycle per spawn.
-  - Task 2 (9aa8997): Bird ghost ring buffer (3 MeshBasicMaterial meshes) + snapshotGhost() + stepGhosts(dt) + resetGhosts(); StorageManager flapTrail:boolean (default false, spread-merge getSettings()); SettingsModal "Flap trail" toggle; main.ts 5 integration edits.
+- Phase 8 Plan 01 (Glass UI Refresh) executed: 3 code tasks + 1 verification task, 3 commits.
+  - Task 1 (c0b53cc): Press Start 2P woff2 font downloaded to public/fonts/; @font-face + h1,h2 rule in styles.css; preload hint in index.html.
+  - Task 2 (a34a7e7): backdrop-filter blur(12px) saturate(120%) on .pause-screen (new), .gameover-screen (upgraded), dialog.settings-modal (saturate added); -webkit- prefix on all three.
+  - Task 3 (5447bf3): :root CSS tokens --btn-top/--btn-bottom/--focus-inner/--focus-outer; button rewrite to linear-gradient + box-shadow depth; @media(hover:hover) hover lift; active press; 2-layer box-shadow focus ring; outline:2px solid removed.
 - tsc --noEmit: exit 0. Build: clean. Bundle: 196.33KB gzip.
-- BEAUTY-06 and BEAUTY-08 requirements marked complete.
-- Phase 7 complete (2/2 plans).
+- BEAUTY-09, BEAUTY-10, BEAUTY-11, BEAUTY-12 requirements marked complete.
+- Phase 8 complete (1/1 plans). v1.1 Beauty Pass all code phases done.
 
 **What's next:**
 
-Phase 7 verification (/gsd-verify-work 7) or Phase 8 (Glass UI Refresh).
+/gsd-verify-work 8 (visual verification of Glass UI) or v1.1 tag + deploy.
 
 **Blockers:**
 
@@ -137,6 +139,7 @@ Phase 7 verification (/gsd-verify-work 7) or Phase 8 (Glass UI Refresh).
 | Phase 06 P02 | 10 | 2 tasks | 2 files |
 | Phase 07-in-game-juice P01 | 6 | 3 tasks | 5 files |
 | Phase 07-in-game-juice P02 | 6 | 2 tasks | 7 files |
+| Phase 08-glass-ui-refresh P01 | 5 | 4 tasks | 3 files |
 
 ## Phase Log
 
@@ -149,9 +152,10 @@ Phase 7 verification (/gsd-verify-work 7) or Phase 8 (Glass UI Refresh).
 | 5 | In progress | - | 05-01 hardening-audit ✓; 05-02 real-audio ✓ (AUD-02 closed); 05-03 tasks 1-3 ✓ (docs+iOS note+SHIPPED.md); tasks 4-5 awaiting human real-device verify + v1.0.0 tag |
 | 6 | ✓ Complete | 2026-04-29 | 06-01 bird-bob+demo-pipes ✓ (BEAUTY-01, BEAUTY-02 closed; 188KB gzip); 06-02 logo+CTA ✓ (BEAUTY-03, BEAUTY-04 closed; 196.78KB gzip) |
 | 7 | ✓ Complete | 2026-04-29 | 07-01 +1 popup + milestones ✓ (BEAUTY-05, BEAUTY-07 closed; 195.81KB gzip); 07-02 flap trail + pipe colors ✓ (BEAUTY-06, BEAUTY-08 closed; 196.33KB gzip) |
+| 8 | ✓ Complete | 2026-04-30 | 08-01 glass UI refresh ✓ (BEAUTY-09..12 closed; 196.33KB gzip; v1.1 Beauty Pass code complete) |
 
 ---
 
 *This file is the project's memory. Update at every phase transition and plan completion.*
 
-**Planned Phase:** 07 (in-game-juice) — 2 plans — 2026-04-29T12:10:44.700Z
+**Planned Phase:** 08 (glass-ui-refresh) — 1 plan — 2026-04-30T00:14:38.000Z

@@ -150,10 +150,14 @@ Visual polish layer on top of the shipped v1. Each requirement is motion-gated w
 
 ### Glass UI refresh (BEAUTY)
 
-- [ ] **BEAUTY-09**: `Press Start 2P` (or comparable arcade font) locally hosted as woff2 at ≤12KB; used for `<h1>`/`<h2>` only; body text remains the system stack for readability
-- [ ] **BEAUTY-10**: PauseScreen, GameOverScreen, SettingsModal use `backdrop-filter: blur(12px) saturate(120%)`; falls back gracefully on browsers without `backdrop-filter` support (solid-color background)
-- [ ] **BEAUTY-11**: `Button` component has a linear-gradient background + subtle inset shadow; hover and active states distinct; touch-target minimums (≥44×44px) preserved
-- [ ] **BEAUTY-12**: Focus ring polished — 2-color outline (inner glow + outer ring) via `:focus-visible`; remains WCAG-AA contrast against all overlay backgrounds; verify in dark + colorblind palettes
+- [x] **BEAUTY-09
+**: `Press Start 2P` (or comparable arcade font) locally hosted as woff2 at ≤12KB; used for `<h1>`/`<h2>` only; body text remains the system stack for readability
+- [x] **BEAUTY-10
+**: PauseScreen, GameOverScreen, SettingsModal use `backdrop-filter: blur(12px) saturate(120%)`; falls back gracefully on browsers without `backdrop-filter` support (solid-color background)
+- [x] **BEAUTY-11
+**: `Button` component has a linear-gradient background + subtle inset shadow; hover and active states distinct; touch-target minimums (≥44×44px) preserved
+- [x] **BEAUTY-12
+**: Focus ring polished — 2-color outline (inner glow + outer ring) via `:focus-visible`; remains WCAG-AA contrast against all overlay backgrounds; verify in dark + colorblind palettes
 
 ---
 
