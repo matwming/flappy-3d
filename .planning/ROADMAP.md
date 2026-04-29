@@ -11,7 +11,7 @@
 
 - [x] **Phase 1: Scaffold + Core Loop** — Bird falls, flaps, and collides; renderer hardened against mobile pitfalls; TypeScript strict mode enforced from commit 1 ✓ (2026-04-28)
 - [x] **Phase 2: Game Machine + Obstacles + Rendering** — Full playable loop with XState state machine, pooled obstacle system, toon rendering, and difficulty ramp ✓ (2026-04-29)
-- [ ] **Phase 3: UI + Audio + Polish** — All four screens, Howler audio, GSAP juice (squash, shake, particles), persistence, leaderboard — gap closure in progress (2026-04-29)
+- [x] **Phase 3: UI + Audio + Polish** — All four screens, Howler audio, GSAP juice (squash, shake, particles), persistence, leaderboard ✓ (2026-04-29)
 - [ ] **Phase 4: PWA + Accessibility + Bundle Audit** — Lighthouse PWA ≥90, offline play, colorblind mode, <250KB confirmed, deploy target locked
 - [ ] **Phase 5: Hardening + Ship** — Memory stability across 10 restarts, iOS audio verified on device, tab-blur music pause, production URL live
 
@@ -86,7 +86,7 @@ Plans:
   5. `npm run build` produces a deployable artifact; game is accessible at a public HTTPS URL with all assets loading (no 404s in Network panel)
 **Plans**: 4 plans
 Plans:
-- [ ] 04-01-PLAN.md — vite-plugin-pwa setup, icons, manifest, service worker (PWA-01, PWA-02, PWA-03, DEPLOY-01)
+- [x] 04-01-PLAN.md — vite-plugin-pwa setup, icons, manifest, service worker (PWA-01, PWA-02, PWA-03, DEPLOY-01) ✓
 - [ ] 04-02-PLAN.md — Install prompt, keyboard nav, aria-live, colorblind palette swap (PWA-04, A11Y-01..05)
 - [ ] 04-03-PLAN.md — CI bundle-size gate script, 60fps perf test docs (PERF-01, PERF-03)
 - [ ] 04-04-PLAN.md — GitHub Pages deploy workflow + Lighthouse PWA gate (PWA-05, DEPLOY-02, DEPLOY-03)
@@ -113,7 +113,7 @@ Plans:
 | 1. Scaffold + Core Loop | 4/4 | Complete | 2026-04-28 |
 | 2. Game Machine + Obstacles + Rendering | 3/3 | Complete | 2026-04-29 |
 | 3. UI + Audio + Polish | 6/6 | Complete | 2026-04-29 |
-| 4. PWA + Accessibility + Bundle Audit | 0/? | Not started | - |
+| 4. PWA + Accessibility + Bundle Audit | 1/4 | In progress | - |
 | 5. Hardening + Ship | 0/? | Not started | - |
 
 ---

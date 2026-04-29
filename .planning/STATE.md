@@ -29,15 +29,15 @@ progress:
 ## Current Position
 
 Phase: 4
-Plan: Not started
+Plan: 2 (next to execute)
 | Field | Value |
 |-------|-------|
-| Phase | 3 |
-| Phase name | UI + Audio + Polish |
-| Plans complete | All Phase 1 + Phase 2 |
-| Plans planned not executed | Phase 3 (4 plans: audio, ui-infra, screens, juice) |
-| Status | Ready to execute in fresh /clear session |
-| Phase goal | DOM overlay screens (Preact), Howler audio + iOS unlock, GSAP juice, particle burst, leaderboard |
+| Phase | 4 |
+| Phase name | PWA + Accessibility + Bundle Audit |
+| Plans complete | 04-01 (pwa-setup) |
+| Plans planned not executed | 04-02 (a11y), 04-03 (bundle-audit), 04-04 (deploy) |
+| Status | 04-01 complete; ready for 04-02 |
+| Phase goal | Lighthouse PWA ≥90, offline play, colorblind mode, <250KB confirmed, deploy target locked |
 
 **Progress bar:**
 
@@ -45,7 +45,7 @@ Plan: Not started
 Phase 1 [██████████] 100% ✓ (user-verified 2026-04-28)
 Phase 2 [██████████] 100% ✓ (user-verified 2026-04-29)
 Phase 3 [██████████] 100% ✓ (03-01 audio ✓, 03-02 ui-infra ✓, 03-03 screens ✓, 03-04 juice ✓, 03-05 fix-ui-state ✓, 03-06 fix-audio-motion ✓)
-Phase 4 [          ] 0%
+Phase 4 [██        ] 25% (04-01 pwa-setup ✓)
 Phase 5 [          ] 0%
 ```
 
@@ -93,19 +93,16 @@ Phase 5 [          ] 0%
 
 **What was done last (this session):**
 
-- Phase 3 Plan 06 (fix-audio-motion) executed: 4 gap-closure fixes across 2 files.
-  - visibilitychange listener added with AbortController — sends PAUSE when tab hidden during 'playing' (7bd64be)
-  - 'paused' audio branch added to actor.subscribe — music pauses on actor 'paused' entry (7bd64be)
-  - squashStretch gated behind prefersReducedMotion(storage) — matches screenShake/particles pattern (7bd64be)
-  - Music volume reset to 0.4 before play() in setMusicPlaying — fixes silent playback after fade-out death (d765121)
-  - Removed now-unused musicLoaded field (Rule 1 cleanup) (d765121)
-- Build green at 194.49 KB gzip (under 250 KB budget)
-- Requirements HUD-04, AUD-03, ANIM-06 now SATISFIED
-- Phase 3 COMPLETE — all 6 plans executed
+- Phase 4 Plan 01 (pwa-setup) executed: 2 tasks, 2 commits.
+  - Task 1: Pure-Node PNG icon generator (scripts/generate-icons.cjs) — 3 icons in public/icons/ (23be80a)
+  - Task 2: vite-plugin-pwa@1.2.0 installed, vite.config.ts configured with generateSW + autoUpdate + skipWaiting, base='/flappy-3d/', index.html theme-color meta (b0936cb)
+- Build green at 194.64 KB gzip (under 250 KB budget)
+- dist/sw.js + dist/manifest.webmanifest generated
+- Requirements PWA-01, PWA-02, PWA-03, DEPLOY-01 now SATISFIED
 
 **What's next:**
 
-Execute Phase 4 (PWA + Accessibility + Bundle Audit): Lighthouse PWA ≥90, offline play, colorblind mode, <250KB confirmed, deploy target locked
+Execute Phase 4 Plan 02 (a11y): install prompt, keyboard nav, aria-live, colorblind palette swap (PWA-04, A11Y-01..05)
 
 **Phase 3 plan summary:**
 
@@ -141,6 +138,7 @@ Execute Phase 4 (PWA + Accessibility + Bundle Audit): Lighthouse PWA ≥90, offl
 | Phase 03 P02 | 420 | 3 tasks | 9 files |
 | Phase 03 P03 | 1089 | 3 tasks | 13 files |
 | Phase 03 P04 | 119 | 3 tasks | 6 files |
+| Phase 04 P01 | 165 | 2 tasks | 8 files |
 
 ## Phase Log
 
@@ -149,7 +147,7 @@ Execute Phase 4 (PWA + Accessibility + Bundle Audit): Lighthouse PWA ≥90, offl
 | 1 | ✓ Complete | 2026-04-28 | 4 plans, 4 commits, user-verified in browser |
 | 2 | ✓ Complete | 2026-04-29 | 3 plans, 6 atomic commits; user-verified in browser |
 | 3 | ✓ Complete | 2026-04-29 | 6 plans, 12 atomic commits; HUD-04, AUD-03, ANIM-06 closed; 194.49 KB gzip |
-| 4 | Not started | - | Blocked on Phase 3 |
+| 4 | In progress | - | 04-01 pwa-setup ✓; 04-02..04 pending |
 | 5 | Not started | - | Blocked on Phase 4 |
 
 ---
