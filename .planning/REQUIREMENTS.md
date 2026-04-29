@@ -92,7 +92,8 @@
 - [ ] **PWA-03**: Service worker caches all static assets including audio files; game playable offline after first load
 - [x] **PWA-04
 **: Install prompt available on supported browsers (Android Chrome, desktop Chrome/Edge); not auto-fired before user has played at least once
-- [ ] **PWA-05**: Lighthouse PWA audit score ≥90
+- [x] **PWA-05
+**: Lighthouse PWA audit score ≥90
 
 ### Accessibility (A11Y)
 
@@ -117,8 +118,10 @@
 ### Deployment (DEPLOY)
 
 - [ ] **DEPLOY-01**: Vite `base` configured for the chosen deployment target (GitHub Pages sub-path or custom domain — decision before Phase 4)
-- [ ] **DEPLOY-02**: Production build deployable via `npm run build` + static-host upload (one command, no manual steps)
-- [ ] **DEPLOY-03**: Game accessible at a public URL with HTTPS (PWA requirement)
+- [x] **DEPLOY-02
+**: Production build deployable via `npm run build` + static-host upload (one command, no manual steps)
+- [x] **DEPLOY-03
+**: Game accessible at a public URL with HTTPS (PWA requirement)
 
 ---
 

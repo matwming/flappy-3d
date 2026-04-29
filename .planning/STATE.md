@@ -3,40 +3,40 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-04-29T04:43:54.470Z"
+last_updated: "2026-04-29T04:54:26.148Z"
 progress:
   total_phases: 5
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 17
-  completed_plans: 13
-  percent: 76
+  completed_plans: 14
+  percent: 82
 ---
 
 # Project State — Flappy 3D
 
-**Last updated:** 2026-04-28
-**Updated by:** gsd-roadmapper
+**Last updated:** 2026-04-29
+**Updated by:** gsd-executor (04-04)
 
 ---
 
 ## Project Reference
 
 **Core value:** The game must feel palpably more crafted than `guiguan/flappy-anna-3d` within 30 seconds of play — polished motion, real menus, real audio, 60fps on a mid-tier phone.
-**Current focus:** Phase 03 — ui-audio-polish
+**Current focus:** Phase 05 — hardening-ship (Phase 4 complete)
 
 ---
 
 ## Current Position
 
-Phase: 4
-Plan: 4 (next to execute)
+Phase: 5
+Plan: 1 (next to execute)
 | Field | Value |
 |-------|-------|
-| Phase | 4 |
+| Phase | 4 → COMPLETE |
 | Phase name | PWA + Accessibility + Bundle Audit |
-| Plans complete | 04-01 (pwa-setup), 04-02 (a11y), 04-03 (bundle-audit) |
-| Plans planned not executed | 04-04 (deploy) |
-| Status | 04-01 ✓, 04-02 ✓, 04-03 ✓; ready for 04-04 |
+| Plans complete | 04-01 (pwa-setup), 04-02 (a11y), 04-03 (bundle-audit), 04-04 (deploy) |
+| Plans planned not executed | none |
+| Status | All 4 plans complete ✓ |
 | Phase goal | Lighthouse PWA ≥90, offline play, colorblind mode, <250KB confirmed, deploy target locked |
 
 **Progress bar:**
@@ -45,7 +45,7 @@ Plan: 4 (next to execute)
 Phase 1 [██████████] 100% ✓ (user-verified 2026-04-28)
 Phase 2 [██████████] 100% ✓ (user-verified 2026-04-29)
 Phase 3 [██████████] 100% ✓ (03-01 audio ✓, 03-02 ui-infra ✓, 03-03 screens ✓, 03-04 juice ✓, 03-05 fix-ui-state ✓, 03-06 fix-audio-motion ✓)
-Phase 4 [██████    ] 75% (04-01 pwa-setup ✓, 04-02 a11y ✓, 04-03 bundle-audit ✓)
+Phase 4 [██████████] 100% ✓ (04-01 pwa-setup ✓, 04-02 a11y ✓, 04-03 bundle-audit ✓, 04-04 deploy ✓)
 Phase 5 [          ] 0%
 ```
 
@@ -93,15 +93,16 @@ Phase 5 [          ] 0%
 
 **What was done last (this session):**
 
-- Phase 4 Plan 02 (a11y) executed: 2 tasks, 1 commit (93056ba).
-  - Task 1: PWA install prompt (beforeinstallprompt + deferredInstallPrompt on window), keyboard nav with AbortController on all 3 screens, aria-live on GameOverScreen score, focus ring updated to 2px #ffd166, install-cta style with 44px touch targets, 04-A11Y-AUDIT.md (8 pairs, all PASS ≥4.5:1)
-  - Task 2: applyColorblindPalette + applyDefaultPalette in toonMaterial.ts, onPaletteChange callback wired main.ts → UIBridge → SettingsModal, startup palette application
+- Phase 4 Plan 04 (deploy) executed: 2 tasks, 2 commits.
+  - Task 1 (53a8698): .github/workflows/deploy.yml — 3-job workflow (build → deploy → lighthouse). build job runs bundle-check.sh gate. deploy job has job-level outputs.page_url for cross-job chaining. lighthouse job audits live URL with npx lighthouse, fails if PWA score < 0.90.
+  - Task 2 (30e45db): README.md Deployment section — one-time Pages setup, workflow steps, manual preview, CI artifacts, Cloudflare Pages migration path.
 - Current bundle: 188.01 KB gzip (61.98 KB headroom under 250 KB budget)
-- Requirements PWA-04, A11Y-01..05 now SATISFIED
+- Requirements PWA-05, DEPLOY-02, DEPLOY-03 now SATISFIED
+- Phase 4 COMPLETE — all 4 plans executed
 
 **What's next:**
 
-Execute Phase 4 Plan 04 (deploy): GitHub Pages workflow, Lighthouse gate.
+Phase 5 — Hardening + Ship (iOS on-device audio, memory stability, final QA).
 
 **Phase 3 plan summary:**
 
@@ -140,6 +141,7 @@ Execute Phase 4 Plan 04 (deploy): GitHub Pages workflow, Lighthouse gate.
 | Phase 04 P01 | 165 | 2 tasks | 8 files |
 | Phase 04 P03 | 87 | 2 tasks | 3 files |
 | Phase 04 P02 | 258 | 2 tasks | 9 files |
+| Phase 04 P04 | 6 | 2 tasks | 2 files |
 
 ## Phase Log
 
@@ -148,7 +150,7 @@ Execute Phase 4 Plan 04 (deploy): GitHub Pages workflow, Lighthouse gate.
 | 1 | ✓ Complete | 2026-04-28 | 4 plans, 4 commits, user-verified in browser |
 | 2 | ✓ Complete | 2026-04-29 | 3 plans, 6 atomic commits; user-verified in browser |
 | 3 | ✓ Complete | 2026-04-29 | 6 plans, 12 atomic commits; HUD-04, AUD-03, ANIM-06 closed; 194.49 KB gzip |
-| 4 | In progress | - | 04-01 pwa-setup ✓, 04-02 a11y ✓, 04-03 bundle-audit ✓; 04-04 deploy pending |
+| 4 | ✓ Complete | 2026-04-29 | 4 plans, 8 atomic commits; PWA-05, DEPLOY-02, DEPLOY-03 closed; 188.01 KB gzip |
 | 5 | Not started | - | Blocked on Phase 4 |
 
 ---
