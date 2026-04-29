@@ -1,9 +1,9 @@
-# Roadmap — Flappy 3D v1
+# Roadmap — Flappy 3D
 
-**Milestone:** v1 — polished PWA, endless mode, mobile-first
-**Granularity:** Coarse (5 phases)
-**Coverage:** 62/62 v1 requirements mapped
-**Generated:** 2026-04-28
+**Milestones:** v1 (shipped, awaiting tag) + v1.1 Beauty Pass (in planning)
+**Granularity:** Coarse (5 phases v1 + 3 phases v1.1)
+**Coverage:** 62/62 v1 requirements + 12 BEAUTY-* requirements mapped
+**Generated:** 2026-04-28 (v1) · 2026-04-29 (v1.1 added)
 
 ---
 
@@ -12,8 +12,14 @@
 - [x] **Phase 1: Scaffold + Core Loop** — Bird falls, flaps, and collides; renderer hardened against mobile pitfalls; TypeScript strict mode enforced from commit 1 ✓ (2026-04-28)
 - [x] **Phase 2: Game Machine + Obstacles + Rendering** — Full playable loop with XState state machine, pooled obstacle system, toon rendering, and difficulty ramp ✓ (2026-04-29)
 - [x] **Phase 3: UI + Audio + Polish** — All four screens, Howler audio, GSAP juice (squash, shake, particles), persistence, leaderboard ✓ (2026-04-29)
-- [ ] **Phase 4: PWA + Accessibility + Bundle Audit** — Lighthouse PWA ≥90, offline play, colorblind mode, <250KB confirmed, deploy target locked
-- [ ] **Phase 5: Hardening + Ship** — Memory stability across 10 restarts, iOS audio verified on device, tab-blur music pause, production URL live
+- [x] **Phase 4: PWA + Accessibility + Bundle Audit** — Lighthouse PWA 1.00 (gate ≥0.90), offline play, colorblind palette, 188KB / 250KB budget, GitHub Pages deploy ✓ (2026-04-29; PERF-03 60fps still pending real-device check)
+- [x] **Phase 5: Hardening + Ship** — DEV memory probe + AbortController on resize listeners, real CC0 audio (Kenney + Junkala), iOS silent-switch note, README hardening procedures, docs/SHIPPED.md ✓ (2026-04-29; 7 runtime/device checks pending in 05-HUMAN-UAT.md before v1.0.0 tag)
+
+### v1.1 — Beauty Pass
+
+- [ ] **Phase 6: Title-Screen Liveliness** — Bird bob, demo pipes scrolling on title, logo entrance, CTA pulse — first-impression beauty
+- [ ] **Phase 7: In-Game Juice** — `+1` score popups, flap trail, milestone celebrations at 10/25/50, per-pair pipe color cycling
+- [ ] **Phase 8: Glass UI Refresh** — Press Start 2P font for headings, backdrop-filter blur on overlays, gradient buttons, focus polish
 
 ---
 
@@ -119,14 +125,56 @@ Plans:
 | 3. UI + Audio + Polish | 6/6 | Complete | 2026-04-29 |
 | 4. PWA + Accessibility + Bundle Audit | 4/4 | Complete | 2026-04-29 |
 | 5. Hardening + Ship | 2/3 (05-03 partial) | In progress — awaiting human real-device verify | - |
+| 6. Title-Screen Liveliness | 0/TBD | Not started (v1.1) | - |
+| 7. In-Game Juice | 0/TBD | Not started (v1.1) | - |
+| 8. Glass UI Refresh | 0/TBD | Not started (v1.1) | - |
+
+---
+
+## v1.1 Phase Details
+
+### Phase 6: Title-Screen Liveliness
+**Goal**: After Phase 6, the Title screen feels alive within 2 seconds of opening — the bird bobs gently, demo pipes scroll past in the background, the logo animates in, and the "Tap to start" CTA pulses subtly. All effects motion-gated.
+**Depends on**: Phase 3 (TitleScreen exists), Phase 4 (motion gates wired)
+**Requirements**: BEAUTY-01, BEAUTY-02, BEAUTY-03, BEAUTY-04
+**Success Criteria** (what must be TRUE):
+  1. Bird visible on title screen and bobbing on a sine wave (~1Hz, ±0.15m amplitude); freezes when `prefersReducedMotion` is true
+  2. Pipes scroll past in title state (no collision, despawn-and-respawn loop); music plays at lower volume than gameplay
+  3. "Flappy 3D" logo letters fade in staggered ~50ms apart on title mount; one-shot, no re-trigger
+  4. "Tap to start" CTA opacity pulses 0.6 ↔ 1.0 over 1.6s ease-in-out; static when reduced-motion
+**Plans**: TBD
+**UI hint**: yes (frontend-heavy)
+
+### Phase 7: In-Game Juice
+**Goal**: After Phase 7, scoring feels visceral and milestone-rewarding. Each scored point gets a `+1` popup floating from the bird, milestone scores trigger a celebration burst, and pipe colors cycle subtly so the world doesn't feel monotonous.
+**Depends on**: Phase 6 (title polish complete; in-game polish builds on motion-gating already proven)
+**Requirements**: BEAUTY-05, BEAUTY-06, BEAUTY-07, BEAUTY-08
+**Success Criteria** (what must be TRUE):
+  1. Each SCORE event triggers a DOM `+1` element rising 60-80px and fading out over 600-800ms from the bird's screen position; gated under reduced-motion
+  2. Optional flap trail: 2-3 fading semi-transparent bird-mesh echoes following the bird for 150-200ms after a flap; gated under reduced-motion (default OFF for perf)
+  3. Score milestones (10, 25, 50) trigger a one-shot gold particle burst + 200ms screen-flash overlay; motion-gated
+  4. Successive ObstaclePair instances cycle through 3-4 toon material colors (subtle hue shift, not jarring) so consecutive pipes look distinct
+**Plans**: TBD
+**UI hint**: yes
+
+### Phase 8: Glass UI Refresh
+**Goal**: After Phase 8, the DOM screens feel polished and modern — arcade-style headings, glass-blur overlays, gradient buttons, and a refined focus state. No accessibility regressions; bundle stays ≤250KB.
+**Depends on**: Phase 6, Phase 7 (juice in place; this is the static-style coat of paint on top)
+**Requirements**: BEAUTY-09, BEAUTY-10, BEAUTY-11, BEAUTY-12
+**Success Criteria** (what must be TRUE):
+  1. `Press Start 2P` (or comparable arcade font) is locally hosted as woff2 (≤12KB), used for `<h1>`/`<h2>` only — body text remains system stack for readability
+  2. PauseScreen, GameOverScreen, SettingsModal use `backdrop-filter: blur(12px) saturate(120%)`; falls back gracefully when unsupported
+  3. Button component has a linear-gradient background + subtle inset shadow; hover/active states distinct; touch-target ≥44px preserved
+  4. Focus ring polished from Phase 4's basic 2px solid to a 2-color outline (inner glow + outer ring) using `:focus-visible`; remains WCAG-AA contrast against backgrounds
+**Plans**: TBD
+**UI hint**: yes (CSS + 1 font asset)
 
 ---
 
 ## Requirement Coverage
 
-**Total v1 requirements:** 62
-**Mapped:** 62
-**Orphaned:** 0
+**v1 requirements:** 62 / 62 mapped, 0 orphaned
+**v1.1 requirements:** 12 / 12 mapped (BEAUTY-01..12)
 
 | Category | Phase |
 |----------|-------|
@@ -148,7 +196,10 @@ Plans:
 | PERF-01, PERF-03 (2) | Phase 4 |
 | DEPLOY (3) | Phase 4 |
 | PERF-05 (1) | Phase 5 |
+| BEAUTY-01..04 (4) | Phase 6 |
+| BEAUTY-05..08 (4) | Phase 7 |
+| BEAUTY-09..12 (4) | Phase 8 |
 
 ---
 
-*Last updated: 2026-04-29 — Phase 3 gap closure plans 03-05 and 03-06 added*
+*Last updated: 2026-04-29 — v1.1 Beauty Pass milestone added (Phases 6-8)*

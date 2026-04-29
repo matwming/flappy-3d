@@ -12,7 +12,16 @@ The game must feel **palpably more crafted** than the baseline within 30 seconds
 
 ### Validated
 
-(None yet — ship to validate)
+(v1 awaiting human-verify on 7 runtime/device items + v1.0.0 tag — see `.planning/phases/05-hardening-ship/05-HUMAN-UAT.md`)
+
+### v1.1 Milestone — Beauty Pass (planned 2026-04-29)
+
+Visual polish layer added on top of shipped v1. Three phases (6, 7, 8) covering:
+- Title-screen liveliness (bird bob, demo pipes, logo entrance, CTA pulse)
+- In-game juice (`+1` score popup, flap trail, milestone celebrations, pipe color cycling)
+- Glass UI refresh (Press Start 2P arcade font, backdrop-filter blur, gradient buttons, focus polish)
+
+12 BEAUTY-* requirements (BEAUTY-01..12). Constraints inherited from v1: bundle ≤250KB, motion-gated effects, no new heavy libs.
 
 ### Active
 

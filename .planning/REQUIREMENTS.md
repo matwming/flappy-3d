@@ -126,6 +126,33 @@
 
 ---
 
+## v1.1 — Beauty Pass
+
+Visual polish layer on top of the shipped v1. Each requirement is motion-gated where applicable; bundle stays ≤250KB gzip.
+
+### Title-screen liveliness (BEAUTY)
+
+- [ ] **BEAUTY-01**: Bird hover-bobs with sine-wave motion (~1Hz, ±0.15m amplitude) on title state; freezes flat when `prefersReducedMotion(storage)` is true
+- [ ] **BEAUTY-02**: Demo pipes scroll past on the title screen using existing `ScrollSystem` and `ObstacleSpawner`; no collision (CollisionSystem is gated on state==='playing'); music plays at lower volume
+- [ ] **BEAUTY-03**: "Flappy 3D" logo letters fade in staggered ~50ms apart on title mount via GSAP timeline; one-shot (does not re-trigger on RESTART → title)
+- [ ] **BEAUTY-04**: "Tap to start" CTA opacity pulses 0.6 ↔ 1.0 over 1.6s ease-in-out via CSS keyframes; static when reduced-motion is set
+
+### In-game juice (BEAUTY)
+
+- [ ] **BEAUTY-05**: Each `SCORE` event spawns a DOM `+1` element rising 60-80px and fading out over 600-800ms from the bird's projected screen position; gated under `prefersReducedMotion`
+- [ ] **BEAUTY-06**: Optional flap trail — 2-3 fading semi-transparent bird-mesh echoes following the bird for 150-200ms after a flap; gated under `prefersReducedMotion`; default OFF in Settings (perf-conscious)
+- [ ] **BEAUTY-07**: Score milestones (10, 25, 50) trigger a one-shot gold particle burst + 200ms screen-flash overlay; gated under `prefersReducedMotion`
+- [ ] **BEAUTY-08**: Successive `ObstaclePair` instances cycle through 3-4 toon material colors (subtle hue shift) so consecutive pipes look distinct; cycle resets on `roundStarted`
+
+### Glass UI refresh (BEAUTY)
+
+- [ ] **BEAUTY-09**: `Press Start 2P` (or comparable arcade font) locally hosted as woff2 at ≤12KB; used for `<h1>`/`<h2>` only; body text remains the system stack for readability
+- [ ] **BEAUTY-10**: PauseScreen, GameOverScreen, SettingsModal use `backdrop-filter: blur(12px) saturate(120%)`; falls back gracefully on browsers without `backdrop-filter` support (solid-color background)
+- [ ] **BEAUTY-11**: `Button` component has a linear-gradient background + subtle inset shadow; hover and active states distinct; touch-target minimums (≥44×44px) preserved
+- [ ] **BEAUTY-12**: Focus ring polished — 2-color outline (inner glow + outer ring) via `:focus-visible`; remains WCAG-AA contrast against all overlay backgrounds; verify in dark + colorblind palettes
+
+---
+
 ## v2 / Deferred
 
 These are valuable but deliberately out of v1 scope. Add post-launch.
@@ -236,3 +263,15 @@ Populated by `gsd-roadmapper` on 2026-04-28. Every v1 REQ-ID maps to exactly one
 | DEPLOY-01 | Phase 4 | Pending |
 | DEPLOY-02 | Phase 4 | Pending |
 | DEPLOY-03 | Phase 4 | Pending |
+| BEAUTY-01 | Phase 6 | Pending |
+| BEAUTY-02 | Phase 6 | Pending |
+| BEAUTY-03 | Phase 6 | Pending |
+| BEAUTY-04 | Phase 6 | Pending |
+| BEAUTY-05 | Phase 7 | Pending |
+| BEAUTY-06 | Phase 7 | Pending |
+| BEAUTY-07 | Phase 7 | Pending |
+| BEAUTY-08 | Phase 7 | Pending |
+| BEAUTY-09 | Phase 8 | Pending |
+| BEAUTY-10 | Phase 8 | Pending |
+| BEAUTY-11 | Phase 8 | Pending |
+| BEAUTY-12 | Phase 8 | Pending |
