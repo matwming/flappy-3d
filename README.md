@@ -2,7 +2,7 @@
 
 A polished 3D Flappy Bird-style PWA built with Three.js (vanilla, no React/R3F). Cel-shaded graphics, full audio, offline-capable via service worker.
 
-**Live:** https://&lt;owner&gt;.github.io/flappy-3d/
+**Live:** https://matwming.github.io/flappy-3d/
 
 ---
 
@@ -63,6 +63,55 @@ This is a **manual test** — no automated gate exists for frame rate on real ha
    - Reduce `POOL_SIZE` or review particle count if allocations are occurring during gameplay
 
 5. **Record result** in `.planning/STATE.md` Performance Metrics table.
+
+---
+
+## Hardening verification
+
+Run these checks before tagging a release. Each maps to a Phase 5 Success Criterion.
+
+### SC-1: Memory stability (PERF-05)
+
+1. Open https://matwming.github.io/flappy-3d/ in Chrome desktop (DEV build: `npm run dev`)
+2. Open DevTools → Console
+3. Play 10 death + restart cycles
+4. Observe `[mem probe] round=N geometries=X textures=Y` log lines (DEV build only)
+5. **Pass:** geometries and textures values plateau — no consistent growth across rounds
+
+Alternate (any browser): DevTools → Memory → take Heap Snapshot before and after 10 rounds. `WebGLBuffer` count should not grow.
+
+### SC-2: iOS audio — real device (AUD-01, AUD-02)
+
+1. Open https://matwming.github.io/flappy-3d/ in Safari on a real iOS device (iOS 16+)
+2. Tap the screen to start a game
+3. Confirm flap, score, and death sounds play immediately (not synth oscillators)
+4. In Safari Web Inspector (Mac → Develop menu → your device), run: `Howler.ctx.state` — expected: `"running"`
+5. **Ringer ON:** all audio plays normally
+6. **Ringer OFF (silent switch):** audio is silenced by iOS — this is expected behaviour, not a bug. The Settings modal documents this.
+7. **Pass:** `Howler.ctx.state === 'running'` after first tap; SFX are recognisably flap/score/death sounds
+
+### SC-3: Tab-blur pause/resume
+
+1. Open the game and start a round
+2. Switch to a different tab (or press Cmd+H on mobile to background the browser)
+3. **Expected:** music stops immediately; game transitions to paused state
+4. Return to the tab
+5. **Expected:** Pause screen is shown; score is preserved
+6. Tap RESUME
+7. **Expected:** music resumes; game continues
+8. **Pass:** All three steps confirmed correct. No music ghost-playing after tab-switch.
+
+### SC-4: No stopped-actor warnings, no listener accumulation
+
+1. Open https://matwming.github.io/flappy-3d/ in Chrome
+2. Open DevTools Console (filter: Warnings + Errors)
+3. Play 20 death + restart cycles
+4. **Pass:** Zero "Event sent to stopped actor" warnings
+
+Listener stability check (Chrome only):
+1. After page load (before any play): `Object.values(getEventListeners(window)).flat().length` — record baseline
+2. After 10 restart cycles: run same command
+3. **Pass:** Count is identical (or within ±1 for browser internals)
 
 ---
 
