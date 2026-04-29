@@ -141,9 +141,11 @@ Visual polish layer on top of the shipped v1. Each requirement is motion-gated w
 
 ### In-game juice (BEAUTY)
 
-- [ ] **BEAUTY-05**: Each `SCORE` event spawns a DOM `+1` element rising 60-80px and fading out over 600-800ms from the bird's projected screen position; gated under `prefersReducedMotion`
+- [x] **BEAUTY-05
+**: Each `SCORE` event spawns a DOM `+1` element rising 60-80px and fading out over 600-800ms from the bird's projected screen position; gated under `prefersReducedMotion`
 - [ ] **BEAUTY-06**: Optional flap trail — 2-3 fading semi-transparent bird-mesh echoes following the bird for 150-200ms after a flap; gated under `prefersReducedMotion`; default OFF in Settings (perf-conscious)
-- [ ] **BEAUTY-07**: Score milestones (10, 25, 50) trigger a one-shot gold particle burst + 200ms screen-flash overlay; gated under `prefersReducedMotion`
+- [x] **BEAUTY-07
+**: Score milestones (10, 25, 50) trigger a one-shot gold particle burst + 200ms screen-flash overlay; gated under `prefersReducedMotion`
 - [ ] **BEAUTY-08**: Successive `ObstaclePair` instances cycle through 3-4 toon material colors (subtle hue shift) so consecutive pipes look distinct; cycle resets on `roundStarted`
 
 ### Glass UI refresh (BEAUTY)

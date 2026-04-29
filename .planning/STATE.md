@@ -3,7 +3,7 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: — Beauty Pass
 status: unknown
-last_updated: "2026-04-29T12:10:44.710Z"
+last_updated: "2026-04-29T12:18:04.680Z"
 progress:
   total_phases: 5
   completed_phases: 3
@@ -22,7 +22,7 @@ progress:
 ## Project Reference
 
 **Core value:** The game must feel palpably more crafted than `guiguan/flappy-anna-3d` within 30 seconds of play — polished motion, real menus, real audio, 60fps on a mid-tier phone.
-**Current focus:** Phase 06 — title-screen-liveliness (v1.1 Beauty Pass)
+**Current focus:** Phase 07 — in-game-juice (v1.1 Beauty Pass)
 
 ---
 
@@ -32,12 +32,12 @@ Phase: 06
 Plan: Not started
 | Field | Value |
 |-------|-------|
-| Phase | 6 — COMPLETE |
-| Phase name | Title-Screen Liveliness |
-| Plans complete | 06-01 (bird-bob + demo-pipes) ✓, 06-02 (logo-entrance + CTA-pulse) ✓ |
-| Plans in progress | None |
-| Status | 2/2 plans complete |
-| Phase goal | Title screen alive within 2s: bird bobbing, pipes scrolling, logo animating, CTA pulsing |
+| Phase | 7 — In Progress |
+| Phase name | In-Game Juice |
+| Plans complete | 07-01 (+1 popup + milestone celebrations) ✓ |
+| Plans in progress | None (07-02 wave 2 pending) |
+| Status | 1/2 plans complete |
+| Phase goal | Scoring feels visceral: +1 popups, flap trail, milestone bursts, pipe color cycling |
 | Blocked on | None |
 
 **Progress bar:**
@@ -49,6 +49,7 @@ Phase 3 [██████████] 100% ✓ (03-01 audio ✓, 03-02 ui-inf
 Phase 4 [██████████] 100% ✓ (04-01 pwa-setup ✓, 04-02 a11y ✓, 04-03 bundle-audit ✓, 04-04 deploy ✓)
 Phase 5 [████████  ] 80% (05-01 ✓, 05-02 ✓, 05-03 tasks 1-3 ✓ | tasks 4-5 awaiting human)
 Phase 6 [██████████] 100% ✓ (06-01 bird-bob+demo-pipes ✓ | 06-02 logo+CTA ✓)
+Phase 7 [█████     ] 50% (07-01 +1 popup + milestones ✓ | 07-02 pending)
 ```
 
 ---
@@ -95,20 +96,16 @@ Phase 6 [██████████] 100% ✓ (06-01 bird-bob+demo-pipes ✓
 
 **What was done last (this session):**
 
-- Phase 6 Plan 02 (logo entrance + CTA pulse) executed: 2 tasks, 2 commits.
-  - Task 1 (00867f8): TitleScreen.tsx — GSAP per-character stagger for FLAPPY 3D logo, hasAnimated useRef one-shot guard, reducedMotion matchMedia check, clearProps cleanup.
-  - Task 2 (1cdcccc): styles.css — ctaPulse 1.6s on .title-cta.pulse, prefers-reduced-motion media query, JS-level pulse class gate in TitleScreen.tsx.
-- tsc --noEmit: exit 0. Build: clean. Bundle: 196.78KB gzip.
-- BEAUTY-03 and BEAUTY-04 requirements marked complete.
-- Phase 6 COMPLETE: all 2 plans done.
+- Phase 7 Plan 01 (+1 popup + milestone celebrations) executed: 3 tasks, 3 commits.
+  - Task 1 (3361109): ParticleEmitter.burstTinted(origin, color) + createParticles adapter interface extended with burstTinted.
+  - Task 2 (c83b031): UIBridge ScorePopupPool (6 DOM divs, Vector3.project, animationend pool return) + spawnScorePopup() + triggerMilestoneFlash(); styles.css @keyframes scorePopup + .milestone-flash.
+  - Task 3 (01214bf): main.ts — MILESTONE_SCORES (10/25/50), firedMilestones Set, camera arg to UIBridge, score-change wiring, firedMilestones.clear() on roundStarted.
+- tsc --noEmit: exit 0. Build: clean. Bundle: 195.81KB gzip.
+- BEAUTY-05 and BEAUTY-07 requirements marked complete.
 
 **What's next:**
 
-Phase 6 is complete. Run verification:
-
-```bash
-/gsd-verify-work 06
-```
+Phase 7 Plan 02 (flap trail + pipe color cycling) — wave 2, depends_on: ["07-01"].
 
 **Blockers:**
 
@@ -120,7 +117,7 @@ Phase 6 is complete. Run verification:
 
 | Metric | Target | Current |
 |--------|--------|---------|
-| JS bundle gzipped | <250KB | 196.78KB (Phase 6 complete; logo stagger + CTA pulse added) |
+| JS bundle gzipped | <250KB | 195.81KB (Phase 7 plan 01 complete; +1 popup + milestone celebrations added) |
 | FPS on Pixel 6 class | 60fps | Unmeasured (Phase 4 PERF-03) |
 | Lighthouse PWA | ≥90 | 0 (Phase 4 PWA-05) |
 | tsc --noEmit | 0 errors | ✓ 0 errors (strict + noUncheckedIndexedAccess) |
@@ -138,6 +135,7 @@ Phase 6 is complete. Run verification:
 | Phase 05 P02 | 1480 | 2 tasks | 5 files |
 | Phase 06 P01 | 180 | 2 tasks | 4 files |
 | Phase 06 P02 | 10 | 2 tasks | 2 files |
+| Phase 07-in-game-juice P01 | 6 | 3 tasks | 5 files |
 
 ## Phase Log
 
@@ -149,6 +147,7 @@ Phase 6 is complete. Run verification:
 | 4 | ✓ Complete | 2026-04-29 | 4 plans, 8 atomic commits; PWA-05, DEPLOY-02, DEPLOY-03 closed; 188.01 KB gzip |
 | 5 | In progress | - | 05-01 hardening-audit ✓; 05-02 real-audio ✓ (AUD-02 closed); 05-03 tasks 1-3 ✓ (docs+iOS note+SHIPPED.md); tasks 4-5 awaiting human real-device verify + v1.0.0 tag |
 | 6 | ✓ Complete | 2026-04-29 | 06-01 bird-bob+demo-pipes ✓ (BEAUTY-01, BEAUTY-02 closed; 188KB gzip); 06-02 logo+CTA ✓ (BEAUTY-03, BEAUTY-04 closed; 196.78KB gzip) |
+| 7 | In progress | - | 07-01 +1 popup + milestones ✓ (BEAUTY-05, BEAUTY-07 closed; 195.81KB gzip); 07-02 pending |
 
 ---
 
