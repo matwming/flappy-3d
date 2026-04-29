@@ -1,6 +1,6 @@
 // CRITICAL: Zero Three.js imports — machine context holds only primitive values.
 
-import { setup, assign } from 'xstate'
+import { setup, assign, emit } from 'xstate'
 import { StorageManager } from '../storage/StorageManager'
 
 export type GameContext = {
@@ -19,6 +19,11 @@ export type GameEvent =
   | { type: 'RESTART' }
   | { type: 'SCORE' }
 
+// Emitted to subscribers via `actor.on(...)`. Used to signal "fresh round
+// starting" so external systems (Three.js entities, pools) can reset.
+// Distinct from the playing state's `entry` to avoid firing on RESUME.
+export type GameEmitted = { type: 'roundStarted' }
+
 // StorageManager instance used by the gameOver entry action.
 // Singleton at module level — pure TS, no Three.js dependency.
 const storage = new StorageManager()
@@ -27,6 +32,7 @@ export const gameMachine = setup({
   types: {
     context: {} as GameContext,
     events: {} as GameEvent,
+    emitted: {} as GameEmitted,
     input: {} as { bestScore: number },
   },
 }).createMachine({
@@ -45,7 +51,10 @@ export const gameMachine = setup({
       on: {
         START: {
           target: 'playing',
-          actions: assign({ score: 0, runDuration: 0 }),
+          actions: [
+            assign({ score: 0, runDuration: 0 }),
+            emit({ type: 'roundStarted' }),
+          ],
         },
       },
     },
@@ -104,7 +113,10 @@ export const gameMachine = setup({
       on: {
         RESTART: {
           target: 'playing',
-          actions: assign({ score: 0, runDuration: 0 }),
+          actions: [
+            assign({ score: 0, runDuration: 0 }),
+            emit({ type: 'roundStarted' }),
+          ],
         },
       },
     },

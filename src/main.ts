@@ -112,6 +112,22 @@ if (!WebGL.isWebGL2Available()) {
 
   ui.mount()
 
+  // Reset bird + clear obstacles when the machine emits 'roundStarted'
+  // (i.e. on START or RESTART, but not on RESUME). Driven by the machine's
+  // emitted event so main.ts doesn't need to track state-transition history.
+  actor.on('roundStarted', () => {
+    bird.position.set(0, 0, 0)
+    bird.velocity.set(0, 0, 0)
+    bird.mesh.rotation.z = 0
+    bird.syncMesh()
+    const toRelease: ObstaclePair[] = []
+    obstaclePool.forEachActive((pair) => {
+      pair.hide()
+      toRelease.push(pair)
+    })
+    for (const p of toRelease) obstaclePool.release(p)
+  })
+
   let lastScore = 0
   let prevState: string | undefined
 
@@ -119,23 +135,6 @@ if (!WebGL.isWebGL2Available()) {
     const s = snapshot.value as string
     if (import.meta.env.DEV) {
       console.log('[machine]', s, 'score:', snapshot.context.score)
-    }
-
-    // Reset bird + clear obstacles on (gameOver|title) → playing.
-    // Without this, RESTART leaves the bird below the floor / inside an
-    // obstacle, and CollisionSystem fires HIT on the next frame.
-    // 'paused' is intentionally excluded so RESUME preserves position.
-    if (s === 'playing' && (prevState === 'gameOver' || prevState === 'title')) {
-      bird.position.set(0, 0, 0)
-      bird.velocity.set(0, 0, 0)
-      bird.mesh.rotation.z = 0
-      bird.syncMesh()
-      const toRelease: ObstaclePair[] = []
-      obstaclePool.forEachActive((pair) => {
-        pair.hide()
-        toRelease.push(pair)
-      })
-      for (const p of toRelease) obstaclePool.release(p)
     }
 
     // Music control: play in 'playing', fade on 'dying', stop elsewhere
