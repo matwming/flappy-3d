@@ -174,7 +174,7 @@ Plans:
   4. Focus ring polished — 2-color outline (inner glow + outer ring) via `:focus-visible`; remains WCAG-AA contrast against all overlay backgrounds; verify in dark + colorblind palettes
 **Plans**: 1 plan
 Plans:
-- [ ] 08-01-PLAN.md — Press Start 2P font, glass blur overlays, gradient buttons, focus ring (BEAUTY-09..12)
+- [x] 08-01-PLAN.md — Press Start 2P font, glass blur overlays, gradient buttons, focus ring (BEAUTY-09..12)
 **UI hint**: yes (CSS + 1 font asset)
 
 ---
