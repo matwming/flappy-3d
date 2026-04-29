@@ -45,7 +45,10 @@ export function SettingsModal({ storage, audio, onClose }: Props) {
     if (partial.reduceMotion !== undefined) refreshReducedMotion(storage)
   }
 
-  const reduceMotionOn = settings.reduceMotion !== 'off'
+  const reduceMotionOn =
+    settings.reduceMotion === 'on' ||
+    (settings.reduceMotion === 'auto' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches)
 
   return h(
     'dialog',
