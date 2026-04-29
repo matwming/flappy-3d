@@ -91,7 +91,7 @@ if (!WebGL.isWebGL2Available()) {
     } else {
       applyDefaultPalette(birdMaterial, pipeMaterial)
     }
-  })
+  }, camera)
   const particles = createParticles(scene)
 
   input.onFlap(() => {
@@ -179,6 +179,7 @@ if (!WebGL.isWebGL2Available()) {
       toRelease.push(pair)
     })
     for (const p of toRelease) obstaclePool.release(p)
+    firedMilestones.clear()
 
     if (import.meta.env.DEV) {
       const mem = renderer.info.memory
@@ -190,6 +191,9 @@ if (!WebGL.isWebGL2Available()) {
       }
     }
   })
+
+  const MILESTONE_SCORES = new Set([10, 25, 50])
+  const firedMilestones = new Set<number>()
 
   let lastScore = 0
   let prevState: string | undefined
@@ -225,9 +229,23 @@ if (!WebGL.isWebGL2Available()) {
       }
     }
 
-    // Score SFX on each increment
+    // Score SFX + popup + milestone on each increment
     if (s === 'playing' && snapshot.context.score > lastScore) {
       audio.playScore()
+      if (!prefersReducedMotion(storage)) {
+        ui.spawnScorePopup({ x: bird.position.x, y: bird.position.y, z: bird.position.z })
+      }
+      const score = snapshot.context.score
+      if (MILESTONE_SCORES.has(score) && !firedMilestones.has(score)) {
+        firedMilestones.add(score)
+        if (!prefersReducedMotion(storage)) {
+          particles.burstTinted(
+            { x: bird.position.x, y: bird.position.y, z: bird.position.z },
+            0xffd166,
+          )
+          ui.triggerMilestoneFlash()
+        }
+      }
     }
     lastScore = snapshot.context.score
     prevState = s
