@@ -9,7 +9,7 @@ import {
   SRGBColorSpace,
 } from 'three'
 
-export function createRenderer(): {
+export function createRenderer(signal?: AbortSignal): {
   renderer: WebGLRenderer
   scene: Scene
   camera: PerspectiveCamera
@@ -56,7 +56,7 @@ export function createRenderer(): {
     camera.aspect = window.innerWidth / window.innerHeight
     camera.updateProjectionMatrix()
     renderer.setSize(window.innerWidth, window.innerHeight)
-  })
+  }, { signal })
 
   return { renderer, scene, camera }
 }

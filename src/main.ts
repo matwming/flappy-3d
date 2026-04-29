@@ -45,7 +45,8 @@ if (!WebGL.isWebGL2Available()) {
     'Sorry, this game needs WebGL 2. Please try a recent version of Chrome, Firefox, or Safari.'
   document.body.appendChild(msg)
 } else {
-  const { renderer, scene, camera } = createRenderer()
+  const ac = new AbortController()
+  const { renderer, scene, camera } = createRenderer(ac.signal)
   const canvas = renderer.domElement
 
   const storage = new StorageManager()
@@ -116,14 +117,13 @@ if (!WebGL.isWebGL2Available()) {
   loop.add(collision)
   loop.add({ step: (dt: number) => particles.step(dt) })
 
-  const composerResult = createComposer(renderer, scene, camera)
+  const composerResult = createComposer(renderer, scene, camera, ac.signal)
   if (composerResult !== null) {
     loop.setRenderFn(composerResult.render)
   }
 
   actor.start()
 
-  const ac = new AbortController()
   document.addEventListener(
     'visibilitychange',
     () => {

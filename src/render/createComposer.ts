@@ -22,6 +22,7 @@ export function createComposer(
   renderer: WebGLRenderer,
   scene: Scene,
   camera: PerspectiveCamera,
+  signal?: AbortSignal,
 ): ComposerResult | null {
   const isLowTier =
     navigator.hardwareConcurrency <= 4 ||
@@ -56,7 +57,7 @@ export function createComposer(
 
   window.addEventListener('resize', () => {
     composer.setSize(window.innerWidth, window.innerHeight)
-  })
+  }, { signal })
 
   return {
     composer,
