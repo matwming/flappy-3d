@@ -3,19 +3,19 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: — Beauty Pass
 status: unknown
-last_updated: "2026-04-29T07:24:45.002Z"
+last_updated: "2026-04-29T08:00:00.000Z"
 progress:
   total_phases: 5
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 20
-  completed_plans: 17
-  percent: 85
+  completed_plans: 19
+  percent: 95
 ---
 
 # Project State — Flappy 3D
 
 **Last updated:** 2026-04-29
-**Updated by:** gsd-executor (06-01)
+**Updated by:** gsd-executor (06-02)
 
 ---
 
@@ -29,14 +29,14 @@ progress:
 ## Current Position
 
 Phase: 06
-Plan: 01 complete
+Plan: 02 complete
 | Field | Value |
 |-------|-------|
-| Phase | 6 — in progress |
+| Phase | 6 — COMPLETE |
 | Phase name | Title-Screen Liveliness |
-| Plans complete | 06-01 (bird-bob + demo-pipes) ✓ |
-| Plans in progress | 06-02 (logo-entrance + CTA-pulse) — not started |
-| Status | 1/2 plans complete |
+| Plans complete | 06-01 (bird-bob + demo-pipes) ✓, 06-02 (logo-entrance + CTA-pulse) ✓ |
+| Plans in progress | None |
+| Status | 2/2 plans complete |
 | Phase goal | Title screen alive within 2s: bird bobbing, pipes scrolling, logo animating, CTA pulsing |
 | Blocked on | None |
 
@@ -48,7 +48,7 @@ Phase 2 [██████████] 100% ✓ (user-verified 2026-04-29)
 Phase 3 [██████████] 100% ✓ (03-01 audio ✓, 03-02 ui-infra ✓, 03-03 screens ✓, 03-04 juice ✓, 03-05 fix-ui-state ✓, 03-06 fix-audio-motion ✓)
 Phase 4 [██████████] 100% ✓ (04-01 pwa-setup ✓, 04-02 a11y ✓, 04-03 bundle-audit ✓, 04-04 deploy ✓)
 Phase 5 [████████  ] 80% (05-01 ✓, 05-02 ✓, 05-03 tasks 1-3 ✓ | tasks 4-5 awaiting human)
-Phase 6 [█████     ] 50% (06-01 bird-bob+demo-pipes ✓ | 06-02 logo+CTA pending)
+Phase 6 [██████████] 100% ✓ (06-01 bird-bob+demo-pipes ✓ | 06-02 logo+CTA ✓)
 ```
 
 ---
@@ -95,18 +95,19 @@ Phase 6 [█████     ] 50% (06-01 bird-bob+demo-pipes ✓ | 06-02 logo+C
 
 **What was done last (this session):**
 
-- Phase 6 Plan 01 (bird-bob + demo-pipes) executed: 2 tasks, 2 commits.
-  - Task 1 (dfa3fd4): main.ts + AudioManager — bobTime accumulator, bird.mesh.position.y sine bob, title/gameOver music split, setMusicVolume(0.2/0.4).
-  - Task 2 (22a0981): ScrollSystem + ObstacleSpawner — title gate relaxed, TITLE_DEMO_SCROLL_SPEED + TITLE_DEMO_DIFFICULTY constants.
-- tsc --noEmit: exit 0. Build: clean. Bundle: 188KB gzip.
-- BEAUTY-01 and BEAUTY-02 requirements marked complete.
+- Phase 6 Plan 02 (logo entrance + CTA pulse) executed: 2 tasks, 2 commits.
+  - Task 1 (00867f8): TitleScreen.tsx — GSAP per-character stagger for FLAPPY 3D logo, hasAnimated useRef one-shot guard, reducedMotion matchMedia check, clearProps cleanup.
+  - Task 2 (1cdcccc): styles.css — ctaPulse 1.6s on .title-cta.pulse, prefers-reduced-motion media query, JS-level pulse class gate in TitleScreen.tsx.
+- tsc --noEmit: exit 0. Build: clean. Bundle: 196.78KB gzip.
+- BEAUTY-03 and BEAUTY-04 requirements marked complete.
+- Phase 6 COMPLETE: all 2 plans done.
 
 **What's next:**
 
-Execute Phase 6 Plan 02 (logo entrance + CTA pulse):
+Phase 6 is complete. Run verification:
 
 ```bash
-/gsd-execute-phase 06-02 --auto
+/gsd-verify-work 06
 ```
 
 **Blockers:**
@@ -119,7 +120,7 @@ Execute Phase 6 Plan 02 (logo entrance + CTA pulse):
 
 | Metric | Target | Current |
 |--------|--------|---------|
-| JS bundle gzipped | <250KB | 194.40KB (Phase 3 complete; +65.8KB for Howler+Preact+GSAP; Phase 4 PERF-01 will audit) |
+| JS bundle gzipped | <250KB | 196.78KB (Phase 6 complete; logo stagger + CTA pulse added) |
 | FPS on Pixel 6 class | 60fps | Unmeasured (Phase 4 PERF-03) |
 | Lighthouse PWA | ≥90 | 0 (Phase 4 PWA-05) |
 | tsc --noEmit | 0 errors | ✓ 0 errors (strict + noUncheckedIndexedAccess) |
@@ -136,6 +137,7 @@ Execute Phase 6 Plan 02 (logo entrance + CTA pulse):
 | Phase 05 P01 | 2 | 3 tasks | 6 files |
 | Phase 05 P02 | 1480 | 2 tasks | 5 files |
 | Phase 06 P01 | 180 | 2 tasks | 4 files |
+| Phase 06 P02 | 10 | 2 tasks | 2 files |
 
 ## Phase Log
 
@@ -146,7 +148,7 @@ Execute Phase 6 Plan 02 (logo entrance + CTA pulse):
 | 3 | ✓ Complete | 2026-04-29 | 6 plans, 12 atomic commits; HUD-04, AUD-03, ANIM-06 closed; 194.49 KB gzip |
 | 4 | ✓ Complete | 2026-04-29 | 4 plans, 8 atomic commits; PWA-05, DEPLOY-02, DEPLOY-03 closed; 188.01 KB gzip |
 | 5 | In progress | - | 05-01 hardening-audit ✓; 05-02 real-audio ✓ (AUD-02 closed); 05-03 tasks 1-3 ✓ (docs+iOS note+SHIPPED.md); tasks 4-5 awaiting human real-device verify + v1.0.0 tag |
-| 6 | In progress | - | 06-01 bird-bob+demo-pipes ✓ (BEAUTY-01, BEAUTY-02 closed; 188KB gzip); 06-02 logo+CTA pending |
+| 6 | ✓ Complete | 2026-04-29 | 06-01 bird-bob+demo-pipes ✓ (BEAUTY-01, BEAUTY-02 closed; 188KB gzip); 06-02 logo+CTA ✓ (BEAUTY-03, BEAUTY-04 closed; 196.78KB gzip) |
 
 ---
 

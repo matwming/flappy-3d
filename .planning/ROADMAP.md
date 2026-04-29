@@ -17,7 +17,7 @@
 
 ### v1.1 — Beauty Pass
 
-- [ ] **Phase 6: Title-Screen Liveliness** — Bird bob, demo pipes scrolling on title, logo entrance, CTA pulse — first-impression beauty
+- [x] **Phase 6: Title-Screen Liveliness** — Bird bob, demo pipes scrolling on title, logo entrance, CTA pulse — first-impression beauty ✓ (2026-04-29)
 - [ ] **Phase 7: In-Game Juice** — `+1` score popups, flap trail, milestone celebrations at 10/25/50, per-pair pipe color cycling
 - [ ] **Phase 8: Glass UI Refresh** — Press Start 2P font for headings, backdrop-filter blur on overlays, gradient buttons, focus polish
 
@@ -125,7 +125,7 @@ Plans:
 | 3. UI + Audio + Polish | 6/6 | Complete | 2026-04-29 |
 | 4. PWA + Accessibility + Bundle Audit | 4/4 | Complete | 2026-04-29 |
 | 5. Hardening + Ship | 2/3 (05-03 partial) | In progress — awaiting human real-device verify | - |
-| 6. Title-Screen Liveliness | 0/2 | Not started (v1.1) | - |
+| 6. Title-Screen Liveliness | 2/2 | Complete (v1.1) | 2026-04-29 |
 | 7. In-Game Juice | 0/TBD | Not started (v1.1) | - |
 | 8. Glass UI Refresh | 0/TBD | Not started (v1.1) | - |
 
@@ -144,8 +144,8 @@ Plans:
   4. "Tap to start" CTA opacity pulses 0.6 ↔ 1.0 over 1.6s ease-in-out; static when reduced-motion
 **Plans**: 2 plans
 Plans:
-- [ ] 06-01-PLAN.md — Bird sine bob (BEAUTY-01) + demo pipes via ScrollSystem/ObstacleSpawner title gate (BEAUTY-02) + AudioManager.setMusicVolume
-- [ ] 06-02-PLAN.md — Logo letter-stagger GSAP entrance + hasAnimated guard (BEAUTY-03) + CTA pulse CSS with motion gate (BEAUTY-04)
+- [x] 06-01-PLAN.md — Bird sine bob (BEAUTY-01) + demo pipes via ScrollSystem/ObstacleSpawner title gate (BEAUTY-02) + AudioManager.setMusicVolume ✓
+- [x] 06-02-PLAN.md — Logo letter-stagger GSAP entrance + hasAnimated guard (BEAUTY-03) + CTA pulse CSS with motion gate (BEAUTY-04) ✓
 **UI hint**: yes (frontend-heavy)
 
 ### Phase 7: In-Game Juice
