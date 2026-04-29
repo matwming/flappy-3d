@@ -77,7 +77,9 @@ if (!WebGL.isWebGL2Available()) {
       physics.queueFlap()
       actor.send({ type: 'FLAP' })
       audio.playFlap()
-      squashStretch(bird.mesh)
+      if (!prefersReducedMotion(storage)) {
+        squashStretch(bird.mesh)
+      }
     } else if (state === 'gameOver') {
       actor.send({ type: 'RESTART' })
     }
@@ -96,6 +98,18 @@ if (!WebGL.isWebGL2Available()) {
   }
 
   actor.start()
+
+  const ac = new AbortController()
+  document.addEventListener(
+    'visibilitychange',
+    () => {
+      if (document.hidden && actor.getSnapshot().value === 'playing') {
+        actor.send({ type: 'PAUSE' })
+      }
+    },
+    { signal: ac.signal },
+  )
+
   ui.mount()
 
   let lastScore = 0
@@ -113,6 +127,8 @@ if (!WebGL.isWebGL2Available()) {
     } else if (s === 'dying') {
       audio.fadeMusicOut(600)
       audio.playDeath()
+    } else if (s === 'paused') {
+      audio.setMusicPlaying(false)
     } else if (s === 'gameOver' || s === 'title') {
       audio.setMusicPlaying(false)
     }
