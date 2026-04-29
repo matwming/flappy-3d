@@ -10,9 +10,10 @@ interface Props {
   storage: StorageManager
   audio: AudioManager
   onClose: () => void
+  onPaletteChange: (palette: 'default' | 'colorblind') => void
 }
 
-export function SettingsModal({ storage, audio, onClose }: Props) {
+export function SettingsModal({ storage, audio, onClose, onPaletteChange }: Props) {
   const [settings, setSettings] = useState<SettingsV2>(() => storage.getSettings())
   const dialogRef = useRef<HTMLDialogElement>(null)
 
@@ -43,6 +44,9 @@ export function SettingsModal({ storage, audio, onClose }: Props) {
 
     // Refresh reduce-motion gate if that setting changed
     if (partial.reduceMotion !== undefined) refreshReducedMotion(storage)
+
+    // Trigger palette swap when colorblind setting changes
+    if (partial.palette !== undefined) onPaletteChange(partial.palette)
   }
 
   const reduceMotionOn =

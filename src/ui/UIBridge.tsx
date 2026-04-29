@@ -18,25 +18,38 @@ interface AppProps {
   actor: GameActor
   audio: AudioManager
   storage: StorageManager
+  onPaletteChange: (palette: 'default' | 'colorblind') => void
 }
 
 export class UIBridge {
   private actor: GameActor
   private audio: AudioManager
   private storage: StorageManager
+  private onPaletteChange: (palette: 'default' | 'colorblind') => void
   private mountEl: HTMLElement | null = null
 
-  constructor(actor: GameActor, audio: AudioManager, storage: StorageManager) {
+  constructor(
+    actor: GameActor,
+    audio: AudioManager,
+    storage: StorageManager,
+    onPaletteChange: (palette: 'default' | 'colorblind') => void,
+  ) {
     this.actor = actor
     this.audio = audio
     this.storage = storage
+    this.onPaletteChange = onPaletteChange
   }
 
   mount(): void {
     this.mountEl = document.getElementById('ui-root')
     if (!this.mountEl) throw new Error('#ui-root not found in DOM')
     render(
-      h(App, { actor: this.actor, audio: this.audio, storage: this.storage }),
+      h(App, {
+        actor: this.actor,
+        audio: this.audio,
+        storage: this.storage,
+        onPaletteChange: this.onPaletteChange,
+      }),
       this.mountEl,
     )
   }
@@ -54,6 +67,7 @@ function App(props: AppProps) {
   )
   const [priorBest, setPriorBest] = useState<number>(() => props.storage.getBestScore())
   const priorBestRef = useRef<number>(props.storage.getBestScore())
+  const [showInstall, setShowInstall] = useState(false)
 
   useEffect(() => {
     let prevValue = props.actor.getSnapshot().value as string
@@ -75,6 +89,23 @@ function App(props: AppProps) {
     return () => sub.unsubscribe()
   }, [])
 
+  // Detect when browser fires beforeinstallprompt so install CTA can appear
+  useEffect(() => {
+    const checkPrompt = () => setShowInstall(!!window.deferredInstallPrompt)
+    window.addEventListener('beforeinstallprompt', checkPrompt)
+    return () => window.removeEventListener('beforeinstallprompt', checkPrompt)
+  }, [])
+
+  function handleInstall() {
+    const prompt = window.deferredInstallPrompt
+    if (!prompt) return
+    void prompt.prompt()
+    void prompt.userChoice.then(() => {
+      window.deferredInstallPrompt = undefined
+      setShowInstall(false)
+    })
+  }
+
   const value = snap.value as string
 
   return h(
@@ -85,6 +116,8 @@ function App(props: AppProps) {
       actor: props.actor,
       leaderboard,
       onSettings: () => setSettingsOpen(true),
+      onInstall: handleInstall,
+      showInstall,
     }),
     h(HUD, {
       active: value === 'playing' || value === 'dying',
@@ -108,6 +141,7 @@ function App(props: AppProps) {
           storage: props.storage,
           audio: props.audio,
           onClose: () => setSettingsOpen(false),
+          onPaletteChange: props.onPaletteChange,
         })
       : null,
   )

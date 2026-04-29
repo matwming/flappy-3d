@@ -13,13 +13,15 @@ interface Props {
 
 export function PauseScreen({ active, actor }: Props) {
   useEffect(() => {
+    const ac = new AbortController()
     const handleKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && active) {
+      if (!active) return
+      if (e.key === 'Escape') {
         actor.send({ type: 'RESUME' })
       }
     }
-    document.addEventListener('keydown', handleKey)
-    return () => document.removeEventListener('keydown', handleKey)
+    document.addEventListener('keydown', handleKey, { signal: ac.signal })
+    return () => ac.abort()
   }, [active, actor])
 
   return h(

@@ -21,13 +21,15 @@ export function GameOverScreen({ active, actor, score, priorBest, leaderboard }:
   const isNewBest = score > 0 && score > priorBest
 
   useEffect(() => {
+    const ac = new AbortController()
     const handleKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && active) {
+      if (!active) return
+      if (e.key === 'Escape' || e.key === 'Enter') {
         actor.send({ type: 'RESTART' })
       }
     }
-    document.addEventListener('keydown', handleKey)
-    return () => document.removeEventListener('keydown', handleKey)
+    document.addEventListener('keydown', handleKey, { signal: ac.signal })
+    return () => ac.abort()
   }, [active, actor])
 
   return h(
@@ -42,7 +44,11 @@ export function GameOverScreen({ active, actor, score, priorBest, leaderboard }:
       },
     },
     h('h2', { className: 'gameover-heading' }, 'Game Over'),
-    h('div', { className: 'gameover-score' }, score),
+    h('div', {
+      className: 'gameover-score',
+      'aria-live': 'polite',
+      'aria-atomic': 'true',
+    }, score),
     isNewBest ? h(NewBestBadge, null) : h('p', { className: 'gameover-pb' }, 'Best: ' + priorBest),
     h('div', { style: 'margin: 8px 0; width: 100%; max-width: 300px;' },
       h(LeaderboardList, { entries: leaderboard, max: 5 }),

@@ -1,9 +1,20 @@
+// Augment Window for beforeinstallprompt (not in TS DOM lib)
+interface BeforeInstallPromptEvent extends Event {
+  prompt(): Promise<void>
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>
+}
+declare global {
+  interface Window {
+    deferredInstallPrompt?: BeforeInstallPromptEvent
+  }
+}
+
 import { createActor } from 'xstate'
 import { BoxGeometry } from 'three'
 import WebGL from 'three/addons/capabilities/WebGL.js'
 import { createRenderer } from './render/createRenderer'
 import { createComposer } from './render/createComposer'
-import { createToonGradient, createToonMaterial } from './render/toonMaterial'
+import { createToonGradient, createToonMaterial, applyColorblindPalette, applyDefaultPalette } from './render/toonMaterial'
 import { GameLoop } from './loop/GameLoop'
 import { InputManager } from './input/InputManager'
 import { Bird } from './entities/Bird'
@@ -66,7 +77,20 @@ if (!WebGL.isWebGL2Available()) {
   const collision = new CollisionSystem(bird, obstaclePool, actor)
 
   const audio = new AudioManager()
-  const ui = new UIBridge(actor, audio, storage)
+
+  // Apply stored palette at startup (per D-13)
+  const storedSettings = storage.getSettings()
+  if (storedSettings.palette === 'colorblind') {
+    applyColorblindPalette(birdMaterial, pipeMaterial)
+  }
+
+  const ui = new UIBridge(actor, audio, storage, (palette) => {
+    if (palette === 'colorblind') {
+      applyColorblindPalette(birdMaterial, pipeMaterial)
+    } else {
+      applyDefaultPalette(birdMaterial, pipeMaterial)
+    }
+  })
   const particles = createParticles(scene)
 
   input.onFlap(() => {
@@ -106,6 +130,16 @@ if (!WebGL.isWebGL2Available()) {
       if (document.hidden && actor.getSnapshot().value === 'playing') {
         actor.send({ type: 'PAUSE' })
       }
+    },
+    { signal: ac.signal },
+  )
+
+  // Capture beforeinstallprompt for deferred PWA install CTA (per D-10)
+  window.addEventListener(
+    'beforeinstallprompt',
+    (e) => {
+      e.preventDefault()
+      window.deferredInstallPrompt = e as BeforeInstallPromptEvent
     },
     { signal: ac.signal },
   )
