@@ -1,23 +1,30 @@
-import { Group, Mesh, BoxGeometry, Material, Box3, Scene } from 'three'
+import { Group, Mesh, BoxGeometry, Material, MeshToonMaterial, Box3, Scene } from 'three'
 
 const PIPE_HEIGHT = 6
 
 export class ObstaclePair {
   readonly group: Group
-  private topMesh: Mesh<BoxGeometry, Material>
-  private bottomMesh: Mesh<BoxGeometry, Material>
+  private topMesh: Mesh<BoxGeometry, MeshToonMaterial>
+  private bottomMesh: Mesh<BoxGeometry, MeshToonMaterial>
   private topBox: Box3 = new Box3()
   private bottomBox: Box3 = new Box3()
+  private readonly pairMaterial: MeshToonMaterial
   passed = false
 
   constructor(geometry: BoxGeometry, material: Material, scene: Scene) {
     this.group = new Group()
-    this.topMesh = new Mesh(geometry, material)
-    this.bottomMesh = new Mesh(geometry, material)
+    // Clone per-pair so setColor() affects only this pair's meshes (D-17)
+    this.pairMaterial = (material as MeshToonMaterial).clone()
+    this.topMesh = new Mesh(geometry, this.pairMaterial)
+    this.bottomMesh = new Mesh(geometry, this.pairMaterial)
     this.group.add(this.topMesh)
     this.group.add(this.bottomMesh)
     this.group.visible = false
     scene.add(this.group)
+  }
+
+  setColor(colorHex: number): void {
+    this.pairMaterial.color.set(colorHex)
   }
 
   reset(x: number, gapCenterY: number, gapHeight: number): void {

@@ -26,6 +26,17 @@ export const MIN_GAP_HEIGHT = 1.6           // pipe gap (world units) at score 4
 export const GAP_CENTER_RANGE = 1.0         // gap center randomized in [-1.0, +1.0]
 export const DIFFICULTY_SCORE_CAP = 40      // score at which difficulty plateaus
 
+// Phase 7 — pipe color cycling (BEAUTY-08, D-14, D-18)
+// 4 toon colors cycling per ObstaclePair spawn. PIPE_COLOR_CYCLE[0] === PIPE_COLOR (green).
+// All colors chosen for adequate luminance contrast against sky-blue background.
+// When colorblind palette is active, cycling is suppressed (uses colorblind single color instead).
+export const PIPE_COLOR_CYCLE: readonly number[] = [
+  0x4caf50,  // green (matches existing PIPE_COLOR)
+  0x3f8fb8,  // teal-blue
+  0xb8843f,  // warm orange-brown
+  0x9b3fb8,  // muted purple
+] as const
+
 // Phase 2 — object pool (per D-07, D-22)
 export const POOL_SIZE = 8                  // pre-warmed ObstaclePair instances
 
