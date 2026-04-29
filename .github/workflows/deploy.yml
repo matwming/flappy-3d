@@ -97,7 +97,7 @@ jobs:
             --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" \
             --quiet || true
 
-      - name: Check PWA score (gate: >= 0.90)
+      - name: "Check PWA score (gate: >= 0.90)"
         run: |
           if [ ! -f lighthouse-pwa.json ]; then
             echo "ERROR: lighthouse-pwa.json not found. Lighthouse may have failed to run."

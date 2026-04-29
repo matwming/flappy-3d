@@ -87,9 +87,9 @@ Plans:
 **Plans**: 4 plans
 Plans:
 - [x] 04-01-PLAN.md — vite-plugin-pwa setup, icons, manifest, service worker (PWA-01, PWA-02, PWA-03, DEPLOY-01) ✓
-- [ ] 04-02-PLAN.md — Install prompt, keyboard nav, aria-live, colorblind palette swap (PWA-04, A11Y-01..05)
-- [ ] 04-03-PLAN.md — CI bundle-size gate script, 60fps perf test docs (PERF-01, PERF-03)
-- [ ] 04-04-PLAN.md — GitHub Pages deploy workflow + Lighthouse PWA gate (PWA-05, DEPLOY-02, DEPLOY-03)
+- [x] 04-02-PLAN.md — Install prompt, keyboard nav, aria-live, colorblind palette swap (PWA-04, A11Y-01..05)
+- [x] 04-03-PLAN.md — CI bundle-size gate script, 60fps perf test docs (PERF-01, PERF-03)
+- [x] 04-04-PLAN.md — GitHub Pages deploy workflow + Lighthouse PWA gate (PWA-05, DEPLOY-02, DEPLOY-03)
 **UI hint**: yes
 
 ### Phase 5: Hardening + Ship
