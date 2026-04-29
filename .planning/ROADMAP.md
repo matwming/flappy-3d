@@ -126,7 +126,7 @@ Plans:
 | 4. PWA + Accessibility + Bundle Audit | 4/4 | Complete | 2026-04-29 |
 | 5. Hardening + Ship | 2/3 (05-03 partial) | In progress — awaiting human real-device verify | - |
 | 6. Title-Screen Liveliness | 2/2 | Complete (v1.1) | 2026-04-29 |
-| 7. In-Game Juice | 0/TBD | Not started (v1.1) | - |
+| 7. In-Game Juice | 0/2 | Not started (v1.1) | - |
 | 8. Glass UI Refresh | 0/TBD | Not started (v1.1) | - |
 
 ---
@@ -157,7 +157,10 @@ Plans:
   2. Optional flap trail: 2-3 fading semi-transparent bird-mesh echoes following the bird for 150-200ms after a flap; gated under reduced-motion (default OFF for perf)
   3. Score milestones (10, 25, 50) trigger a one-shot gold particle burst + 200ms screen-flash overlay; motion-gated
   4. Successive ObstaclePair instances cycle through 3-4 toon material colors (subtle hue shift, not jarring) so consecutive pipes look distinct
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+- [ ] 07-01-PLAN.md — Score popup pool + milestone flash (BEAUTY-05, BEAUTY-07) + main.ts wiring
+- [ ] 07-02-PLAN.md — Flap trail ghosts + pipe color cycling + flapTrail setting (BEAUTY-06, BEAUTY-08)
 **UI hint**: yes
 
 ### Phase 8: Glass UI Refresh
