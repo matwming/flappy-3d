@@ -5,6 +5,7 @@ export interface SettingsV2 {
   music: boolean
   reduceMotion: 'auto' | 'on' | 'off'
   palette: 'default' | 'colorblind'
+  flapTrail: boolean  // Phase 7 BEAUTY-06; default false
 }
 
 export interface LeaderboardEntry {
@@ -17,6 +18,7 @@ const DEFAULT_SETTINGS: SettingsV2 = {
   music: true,
   reduceMotion: 'auto',
   palette: 'default',
+  flapTrail: false,
 }
 
 interface SaveV1 {
@@ -101,7 +103,7 @@ export class StorageManager {
   }
 
   getSettings(): SettingsV2 {
-    return { ...this.load().settings }
+    return { ...DEFAULT_SETTINGS, ...this.load().settings }
   }
 
   setSettings(partial: Partial<SettingsV2>): void {

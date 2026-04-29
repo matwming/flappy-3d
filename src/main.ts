@@ -83,6 +83,7 @@ if (!WebGL.isWebGL2Available()) {
   const storedSettings = storage.getSettings()
   if (storedSettings.palette === 'colorblind') {
     applyColorblindPalette(birdMaterial, pipeMaterial)
+    spawner.setColorblindMode(true)
   }
 
   const ui = new UIBridge(actor, audio, storage, (palette) => {
@@ -91,6 +92,7 @@ if (!WebGL.isWebGL2Available()) {
     } else {
       applyDefaultPalette(birdMaterial, pipeMaterial)
     }
+    spawner.setColorblindMode(palette === 'colorblind')
   }, camera)
   const particles = createParticles(scene)
 
@@ -105,6 +107,9 @@ if (!WebGL.isWebGL2Available()) {
       if (!prefersReducedMotion(storage)) {
         squashStretch(bird.mesh)
       }
+      if (storage.getSettings().flapTrail && !prefersReducedMotion(storage)) {
+        bird.snapshotGhost()
+      }
     } else if (state === 'gameOver') {
       actor.send({ type: 'RESTART' })
     }
@@ -118,6 +123,7 @@ if (!WebGL.isWebGL2Available()) {
   loop.add(scoreSystem)
   loop.add(collision)
   loop.add({ step: (dt: number) => particles.step(dt) })
+  loop.add({ step: (dt: number) => bird.stepGhosts(dt) })
   loop.add({
     step: (dt: number) => {
       const s = actor.getSnapshot().value
@@ -180,6 +186,8 @@ if (!WebGL.isWebGL2Available()) {
     })
     for (const p of toRelease) obstaclePool.release(p)
     firedMilestones.clear()
+    bird.resetGhosts()
+    spawner.resetColorIndex()
 
     if (import.meta.env.DEV) {
       const mem = renderer.info.memory

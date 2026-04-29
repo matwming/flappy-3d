@@ -89,6 +89,14 @@ export function SettingsModal({ storage, audio, onClose, onPaletteChange }: Prop
         checked: settings.palette === 'colorblind',
         onChange: (v) => update({ palette: v ? 'colorblind' : 'default' }),
       }),
+      h(Toggle, {
+        label: 'Flap trail',
+        checked: settings.flapTrail ?? false,
+        onChange: (v) => update({ flapTrail: v }),
+      }),
+      h('p', { className: 'settings-note' },
+        'Adds ghost echoes after each flap. May reduce performance on older devices.',
+      ),
     ),
   )
 }
