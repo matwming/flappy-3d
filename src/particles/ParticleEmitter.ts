@@ -35,6 +35,12 @@ export class ParticleEmitter {
     scene.add(this.points)
   }
 
+  burstTinted(origin: { x: number; y: number; z: number }, color: number): void {
+    const mat = this.points.material as PointsMaterial
+    mat.color.setHex(color)
+    this.burst(new Vector3(origin.x, origin.y, origin.z))
+  }
+
   burst(origin: Vector3): void {
     this.active = true
     this.points.visible = true
