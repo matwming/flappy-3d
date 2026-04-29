@@ -29,7 +29,10 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
+        # --legacy-peer-deps: vite-plugin-pwa@1.2.0 peer range excludes Vite 8
+        # but the plugin works correctly with Vite 8 (verified locally + in build).
+        # Remove this flag once vite-plugin-pwa publishes a version with vite@8 in peers.
+        run: npm ci --legacy-peer-deps
 
       - name: Build
         run: npm run build
