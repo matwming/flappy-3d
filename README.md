@@ -4,6 +4,23 @@ A polished 3D Flappy Bird-style PWA built with Three.js (vanilla, no React/R3F).
 
 **Live:** https://matwming.github.io/flappy-3d/
 
+## v1.1 — Beauty Pass
+
+- Title screen comes alive: bird hover-bobs, demo pipes scroll past, logo letter-stagger entrance, "Tap to start" pulses
+- In-game juice: `+1` score popups, milestone celebrations at 10/25/50 (gold burst + flash), optional flap trail (Settings), 4-color pipe cycling
+- Glass UI: Press Start 2P arcade font on headings, `backdrop-filter` blur on overlays, gradient buttons with hover/active depth, 2-layer focus ring
+- Every motion effect respects `prefers-reduced-motion` (OS) and the in-game motion toggle
+- Bundle: 196KB / 250KB gzipped
+
+## v1.0 — Core Game
+
+- Endless Flappy Bird loop: tap/click/spacebar to flap, gravity falls, pipes scroll, score on pass, die on contact
+- Cel-shaded toon materials, post-processing (bloom + vignette) gated on desktop / hi-tier mobile
+- 5 screens (Title, HUD, Pause, GameOver, Settings) with leaderboard + persistence
+- PWA installable, offline play, Lighthouse PWA 1.00, iOS Safari audio unlock
+- Accessibility: keyboard nav (Space/Enter/Esc/Tab), focus rings, ARIA-live score, colorblind palette toggle, motion-reduce override
+- xstate v5 state machine, GSAP juice (squash, screen shake, particles), Howler audio with WebAudio synth fallback
+
 ---
 
 ## Bundle Budget
