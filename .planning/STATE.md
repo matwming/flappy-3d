@@ -15,7 +15,7 @@ progress:
 # Project State — Flappy 3D
 
 **Last updated:** 2026-04-29
-**Updated by:** gsd-executor (05-02)
+**Updated by:** gsd-executor (05-03)
 
 ---
 
@@ -29,15 +29,16 @@ progress:
 ## Current Position
 
 Phase: 5
-Plan: 2 → COMPLETE
+Plan: 3 → IN PROGRESS (tasks 1-3 complete; tasks 4-5 awaiting human real-device verification)
 | Field | Value |
 |-------|-------|
 | Phase | 5 — in progress |
 | Phase name | Hardening + Ship |
 | Plans complete | 05-01 (hardening-audit) ✓, 05-02 (real-audio) ✓ |
-| Plans planned not executed | 05-03 (final-qa) |
-| Status | 2/3 plans complete |
+| Plans in progress | 05-03 (verify-ship) — tasks 1-3 done, tasks 4-5 pending human |
+| Status | 2.6/3 plans complete (partial) |
 | Phase goal | Memory stable, event listeners clean, iOS audio unlock, final QA |
+| Blocked on | Human real-device verification (SC-2 iOS audio, SC-3 tab-blur, PERF-03 60fps, VIS-07 parallax) |
 
 **Progress bar:**
 
@@ -46,7 +47,7 @@ Phase 1 [██████████] 100% ✓ (user-verified 2026-04-28)
 Phase 2 [██████████] 100% ✓ (user-verified 2026-04-29)
 Phase 3 [██████████] 100% ✓ (03-01 audio ✓, 03-02 ui-infra ✓, 03-03 screens ✓, 03-04 juice ✓, 03-05 fix-ui-state ✓, 03-06 fix-audio-motion ✓)
 Phase 4 [██████████] 100% ✓ (04-01 pwa-setup ✓, 04-02 a11y ✓, 04-03 bundle-audit ✓, 04-04 deploy ✓)
-Phase 5 [██████    ] 67% (05-01 hardening-audit ✓, 05-02 real-audio ✓)
+Phase 5 [████████  ] 80% (05-01 ✓, 05-02 ✓, 05-03 tasks 1-3 ✓ | tasks 4-5 awaiting human)
 ```
 
 ---
@@ -93,19 +94,19 @@ Phase 5 [██████    ] 67% (05-01 hardening-audit ✓, 05-02 real-audi
 
 **What was done last (this session):**
 
-- Phase 5 Plan 02 (real-audio) executed: 2 tasks, 2 commits.
-  - Task 1 (63987ab): Replaced 4 zero-byte placeholder MP3s with real CC0 samples sourced from kenney.nl (SFX) and opengameart.org (music). Converted OGG→MP3 at 64kbps via ffmpeg.
-  - Task 2 (62994b0): Updated CREDITS.md with full source URLs, author, license, bundle budget notes.
-- Audio files: flap.mp3 (2.3KB), score.mp3 (2.9KB), death.mp3 (1.9KB), music.mp3 (329KB)
-- Music loop: Juhani Junkala Chiptune Adventures Stage 1 (CC0, 41s, opengameart.org)
-- SFX: Kenney Interface Sounds pack (CC0, kenney.nl)
-- JS bundle unchanged: 188.03 KB gzip (61.96 KB headroom under 250 KB budget)
-- Requirement AUD-02 now SATISFIED
-- flapLoaded/scoreLoaded/deathLoaded flags will be true after page load (synth fallback no longer fires)
+- Phase 5 Plan 03 (verify-ship) tasks 1-3 executed: 3 tasks, 3 commits.
+  - Task 1 (8f7debf): README — fixed Live URL (matwming.github.io) + added Hardening verification section (SC-1..SC-4 procedures).
+  - Task 2 (cf239dd): SettingsModal — added iOS silent switch note under Music toggle; added .settings-note CSS rule.
+  - Task 3 (bcd8d78): Created docs/SHIPPED.md — v1.0.0 ship summary with 62/62 requirements coverage table, known limitations, stack.
+- Tasks 4-5 deliberately skipped: await user real-device verification before tagging v1.0.0.
+- tsc --noEmit: exit 0. Build: clean.
 
 **What's next:**
 
-Phase 5 Plan 03 — Final QA (iOS audio real-device verify, memory probe, ship checklist, v1.0.0 tag).
+Run real-device verification checks (see 05-03-SUMMARY.md Task 4 checklist), then:
+```bash
+git tag -a v1.0.0 -m "v1.0.0 — Flappy 3D initial release" && git push origin v1.0.0
+```
 
 **Phase 3 plan summary:**
 
@@ -156,7 +157,7 @@ Phase 5 Plan 03 — Final QA (iOS audio real-device verify, memory probe, ship c
 | 2 | ✓ Complete | 2026-04-29 | 3 plans, 6 atomic commits; user-verified in browser |
 | 3 | ✓ Complete | 2026-04-29 | 6 plans, 12 atomic commits; HUD-04, AUD-03, ANIM-06 closed; 194.49 KB gzip |
 | 4 | ✓ Complete | 2026-04-29 | 4 plans, 8 atomic commits; PWA-05, DEPLOY-02, DEPLOY-03 closed; 188.01 KB gzip |
-| 5 | In progress | - | 05-01 hardening-audit ✓; 05-02 real-audio ✓ (AUD-02 closed); 05-03 final-qa pending |
+| 5 | In progress | - | 05-01 hardening-audit ✓; 05-02 real-audio ✓ (AUD-02 closed); 05-03 tasks 1-3 ✓ (docs+iOS note+SHIPPED.md); tasks 4-5 awaiting human real-device verify + v1.0.0 tag |
 
 ---
 

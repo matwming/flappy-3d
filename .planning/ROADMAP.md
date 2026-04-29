@@ -105,7 +105,7 @@ Plans:
 Plans:
 - [x] 05-01-PLAN.md — Hardening audit: DEV memory probe + AbortController resize fix + actor.send site audit
 - [x] 05-02-PLAN.md — Real CC0 audio sourcing: replace placeholder MP3s + update CREDITS.md
-- [ ] 05-03-PLAN.md — Real-device verification + README polish + SettingsModal iOS note + v1.0.0 tag
+- [ ] 05-03-PLAN.md — Real-device verification + README polish + SettingsModal iOS note + v1.0.0 tag (tasks 1-3 complete; tasks 4-5 awaiting human real-device verify)
 **UI hint**: yes
 
 ---
@@ -118,7 +118,7 @@ Plans:
 | 2. Game Machine + Obstacles + Rendering | 3/3 | Complete | 2026-04-29 |
 | 3. UI + Audio + Polish | 6/6 | Complete | 2026-04-29 |
 | 4. PWA + Accessibility + Bundle Audit | 4/4 | Complete | 2026-04-29 |
-| 5. Hardening + Ship | 2/3 | In progress | - |
+| 5. Hardening + Ship | 2/3 (05-03 partial) | In progress — awaiting human real-device verify | - |
 
 ---
 
