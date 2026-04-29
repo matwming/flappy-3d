@@ -18,7 +18,7 @@
 ### v1.1 — Beauty Pass
 
 - [x] **Phase 6: Title-Screen Liveliness** — Bird bob, demo pipes scrolling on title, logo entrance, CTA pulse — first-impression beauty ✓ (2026-04-29)
-- [ ] **Phase 7: In-Game Juice** — `+1` score popups, flap trail, milestone celebrations at 10/25/50, per-pair pipe color cycling
+- [x] **Phase 7: In-Game Juice** — `+1` score popups, flap trail, milestone celebrations at 10/25/50, per-pair pipe color cycling ✓ (2026-04-29)
 - [ ] **Phase 8: Glass UI Refresh** — Press Start 2P font for headings, backdrop-filter blur on overlays, gradient buttons, focus polish
 
 ---
@@ -126,7 +126,7 @@ Plans:
 | 4. PWA + Accessibility + Bundle Audit | 4/4 | Complete | 2026-04-29 |
 | 5. Hardening + Ship | 2/3 (05-03 partial) | In progress — awaiting human real-device verify | - |
 | 6. Title-Screen Liveliness | 2/2 | Complete (v1.1) | 2026-04-29 |
-| 7. In-Game Juice | 0/2 | Not started (v1.1) | - |
+| 7. In-Game Juice | 2/2 | Complete (v1.1) | 2026-04-29 |
 | 8. Glass UI Refresh | 0/TBD | Not started (v1.1) | - |
 
 ---
@@ -159,8 +159,8 @@ Plans:
   4. Successive ObstaclePair instances cycle through 3-4 toon material colors (subtle hue shift, not jarring) so consecutive pipes look distinct
 **Plans**: 2 plans
 Plans:
-- [ ] 07-01-PLAN.md — Score popup pool + milestone flash (BEAUTY-05, BEAUTY-07) + main.ts wiring
-- [ ] 07-02-PLAN.md — Flap trail ghosts + pipe color cycling + flapTrail setting (BEAUTY-06, BEAUTY-08)
+- [x] 07-01-PLAN.md — Score popup pool + milestone flash (BEAUTY-05, BEAUTY-07) + main.ts wiring ✓
+- [x] 07-02-PLAN.md — Flap trail ghosts + pipe color cycling + flapTrail setting (BEAUTY-06, BEAUTY-08) ✓
 **UI hint**: yes
 
 ### Phase 8: Glass UI Refresh
