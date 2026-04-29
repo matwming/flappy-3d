@@ -10,9 +10,50 @@ import { HUD } from './screens/HUD'
 import { PauseScreen } from './screens/PauseScreen'
 import { GameOverScreen } from './screens/GameOverScreen'
 import { SettingsModal } from './screens/SettingsModal'
+import { Vector3 } from 'three'
+import type { Camera } from 'three'
 
 type GameActor = Actor<typeof gameMachine>
 type Snap = SnapshotFrom<typeof gameMachine>
+
+const POPUP_POOL_SIZE = 6
+
+class ScorePopupPool {
+  private pool: HTMLDivElement[] = []
+  private container: HTMLElement
+
+  constructor(container: HTMLElement) {
+    this.container = container
+    for (let i = 0; i < POPUP_POOL_SIZE; i++) {
+      const div = document.createElement('div')
+      div.className = 'score-popup'
+      div.textContent = '+1'
+      container.appendChild(div)
+      this.pool.push(div)
+    }
+  }
+
+  spawn(worldPos: { x: number; y: number; z: number }, camera: Camera): void {
+    const div = this.pool.find((d) => !d.classList.contains('animating'))
+    if (!div) return
+
+    const vec = new Vector3(worldPos.x, worldPos.y, worldPos.z)
+    vec.project(camera)
+    const rect = this.container.getBoundingClientRect()
+    const x = ((vec.x + 1) / 2) * rect.width
+    const y = ((-vec.y + 1) / 2) * rect.height
+
+    div.style.left = `${x}px`
+    div.style.top = `${y}px`
+    div.classList.add('animating')
+
+    const onEnd = () => {
+      div.classList.remove('animating')
+      div.removeEventListener('animationend', onEnd)
+    }
+    div.addEventListener('animationend', onEnd)
+  }
+}
 
 interface AppProps {
   actor: GameActor
@@ -27,22 +68,35 @@ export class UIBridge {
   private storage: StorageManager
   private onPaletteChange: (palette: 'default' | 'colorblind') => void
   private mountEl: HTMLElement | null = null
+  private popupPool: ScorePopupPool | null = null
+  private milestoneFlash: HTMLDivElement | null = null
+  private camera: Camera | null = null
 
   constructor(
     actor: GameActor,
     audio: AudioManager,
     storage: StorageManager,
     onPaletteChange: (palette: 'default' | 'colorblind') => void,
+    camera?: Camera,
   ) {
     this.actor = actor
     this.audio = audio
     this.storage = storage
     this.onPaletteChange = onPaletteChange
+    this.camera = camera ?? null
   }
 
   mount(): void {
     this.mountEl = document.getElementById('ui-root')
     if (!this.mountEl) throw new Error('#ui-root not found in DOM')
+
+    this.popupPool = new ScorePopupPool(this.mountEl)
+
+    const flash = document.createElement('div')
+    flash.className = 'milestone-flash'
+    this.mountEl.appendChild(flash)
+    this.milestoneFlash = flash
+
     render(
       h(App, {
         actor: this.actor,
@@ -52,6 +106,18 @@ export class UIBridge {
       }),
       this.mountEl,
     )
+  }
+
+  spawnScorePopup(worldPos: { x: number; y: number; z: number }): void {
+    if (!this.popupPool || !this.camera) return
+    this.popupPool.spawn(worldPos, this.camera)
+  }
+
+  triggerMilestoneFlash(): void {
+    const flash = this.milestoneFlash
+    if (!flash) return
+    flash.classList.add('active')
+    setTimeout(() => flash.classList.remove('active'), 200)
   }
 
   dispose(): void {

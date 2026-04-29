@@ -269,3 +269,41 @@ dialog.settings-modal::backdrop {
   min-width: 44px;
   min-height: 44px;
 }
+
+/* ── Score +1 popup ── */
+.score-popup {
+  position: absolute;
+  pointer-events: none;
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: #ffd166;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  user-select: none;
+  will-change: transform, opacity;
+}
+.score-popup.animating {
+  animation: scorePopup 700ms ease-out forwards;
+}
+@keyframes scorePopup {
+  0%   { opacity: 1;   transform: translate(-50%, 0); }
+  100% { opacity: 0;   transform: translate(-50%, -70px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .score-popup.animating { animation: none; }
+}
+
+/* ── Milestone screen flash ── */
+.milestone-flash {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: rgba(255, 209, 102, 0.4);
+  opacity: 0;
+  z-index: 5;
+  transition: opacity 50ms ease-in;
+}
+.milestone-flash.active {
+  opacity: 1;
+  transition: opacity 50ms ease-in;
+}
