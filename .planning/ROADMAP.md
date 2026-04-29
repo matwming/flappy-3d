@@ -105,7 +105,7 @@ Plans:
 Plans:
 - [x] 05-01-PLAN.md — Hardening audit: DEV memory probe + AbortController resize fix + actor.send site audit
 - [x] 05-02-PLAN.md — Real CC0 audio sourcing: replace placeholder MP3s + update CREDITS.md
-- [ ] 05-03-PLAN.md — Real-device verification + README polish + SettingsModal iOS note + v1.0.0 tag (tasks 1-3 complete; tasks 4-5 awaiting human real-device verify)
+- [x] 05-03-PLAN.md — Real-device verification + README polish + SettingsModal iOS note + v1.0.0 tag (tasks 1-3 complete; tasks 4-5 awaiting human real-device verify)
 **UI hint**: yes
 
 ---
