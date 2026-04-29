@@ -132,8 +132,10 @@ Visual polish layer on top of the shipped v1. Each requirement is motion-gated w
 
 ### Title-screen liveliness (BEAUTY)
 
-- [ ] **BEAUTY-01**: Bird hover-bobs with sine-wave motion (~1Hz, ±0.15m amplitude) on title state; freezes flat when `prefersReducedMotion(storage)` is true
-- [ ] **BEAUTY-02**: Demo pipes scroll past on the title screen using existing `ScrollSystem` and `ObstacleSpawner`; no collision (CollisionSystem is gated on state==='playing'); music plays at lower volume
+- [x] **BEAUTY-01
+**: Bird hover-bobs with sine-wave motion (~1Hz, ±0.15m amplitude) on title state; freezes flat when `prefersReducedMotion(storage)` is true
+- [x] **BEAUTY-02
+**: Demo pipes scroll past on the title screen using existing `ScrollSystem` and `ObstacleSpawner`; no collision (CollisionSystem is gated on state==='playing'); music plays at lower volume
 - [ ] **BEAUTY-03**: "Flappy 3D" logo letters fade in staggered ~50ms apart on title mount via GSAP timeline; one-shot (does not re-trigger on RESTART → title)
 - [ ] **BEAUTY-04**: "Tap to start" CTA opacity pulses 0.6 ↔ 1.0 over 1.6s ease-in-out via CSS keyframes; static when reduced-motion is set
 

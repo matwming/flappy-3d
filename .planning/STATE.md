@@ -3,42 +3,42 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: — Beauty Pass
 status: unknown
-last_updated: "2026-04-29T07:19:30.697Z"
+last_updated: "2026-04-29T07:24:45.002Z"
 progress:
-  total_phases: 8
+  total_phases: 5
   completed_phases: 3
-  total_plans: 22
+  total_plans: 20
   completed_plans: 17
-  percent: 77
+  percent: 85
 ---
 
 # Project State — Flappy 3D
 
 **Last updated:** 2026-04-29
-**Updated by:** gsd-executor (05-03)
+**Updated by:** gsd-executor (06-01)
 
 ---
 
 ## Project Reference
 
 **Core value:** The game must feel palpably more crafted than `guiguan/flappy-anna-3d` within 30 seconds of play — polished motion, real menus, real audio, 60fps on a mid-tier phone.
-**Current focus:** Phase 05 — hardening-ship (Phase 4 complete)
+**Current focus:** Phase 06 — title-screen-liveliness (v1.1 Beauty Pass)
 
 ---
 
 ## Current Position
 
-Phase: 05
-Plan: Not started
+Phase: 06
+Plan: 01 complete
 | Field | Value |
 |-------|-------|
-| Phase | 5 — in progress |
-| Phase name | Hardening + Ship |
-| Plans complete | 05-01 (hardening-audit) ✓, 05-02 (real-audio) ✓ |
-| Plans in progress | 05-03 (verify-ship) — tasks 1-3 done, tasks 4-5 pending human |
-| Status | 2.6/3 plans complete (partial) |
-| Phase goal | Memory stable, event listeners clean, iOS audio unlock, final QA |
-| Blocked on | Human real-device verification (SC-2 iOS audio, SC-3 tab-blur, PERF-03 60fps, VIS-07 parallax) |
+| Phase | 6 — in progress |
+| Phase name | Title-Screen Liveliness |
+| Plans complete | 06-01 (bird-bob + demo-pipes) ✓ |
+| Plans in progress | 06-02 (logo-entrance + CTA-pulse) — not started |
+| Status | 1/2 plans complete |
+| Phase goal | Title screen alive within 2s: bird bobbing, pipes scrolling, logo animating, CTA pulsing |
+| Blocked on | None |
 
 **Progress bar:**
 
@@ -48,6 +48,7 @@ Phase 2 [██████████] 100% ✓ (user-verified 2026-04-29)
 Phase 3 [██████████] 100% ✓ (03-01 audio ✓, 03-02 ui-infra ✓, 03-03 screens ✓, 03-04 juice ✓, 03-05 fix-ui-state ✓, 03-06 fix-audio-motion ✓)
 Phase 4 [██████████] 100% ✓ (04-01 pwa-setup ✓, 04-02 a11y ✓, 04-03 bundle-audit ✓, 04-04 deploy ✓)
 Phase 5 [████████  ] 80% (05-01 ✓, 05-02 ✓, 05-03 tasks 1-3 ✓ | tasks 4-5 awaiting human)
+Phase 6 [█████     ] 50% (06-01 bird-bob+demo-pipes ✓ | 06-02 logo+CTA pending)
 ```
 
 ---
@@ -94,38 +95,23 @@ Phase 5 [████████  ] 80% (05-01 ✓, 05-02 ✓, 05-03 tasks 1-3 
 
 **What was done last (this session):**
 
-- Phase 5 Plan 03 (verify-ship) tasks 1-3 executed: 3 tasks, 3 commits.
-  - Task 1 (8f7debf): README — fixed Live URL (matwming.github.io) + added Hardening verification section (SC-1..SC-4 procedures).
-  - Task 2 (cf239dd): SettingsModal — added iOS silent switch note under Music toggle; added .settings-note CSS rule.
-  - Task 3 (bcd8d78): Created docs/SHIPPED.md — v1.0.0 ship summary with 62/62 requirements coverage table, known limitations, stack.
-- Tasks 4-5 deliberately skipped: await user real-device verification before tagging v1.0.0.
-- tsc --noEmit: exit 0. Build: clean.
+- Phase 6 Plan 01 (bird-bob + demo-pipes) executed: 2 tasks, 2 commits.
+  - Task 1 (dfa3fd4): main.ts + AudioManager — bobTime accumulator, bird.mesh.position.y sine bob, title/gameOver music split, setMusicVolume(0.2/0.4).
+  - Task 2 (22a0981): ScrollSystem + ObstacleSpawner — title gate relaxed, TITLE_DEMO_SCROLL_SPEED + TITLE_DEMO_DIFFICULTY constants.
+- tsc --noEmit: exit 0. Build: clean. Bundle: 188KB gzip.
+- BEAUTY-01 and BEAUTY-02 requirements marked complete.
 
 **What's next:**
 
-Run real-device verification checks (see 05-03-SUMMARY.md Task 4 checklist), then:
+Execute Phase 6 Plan 02 (logo entrance + CTA pulse):
 
 ```bash
-git tag -a v1.0.0 -m "v1.0.0 — Flappy 3D initial release" && git push origin v1.0.0
+/gsd-execute-phase 06-02 --auto
 ```
-
-**Phase 3 plan summary:**
-
-- `03-01-audio-PLAN.md` — Howler install, fetch 4 audio assets, AudioManager singleton with iOS unlock, music fade-out (AUD-01..05)
-- `03-02-ui-infra-PLAN.md` — Preact install, #ui-root in index.html, UIBridge mount, StorageManager v2 schema (HUD-01, HUD-08, SAVE-03, SAVE-04)
-- `03-03-screens-PLAN.md` — 5 Preact screens (Title, HUD, Pause, GameOver, Settings) + 4 shared components (HUD-02..07)
-- `03-04-juice-PLAN.md` — GSAP install, squash/shake/score-pop helpers, ParticleEmitter (bespoke fallback) (ANIM-01..06 + A11Y-01 motion gate)
-
-**Bundle target:** Phase 3 should land at ~210KB gzipped (was 143KB after Phase 2; +60-70KB for Howler + Preact + GSAP + game code). Still under 250KB Phase 4 budget.
-
-**Resume commands:**
-
-- `/gsd-execute-phase 03 --auto --no-transition` (recommended — auto-execute all 4 plans sequentially)
-- OR `cat .planning/phases/03-ui-audio-polish/03-01-audio-PLAN.md` then implement inline
 
 **Blockers:**
 
-- None functional. Audio sourcing is the only realtime-dependent step (WebFetch from Pixabay needs working internet); plan has fallback to TODO-marked placeholder if fetch fails.
+- None.
 
 ---
 
@@ -149,6 +135,7 @@ git tag -a v1.0.0 -m "v1.0.0 — Flappy 3D initial release" && git push origin v
 | Phase 04 P04 | 6 | 2 tasks | 2 files |
 | Phase 05 P01 | 2 | 3 tasks | 6 files |
 | Phase 05 P02 | 1480 | 2 tasks | 5 files |
+| Phase 06 P01 | 180 | 2 tasks | 4 files |
 
 ## Phase Log
 
@@ -159,6 +146,7 @@ git tag -a v1.0.0 -m "v1.0.0 — Flappy 3D initial release" && git push origin v
 | 3 | ✓ Complete | 2026-04-29 | 6 plans, 12 atomic commits; HUD-04, AUD-03, ANIM-06 closed; 194.49 KB gzip |
 | 4 | ✓ Complete | 2026-04-29 | 4 plans, 8 atomic commits; PWA-05, DEPLOY-02, DEPLOY-03 closed; 188.01 KB gzip |
 | 5 | In progress | - | 05-01 hardening-audit ✓; 05-02 real-audio ✓ (AUD-02 closed); 05-03 tasks 1-3 ✓ (docs+iOS note+SHIPPED.md); tasks 4-5 awaiting human real-device verify + v1.0.0 tag |
+| 6 | In progress | - | 06-01 bird-bob+demo-pipes ✓ (BEAUTY-01, BEAUTY-02 closed; 188KB gzip); 06-02 logo+CTA pending |
 
 ---
 
