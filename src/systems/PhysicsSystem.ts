@@ -19,6 +19,7 @@ export class PhysicsSystem {
     this.flapQueued = true
   }
 
+  // actor.send audit (Phase 5): read-only — no send calls
   step(dt: number): void {
     const state = this.actor.getSnapshot().value
 

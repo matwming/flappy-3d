@@ -17,6 +17,8 @@ export class ObstacleSpawner {
     this.actor = actor
   }
 
+  // actor.send audit (Phase 5 D-08): this system is read-only (getSnapshot only).
+  // No actor.send guard required.
   step(dt: number): void {
     if (this.actor.getSnapshot().value !== 'playing') {
       this.elapsed = 0
