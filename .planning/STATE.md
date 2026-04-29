@@ -28,8 +28,8 @@ progress:
 
 ## Current Position
 
-Phase: 03 (ui-audio-polish) — Gap closure in progress
-Plan: 5 of 6 (03-05 complete, 03-06 remaining)
+Phase: 03 (ui-audio-polish) — Complete
+Plan: 6 of 6 (all plans complete)
 | Field | Value |
 |-------|-------|
 | Phase | 3 |
@@ -44,7 +44,7 @@ Plan: 5 of 6 (03-05 complete, 03-06 remaining)
 ```
 Phase 1 [██████████] 100% ✓ (user-verified 2026-04-28)
 Phase 2 [██████████] 100% ✓ (user-verified 2026-04-29)
-Phase 3 [█████████░] 90% (03-01 audio ✓, 03-02 ui-infra ✓, 03-03 screens ✓, 03-04 juice ✓, 03-05 fix-ui-state ✓, 03-06 pending)
+Phase 3 [██████████] 100% ✓ (03-01 audio ✓, 03-02 ui-infra ✓, 03-03 screens ✓, 03-04 juice ✓, 03-05 fix-ui-state ✓, 03-06 fix-audio-motion ✓)
 Phase 4 [          ] 0%
 Phase 5 [          ] 0%
 ```
@@ -93,16 +93,19 @@ Phase 5 [          ] 0%
 
 **What was done last (this session):**
 
-- Phase 3 Plan 05 (fix-ui-state) executed: 3 surgical gap-closure fixes.
-  - priorBest race fixed via useRef snapshot on 'playing' entry (cd5d362)
-  - SettingsModal reduce-motion toggle wired to live matchMedia for 'auto' mode (91ac3f5)
-  - Screen opacity transitions changed from 250ms to 120ms (91ac3f5)
-- Build green at 194.43 KB gzip (under 250 KB budget)
-- Requirements HUD-05, HUD-06, HUD-07, ANIM-06 now SATISFIED
+- Phase 3 Plan 06 (fix-audio-motion) executed: 4 gap-closure fixes across 2 files.
+  - visibilitychange listener added with AbortController — sends PAUSE when tab hidden during 'playing' (7bd64be)
+  - 'paused' audio branch added to actor.subscribe — music pauses on actor 'paused' entry (7bd64be)
+  - squashStretch gated behind prefersReducedMotion(storage) — matches screenShake/particles pattern (7bd64be)
+  - Music volume reset to 0.4 before play() in setMusicPlaying — fixes silent playback after fade-out death (d765121)
+  - Removed now-unused musicLoaded field (Rule 1 cleanup) (d765121)
+- Build green at 194.49 KB gzip (under 250 KB budget)
+- Requirements HUD-04, AUD-03, ANIM-06 now SATISFIED
+- Phase 3 COMPLETE — all 6 plans executed
 
 **What's next:**
 
-Execute Phase 3 Plan 06 (fix-audio-motion): visibilitychange auto-pause (HUD-04), paused audio branch (AUD-03), music volume reset, squashStretch motion gate
+Execute Phase 4 (PWA + Accessibility + Bundle Audit): Lighthouse PWA ≥90, offline play, colorblind mode, <250KB confirmed, deploy target locked
 
 **Phase 3 plan summary:**
 
@@ -145,7 +148,7 @@ Execute Phase 3 Plan 06 (fix-audio-motion): visibilitychange auto-pause (HUD-04)
 |-------|--------|-----------|-------|
 | 1 | ✓ Complete | 2026-04-28 | 4 plans, 4 commits, user-verified in browser |
 | 2 | ✓ Complete | 2026-04-29 | 3 plans, 6 atomic commits; user-verified in browser |
-| 3 | ✓ Complete | 2026-04-29 | 4 plans, 10 atomic commits; 21 reqs closed; 194.40 KB gzip |
+| 3 | ✓ Complete | 2026-04-29 | 6 plans, 12 atomic commits; HUD-04, AUD-03, ANIM-06 closed; 194.49 KB gzip |
 | 4 | Not started | - | Blocked on Phase 3 |
 | 5 | Not started | - | Blocked on Phase 4 |
 

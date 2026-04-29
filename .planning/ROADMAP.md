@@ -71,7 +71,7 @@ Plans:
 - [x] 03-03-screens-PLAN.md — 5 screens (Title/HUD/Pause/GameOver/Settings) + 4 components (HUD-02..07) ✓
 - [x] 03-04-juice-PLAN.md — GSAP squash/shake/particles, ParticleEmitter, reduced-motion gate (ANIM-01..06) ✓
 - [x] 03-05-fix-ui-state-PLAN.md — Gap closure: priorBest race fix (HUD-05, ANIM-06), reduceMotion toggle (HUD-06), 120ms transition (HUD-07) ✓
-- [ ] 03-06-fix-audio-motion-PLAN.md — Gap closure: visibilitychange auto-pause (HUD-04), paused audio branch (AUD-03), music volume reset (AUD-03), squashStretch gate (CLAUDE.md)
+- [x] 03-06-fix-audio-motion-PLAN.md — Gap closure: visibilitychange auto-pause (HUD-04), paused audio branch (AUD-03), music volume reset (AUD-03), squashStretch gate (CLAUDE.md) ✓
 **UI hint**: yes
 
 ### Phase 4: PWA + Accessibility + Bundle Audit
@@ -107,7 +107,7 @@ Plans:
 |-------|----------------|--------|-----------|
 | 1. Scaffold + Core Loop | 4/4 | Complete | 2026-04-28 |
 | 2. Game Machine + Obstacles + Rendering | 3/3 | Complete | 2026-04-29 |
-| 3. UI + Audio + Polish | 5/6 | Gap closure in progress (03-06 remaining) | 2026-04-29 |
+| 3. UI + Audio + Polish | 6/6 | Complete | 2026-04-29 |
 | 4. PWA + Accessibility + Bundle Audit | 0/? | Not started | - |
 | 5. Hardening + Ship | 0/? | Not started | - |
 
