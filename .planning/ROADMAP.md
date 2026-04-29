@@ -101,7 +101,11 @@ Plans:
   2. `Howler.ctx.state === 'running'` confirmed after first tap on real iOS Safari; audio plays correctly with ringer ON; silent switch behavior documented in settings UI
   3. Tab-switching mid-game pauses music and triggers the paused state; returning to tab resumes correctly
   4. No "Event sent to stopped actor" warnings in console across 20 play cycles; `getEventListeners(document)` count is stable after 10 restarts
-**Plans**: TBD
+**Plans**: 3 plans
+Plans:
+- [ ] 05-01-PLAN.md — Hardening audit: DEV memory probe + AbortController resize fix + actor.send site audit
+- [ ] 05-02-PLAN.md — Real CC0 audio sourcing: replace placeholder MP3s + update CREDITS.md
+- [ ] 05-03-PLAN.md — Real-device verification + README polish + SettingsModal iOS note + v1.0.0 tag
 **UI hint**: yes
 
 ---
