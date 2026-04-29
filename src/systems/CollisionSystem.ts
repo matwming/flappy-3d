@@ -1,6 +1,6 @@
 import type { Actor } from 'xstate'
 import type { gameMachine } from '../machine/gameMachine'
-import { WORLD_FLOOR_Y, WORLD_CEILING_Y } from '../constants'
+import { WORLD_FLOOR_Y } from '../constants'
 import type { Bird } from '../entities/Bird'
 import type { ObjectPool } from '../pools/ObjectPool'
 import type { ObstaclePair } from '../entities/ObstaclePair'
@@ -24,7 +24,7 @@ export class CollisionSystem {
     const birdBox = this.bird.getBoundingBox()
     const pos = this.bird.position
 
-    if (pos.y < WORLD_FLOOR_Y || pos.y > WORLD_CEILING_Y) {
+    if (pos.y < WORLD_FLOOR_Y) {
       this.hit()
       return
     }

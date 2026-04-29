@@ -1,6 +1,6 @@
 import type { Actor } from 'xstate'
 import type { gameMachine } from '../machine/gameMachine'
-import { GRAVITY, FLAP_IMPULSE, MAX_FALL_SPEED } from '../constants'
+import { GRAVITY, FLAP_IMPULSE, MAX_FALL_SPEED, WORLD_CEILING_Y } from '../constants'
 import type { Bird } from '../entities/Bird'
 
 type GameActor = Actor<typeof gameMachine>
@@ -46,6 +46,13 @@ export class PhysicsSystem {
     }
 
     this.bird.position.y += this.bird.velocity.y * dt
+
+    // Clamp at ceiling — flapping into the sky shouldn't kill (only the floor does).
+    // Original Flappy Bird treated the top of the screen as a soft cap, not a death.
+    if (this.bird.position.y > WORLD_CEILING_Y) {
+      this.bird.position.y = WORLD_CEILING_Y
+      this.bird.velocity.y = 0
+    }
 
     this.bird.syncMesh()
   }
