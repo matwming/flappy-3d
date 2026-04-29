@@ -83,7 +83,9 @@ jobs:
           node-version: '20'
 
       - name: Install Lighthouse CLI
-        run: npm install -g lighthouse
+        # Pinned to v11: Lighthouse v12 removed the dedicated `pwa` category
+        # (PWA audits redistributed). PWA-05 references the category score, so v11.
+        run: npm install -g lighthouse@^11.7.1
 
       - name: Run Lighthouse PWA audit
         run: |
