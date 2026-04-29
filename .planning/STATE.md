@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-04-29T04:25:17.082Z"
+last_updated: "2026-04-29T04:35:59.168Z"
 progress:
   total_phases: 5
   completed_phases: 1
   total_plans: 17
-  completed_plans: 10
-  percent: 59
+  completed_plans: 12
+  percent: 71
 ---
 
 # Project State — Flappy 3D
@@ -29,14 +29,14 @@ progress:
 ## Current Position
 
 Phase: 4
-Plan: 2 (next to execute)
+Plan: 4 (next to execute)
 | Field | Value |
 |-------|-------|
 | Phase | 4 |
 | Phase name | PWA + Accessibility + Bundle Audit |
-| Plans complete | 04-01 (pwa-setup) |
-| Plans planned not executed | 04-02 (a11y), 04-03 (bundle-audit), 04-04 (deploy) |
-| Status | 04-01 complete; ready for 04-02 |
+| Plans complete | 04-01 (pwa-setup), 04-03 (bundle-audit) |
+| Plans planned not executed | 04-02 (a11y), 04-04 (deploy) |
+| Status | 04-01 ✓, 04-03 ✓; ready for 04-02 and 04-04 |
 | Phase goal | Lighthouse PWA ≥90, offline play, colorblind mode, <250KB confirmed, deploy target locked |
 
 **Progress bar:**
@@ -45,7 +45,7 @@ Plan: 2 (next to execute)
 Phase 1 [██████████] 100% ✓ (user-verified 2026-04-28)
 Phase 2 [██████████] 100% ✓ (user-verified 2026-04-29)
 Phase 3 [██████████] 100% ✓ (03-01 audio ✓, 03-02 ui-infra ✓, 03-03 screens ✓, 03-04 juice ✓, 03-05 fix-ui-state ✓, 03-06 fix-audio-motion ✓)
-Phase 4 [██        ] 25% (04-01 pwa-setup ✓)
+Phase 4 [████      ] 50% (04-01 pwa-setup ✓, 04-03 bundle-audit ✓)
 Phase 5 [          ] 0%
 ```
 
@@ -93,16 +93,16 @@ Phase 5 [          ] 0%
 
 **What was done last (this session):**
 
-- Phase 4 Plan 01 (pwa-setup) executed: 2 tasks, 2 commits.
-  - Task 1: Pure-Node PNG icon generator (scripts/generate-icons.cjs) — 3 icons in public/icons/ (23be80a)
-  - Task 2: vite-plugin-pwa@1.2.0 installed, vite.config.ts configured with generateSW + autoUpdate + skipWaiting, base='/flappy-3d/', index.html theme-color meta (b0936cb)
-- Build green at 194.64 KB gzip (under 250 KB budget)
-- dist/sw.js + dist/manifest.webmanifest generated
-- Requirements PWA-01, PWA-02, PWA-03, DEPLOY-01 now SATISFIED
+- Phase 4 Plan 03 (bundle-audit) executed: 2 tasks, 2 commits.
+  - Task 1: scripts/bundle-check.sh — CI gate, gzips dist/assets/*.js, exits non-zero if >250KB; npm run bundle-check added (b960fb0)
+  - Task 2: README.md created with Bundle Budget + Performance Testing sections (60fps manual procedure) (cba1d55)
+- Current bundle: 187.64 KB gzip (62.35 KB headroom under 250 KB budget)
+- Requirements PERF-01, PERF-03 now SATISFIED
 
 **What's next:**
 
 Execute Phase 4 Plan 02 (a11y): install prompt, keyboard nav, aria-live, colorblind palette swap (PWA-04, A11Y-01..05)
+Then Phase 4 Plan 04 (deploy): GitHub Pages workflow, Lighthouse gate.
 
 **Phase 3 plan summary:**
 
@@ -139,6 +139,7 @@ Execute Phase 4 Plan 02 (a11y): install prompt, keyboard nav, aria-live, colorbl
 | Phase 03 P03 | 1089 | 3 tasks | 13 files |
 | Phase 03 P04 | 119 | 3 tasks | 6 files |
 | Phase 04 P01 | 165 | 2 tasks | 8 files |
+| Phase 04 P03 | 87 | 2 tasks | 3 files |
 
 ## Phase Log
 

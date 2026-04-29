@@ -75,9 +75,11 @@
 
 ### Performance (PERF)
 
-- [ ] **PERF-01**: Production JS bundle ≤250KB gzipped (measured via `rollup-plugin-visualizer`)
+- [x] **PERF-01
+**: Production JS bundle ≤250KB gzipped (measured via `rollup-plugin-visualizer`)
 - [ ] **PERF-02**: Three.js imports are named only; no `import * as THREE` anywhere in `src/`
-- [ ] **PERF-03**: Sustained 60fps on iPhone 12 / Pixel 6 class device during normal play (measured via Chrome DevTools FPS meter on real device)
+- [x] **PERF-03
+**: Sustained 60fps on iPhone 12 / Pixel 6 class device during normal play (measured via Chrome DevTools FPS meter on real device)
 - [ ] **PERF-04**: Object pooling: obstacles, particles, score-popups all use `ObjectPool<T>`; no `new THREE.Mesh()` calls during gameplay
 - [ ] **PERF-05**: `disposeMesh()` utility called at teardown; `renderer.info.memory` does not grow across 10 restart cycles
 - [ ] **PERF-06**: Variable timestep accumulator clamps raw dt to ≤100ms (absorbs tab-return spikes)
