@@ -6,6 +6,8 @@ import type { Background } from '../entities/Background'
 import { OBSTACLE_DESPAWN_X } from '../constants'
 import { difficultyFrom } from './Difficulty'
 
+const TITLE_DEMO_SCROLL_SPEED = 1.8  // world units/sec — visually pleasant, slower than gameplay
+
 type GameActor = Actor<typeof gameMachine>
 
 export class ScrollSystem {
@@ -26,10 +28,13 @@ export class ScrollSystem {
   // actor.send audit (Phase 5): read-only — no send calls
   step(dt: number): void {
     const state = this.actor.getSnapshot().value
-    if (state !== 'playing' && state !== 'dying') return
+    const isTitleDemo = state === 'title'
+    if (!isTitleDemo && state !== 'playing' && state !== 'dying') return
 
     const score = this.actor.getSnapshot().context.score
-    const scrollSpeed = difficultyFrom(score).scrollSpeed
+    const scrollSpeed = isTitleDemo
+      ? TITLE_DEMO_SCROLL_SPEED  // slower, more relaxed feel
+      : difficultyFrom(score).scrollSpeed
 
     const toRelease: ObstaclePair[] = []
     this.pool.forEachActive((pair) => {

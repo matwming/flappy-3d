@@ -4,6 +4,13 @@ import type { ObjectPool } from '../pools/ObjectPool'
 import type { ObstaclePair } from '../entities/ObstaclePair'
 import { OBSTACLE_SPAWN_X, GAP_CENTER_RANGE } from '../constants'
 import { difficultyFrom } from './Difficulty'
+import type { DifficultyConfig } from './Difficulty'
+
+const TITLE_DEMO_DIFFICULTY: DifficultyConfig = {
+  spawnInterval: 2.2,  // seconds — slower cadence, fewer pipes on screen
+  scrollSpeed: 1.8,    // matches TITLE_DEMO_SCROLL_SPEED in ScrollSystem
+  gapHeight: 3.2,      // wider than gameplay BASE_GAP_HEIGHT (2.6) — easy/relaxed
+}
 
 type GameActor = Actor<typeof gameMachine>
 
@@ -20,15 +27,19 @@ export class ObstacleSpawner {
   // actor.send audit (Phase 5 D-08): this system is read-only (getSnapshot only).
   // No actor.send guard required.
   step(dt: number): void {
-    if (this.actor.getSnapshot().value !== 'playing') {
+    const state = this.actor.getSnapshot().value
+    const isTitleDemo = state === 'title'
+
+    if (!isTitleDemo && state !== 'playing') {
       this.elapsed = 0
       return
     }
 
     this.elapsed += dt
 
-    const score = this.actor.getSnapshot().context.score
-    const difficulty = difficultyFrom(score)
+    const difficulty: DifficultyConfig = isTitleDemo
+      ? TITLE_DEMO_DIFFICULTY
+      : difficultyFrom(this.actor.getSnapshot().context.score)
 
     if (this.elapsed >= difficulty.spawnInterval) {
       this.elapsed = 0
