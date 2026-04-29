@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-04-29T04:35:59.168Z"
+last_updated: "2026-04-29T04:43:54.470Z"
 progress:
   total_phases: 5
   completed_phases: 1
   total_plans: 17
-  completed_plans: 12
-  percent: 71
+  completed_plans: 13
+  percent: 76
 ---
 
 # Project State — Flappy 3D
@@ -34,9 +34,9 @@ Plan: 4 (next to execute)
 |-------|-------|
 | Phase | 4 |
 | Phase name | PWA + Accessibility + Bundle Audit |
-| Plans complete | 04-01 (pwa-setup), 04-03 (bundle-audit) |
-| Plans planned not executed | 04-02 (a11y), 04-04 (deploy) |
-| Status | 04-01 ✓, 04-03 ✓; ready for 04-02 and 04-04 |
+| Plans complete | 04-01 (pwa-setup), 04-02 (a11y), 04-03 (bundle-audit) |
+| Plans planned not executed | 04-04 (deploy) |
+| Status | 04-01 ✓, 04-02 ✓, 04-03 ✓; ready for 04-04 |
 | Phase goal | Lighthouse PWA ≥90, offline play, colorblind mode, <250KB confirmed, deploy target locked |
 
 **Progress bar:**
@@ -45,7 +45,7 @@ Plan: 4 (next to execute)
 Phase 1 [██████████] 100% ✓ (user-verified 2026-04-28)
 Phase 2 [██████████] 100% ✓ (user-verified 2026-04-29)
 Phase 3 [██████████] 100% ✓ (03-01 audio ✓, 03-02 ui-infra ✓, 03-03 screens ✓, 03-04 juice ✓, 03-05 fix-ui-state ✓, 03-06 fix-audio-motion ✓)
-Phase 4 [████      ] 50% (04-01 pwa-setup ✓, 04-03 bundle-audit ✓)
+Phase 4 [██████    ] 75% (04-01 pwa-setup ✓, 04-02 a11y ✓, 04-03 bundle-audit ✓)
 Phase 5 [          ] 0%
 ```
 
@@ -93,16 +93,15 @@ Phase 5 [          ] 0%
 
 **What was done last (this session):**
 
-- Phase 4 Plan 03 (bundle-audit) executed: 2 tasks, 2 commits.
-  - Task 1: scripts/bundle-check.sh — CI gate, gzips dist/assets/*.js, exits non-zero if >250KB; npm run bundle-check added (b960fb0)
-  - Task 2: README.md created with Bundle Budget + Performance Testing sections (60fps manual procedure) (cba1d55)
-- Current bundle: 187.64 KB gzip (62.35 KB headroom under 250 KB budget)
-- Requirements PERF-01, PERF-03 now SATISFIED
+- Phase 4 Plan 02 (a11y) executed: 2 tasks, 1 commit (93056ba).
+  - Task 1: PWA install prompt (beforeinstallprompt + deferredInstallPrompt on window), keyboard nav with AbortController on all 3 screens, aria-live on GameOverScreen score, focus ring updated to 2px #ffd166, install-cta style with 44px touch targets, 04-A11Y-AUDIT.md (8 pairs, all PASS ≥4.5:1)
+  - Task 2: applyColorblindPalette + applyDefaultPalette in toonMaterial.ts, onPaletteChange callback wired main.ts → UIBridge → SettingsModal, startup palette application
+- Current bundle: 188.01 KB gzip (61.98 KB headroom under 250 KB budget)
+- Requirements PWA-04, A11Y-01..05 now SATISFIED
 
 **What's next:**
 
-Execute Phase 4 Plan 02 (a11y): install prompt, keyboard nav, aria-live, colorblind palette swap (PWA-04, A11Y-01..05)
-Then Phase 4 Plan 04 (deploy): GitHub Pages workflow, Lighthouse gate.
+Execute Phase 4 Plan 04 (deploy): GitHub Pages workflow, Lighthouse gate.
 
 **Phase 3 plan summary:**
 
@@ -140,6 +139,7 @@ Then Phase 4 Plan 04 (deploy): GitHub Pages workflow, Lighthouse gate.
 | Phase 03 P04 | 119 | 3 tasks | 6 files |
 | Phase 04 P01 | 165 | 2 tasks | 8 files |
 | Phase 04 P03 | 87 | 2 tasks | 3 files |
+| Phase 04 P02 | 258 | 2 tasks | 9 files |
 
 ## Phase Log
 
@@ -148,7 +148,7 @@ Then Phase 4 Plan 04 (deploy): GitHub Pages workflow, Lighthouse gate.
 | 1 | ✓ Complete | 2026-04-28 | 4 plans, 4 commits, user-verified in browser |
 | 2 | ✓ Complete | 2026-04-29 | 3 plans, 6 atomic commits; user-verified in browser |
 | 3 | ✓ Complete | 2026-04-29 | 6 plans, 12 atomic commits; HUD-04, AUD-03, ANIM-06 closed; 194.49 KB gzip |
-| 4 | In progress | - | 04-01 pwa-setup ✓; 04-02..04 pending |
+| 4 | In progress | - | 04-01 pwa-setup ✓, 04-02 a11y ✓, 04-03 bundle-audit ✓; 04-04 deploy pending |
 | 5 | Not started | - | Blocked on Phase 4 |
 
 ---

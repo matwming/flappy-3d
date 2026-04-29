@@ -90,16 +90,22 @@
 - [ ] **PWA-01**: `vite-plugin-pwa` configured with `generateSW` strategy and `skipWaiting` on update
 - [ ] **PWA-02**: Web App Manifest includes name, short_name, description, theme color, background color, display=standalone, all required icon sizes (192, 512, maskable)
 - [ ] **PWA-03**: Service worker caches all static assets including audio files; game playable offline after first load
-- [ ] **PWA-04**: Install prompt available on supported browsers (Android Chrome, desktop Chrome/Edge); not auto-fired before user has played at least once
+- [x] **PWA-04
+**: Install prompt available on supported browsers (Android Chrome, desktop Chrome/Edge); not auto-fired before user has played at least once
 - [ ] **PWA-05**: Lighthouse PWA audit score ≥90
 
 ### Accessibility (A11Y)
 
-- [ ] **A11Y-01**: `prefers-reduced-motion` check in JavaScript (not just CSS) gates screen shake, particle bursts, and aggressive tweens
-- [ ] **A11Y-02**: Colorblind-safe palette option uses luminance contrast as primary differentiator (verified via deuteranopia/protanopia simulation)
-- [ ] **A11Y-03**: Keyboard-only path: spacebar flaps, Enter/Esc navigate menus, focus visible on all interactive elements
-- [ ] **A11Y-04**: All interactive elements meet WCAG 2.1 AA contrast (≥4.5:1) and minimum 44x44px touch target
-- [ ] **A11Y-05**: HUD score has `aria-live="polite"` for screen readers; game-over screen score is announced
+- [x] **A11Y-01
+**: `prefers-reduced-motion` check in JavaScript (not just CSS) gates screen shake, particle bursts, and aggressive tweens
+- [x] **A11Y-02
+**: Colorblind-safe palette option uses luminance contrast as primary differentiator (verified via deuteranopia/protanopia simulation)
+- [x] **A11Y-03
+**: Keyboard-only path: spacebar flaps, Enter/Esc navigate menus, focus visible on all interactive elements
+- [x] **A11Y-04
+**: All interactive elements meet WCAG 2.1 AA contrast (≥4.5:1) and minimum 44x44px touch target
+- [x] **A11Y-05
+**: HUD score has `aria-live="polite"` for screen readers; game-over screen score is announced
 
 ### TypeScript & build hygiene (HYG)
 
