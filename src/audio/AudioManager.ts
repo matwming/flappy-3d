@@ -29,11 +29,10 @@ export class AudioManager {
   private score: Howl
   private death: Howl
   private music: Howl
-  // Track whether each Howl successfully loaded (flap to use synth fallback if not)
+  // Track whether each Howl successfully loaded (used for synth fallback — see playFlap/playScore/playDeath)
   private flapLoaded = false
   private scoreLoaded = false
   private deathLoaded = false
-  private musicLoaded = false
 
   private musicPlaying = false
   private sfxMuted = false
@@ -66,7 +65,6 @@ export class AudioManager {
       volume: 0.4,
       loop: true,
       preload: true,
-      onload: () => { this.musicLoaded = true },
     })
 
     // iOS unlock pattern (AUD-01, D-08): one-time pointerup listener
@@ -118,12 +116,11 @@ export class AudioManager {
   setMusicPlaying(playing: boolean): void {
     this.musicPlaying = playing
     if (playing && !this.musicMuted) {
+      this.music.volume(0.4)  // reset after potential fadeMusicOut (which fades to 0)
       if (this.unlocked) {
-        if (this.musicLoaded) this.music.play()
-        // If music not loaded, music.play() will queue until Howler decodes it
-        else this.music.play()
+        this.music.play()
       }
-      // else: music will start in unlockHandler when user taps
+      // else: unlockHandler will call music.play() after first pointerup
     } else {
       this.music.pause()
     }
