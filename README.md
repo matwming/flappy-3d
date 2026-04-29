@@ -65,3 +65,50 @@ This is a **manual test** — no automated gate exists for frame rate on real ha
 5. **Record result** in `.planning/STATE.md` Performance Metrics table.
 
 ---
+
+## Deployment
+
+The game is deployed to **GitHub Pages** at:
+`https://<owner>.github.io/flappy-3d/`
+
+### One-time setup (per repository)
+
+1. Go to **Repository Settings > Pages**
+2. Set **Source** to **GitHub Actions** (not "Deploy from branch")
+3. Save. No branch selection needed — the workflow handles everything.
+
+### Automatic deploy
+
+Push to `main` triggers `.github/workflows/deploy.yml` which:
+
+1. Installs dependencies (`npm ci`)
+2. Builds the production bundle (`npm run build`)
+3. **Bundle size gate**: fails if JS gzip > 250 KB (`scripts/bundle-check.sh`)
+4. Uploads `dist/` as a GitHub Pages artifact
+5. Deploys to `https://<owner>.github.io/flappy-3d/`
+6. **Lighthouse PWA gate**: runs Lighthouse in headless Chrome against the live URL and fails if PWA score < 0.90 (PERF-05)
+
+### Manual deploy (local preview)
+
+```bash
+npm run build
+npx serve -s dist -l 5000
+# Open http://localhost:5000/flappy-3d/
+```
+
+### CI artifacts
+
+After each workflow run, two artifacts are available for download:
+- `bundle-stats` — `dist/stats.html` interactive treemap (rollup-plugin-visualizer)
+- `lighthouse-report` — `lighthouse-pwa.json` full Lighthouse audit
+
+### Cloudflare Pages migration (future)
+
+If migrating from GitHub Pages to Cloudflare Pages:
+1. Change `vite.config.ts`: `base: '/flappy-3d/'` → `base: '/'`
+2. Re-audit `dist/manifest.webmanifest` for `start_url`/`scope` — they will change to `/`
+3. Delete `.github/workflows/deploy.yml`
+4. Connect repo to Cloudflare Pages dashboard (auto-builds on push, same `npm run build` command, output: `dist/`)
+5. No application code changes required.
+
+---
