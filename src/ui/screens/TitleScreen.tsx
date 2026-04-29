@@ -1,5 +1,6 @@
 import { h } from 'preact'
-import { useEffect } from 'preact/hooks'
+import { useEffect, useRef } from 'preact/hooks'
+import { gsap } from 'gsap'
 import type { Actor } from 'xstate'
 import type { gameMachine } from '../../machine/gameMachine'
 import type { LeaderboardEntry } from '../../storage/StorageManager'
@@ -17,7 +18,33 @@ interface Props {
   showInstall?: boolean
 }
 
+const LOGO_TEXT = 'FLAPPY 3D'
+const logoLetters = LOGO_TEXT.split('')
+
 export function TitleScreen({ active, actor, leaderboard, onSettings, onInstall, showInstall }: Props) {
+  const hasAnimated = useRef(false)
+
+  useEffect(() => {
+    // One-shot: skip if already animated this session (e.g. back-to-title from gameOver)
+    if (hasAnimated.current) return
+    // Skip if OS has set reduced-motion preference
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    hasAnimated.current = true
+
+    const spans = document.querySelectorAll('.title-heading .title-letter')
+    if (spans.length === 0) return
+
+    gsap.from(spans, {
+      opacity: 0,
+      y: 10,
+      duration: 0.35,
+      stagger: 0.05,
+      ease: 'power2.out',
+      clearProps: 'opacity,transform',
+    })
+  }, [])
+
   useEffect(() => {
     const ac = new AbortController()
     const handleKey = (e: KeyboardEvent) => {
@@ -27,6 +54,8 @@ export function TitleScreen({ active, actor, leaderboard, onSettings, onInstall,
     document.addEventListener('keydown', handleKey, { signal: ac.signal })
     return () => ac.abort()
   }, [active, actor])
+
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
   return h(
     'div',
@@ -49,13 +78,19 @@ export function TitleScreen({ active, actor, leaderboard, onSettings, onInstall,
       },
       '⚙️',
     ),
-    h('h1', { className: 'title-heading' }, 'FLAPPY 3D'),
+    h('h1', { className: 'title-heading' },
+      ...logoLetters.map((ch, i) =>
+        h('span', { key: i, className: 'title-letter' },
+          ch === ' ' ? ' ' : ch,
+        )
+      )
+    ),
     h(
       'div',
       { style: 'margin: 8px 0 16px; width: 100%; max-width: 300px;' },
       h(LeaderboardList, { entries: leaderboard, max: 3 }),
     ),
-    h('p', { className: 'title-cta' }, 'Tap anywhere to start'),
+    h('p', { className: 'title-cta' + (reducedMotion ? '' : ' pulse') }, 'Tap anywhere to start'),
     (showInstall && leaderboard.length >= 1)
       ? h(Button, {
           className: 'install-cta',
