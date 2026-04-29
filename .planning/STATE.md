@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-04-28T23:09:19.723Z"
+last_updated: "2026-04-29T00:52:09.993Z"
 progress:
   total_phases: 5
   completed_phases: 0
-  total_plans: 11
-  completed_plans: 6
-  percent: 55
+  total_plans: 13
+  completed_plans: 8
+  percent: 62
 ---
 
 # Project State — Flappy 3D
@@ -28,8 +28,8 @@ progress:
 
 ## Current Position
 
-Phase: 03 (ui-audio-polish) — COMPLETE
-Plan: 4 of 4 (all complete)
+Phase: 03 (ui-audio-polish) — Gap closure in progress
+Plan: 5 of 6 (03-05 complete, 03-06 remaining)
 | Field | Value |
 |-------|-------|
 | Phase | 3 |
@@ -44,7 +44,7 @@ Plan: 4 of 4 (all complete)
 ```
 Phase 1 [██████████] 100% ✓ (user-verified 2026-04-28)
 Phase 2 [██████████] 100% ✓ (user-verified 2026-04-29)
-Phase 3 [██████████] 100% ✓ (03-01 audio ✓, 03-02 ui-infra ✓, 03-03 screens ✓, 03-04 juice ✓)
+Phase 3 [█████████░] 90% (03-01 audio ✓, 03-02 ui-infra ✓, 03-03 screens ✓, 03-04 juice ✓, 03-05 fix-ui-state ✓, 03-06 pending)
 Phase 4 [          ] 0%
 Phase 5 [          ] 0%
 ```
@@ -93,14 +93,16 @@ Phase 5 [          ] 0%
 
 **What was done last (this session):**
 
-- Phase 3 Plan 04 (juice) executed: GSAP installed, anim.ts helpers (squashStretch, screenShake, scorePop), bespoke ParticleEmitter, all wired into main.ts.
-- 3 atomic feat commits: 851b26f (GSAP + anim.ts), 20bc7fa (ParticleEmitter + createParticles), 576cd6d (main.ts wiring)
-- Build green at 194.40 KB gzip (+28.3 KB for GSAP, under 250 KB budget)
-- Phase 3 COMPLETE — all 21 requirements closed (AUD-01..05, HUD-01..08, ANIM-01..06, SAVE-03..04)
+- Phase 3 Plan 05 (fix-ui-state) executed: 3 surgical gap-closure fixes.
+  - priorBest race fixed via useRef snapshot on 'playing' entry (cd5d362)
+  - SettingsModal reduce-motion toggle wired to live matchMedia for 'auto' mode (91ac3f5)
+  - Screen opacity transitions changed from 250ms to 120ms (91ac3f5)
+- Build green at 194.43 KB gzip (under 250 KB budget)
+- Requirements HUD-05, HUD-06, HUD-07, ANIM-06 now SATISFIED
 
 **What's next:**
 
-Execute Phase 4 (PWA + Accessibility + Bundle Audit): vite-plugin-pwa, manifest, offline SW, Lighthouse ≥90, colorblind palette, keyboard nav, bundle audit
+Execute Phase 3 Plan 06 (fix-audio-motion): visibilitychange auto-pause (HUD-04), paused audio branch (AUD-03), music volume reset, squashStretch motion gate
 
 **Phase 3 plan summary:**
 
@@ -151,4 +153,4 @@ Execute Phase 4 (PWA + Accessibility + Bundle Audit): vite-plugin-pwa, manifest,
 
 *This file is the project's memory. Update at every phase transition and plan completion.*
 
-**Planned Phase:** 01 (scaffold-core-loop) — 4 plans — 2026-04-28T12:07:39.581Z
+**Planned Phase:** 03 (ui-audio-polish) — 6 plans — 2026-04-29T00:52:09.979Z

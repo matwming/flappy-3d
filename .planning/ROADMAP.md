@@ -11,7 +11,7 @@
 
 - [x] **Phase 1: Scaffold + Core Loop** — Bird falls, flaps, and collides; renderer hardened against mobile pitfalls; TypeScript strict mode enforced from commit 1 ✓ (2026-04-28)
 - [x] **Phase 2: Game Machine + Obstacles + Rendering** — Full playable loop with XState state machine, pooled obstacle system, toon rendering, and difficulty ramp ✓ (2026-04-29)
-- [x] **Phase 3: UI + Audio + Polish** — All four screens, Howler audio, GSAP juice (squash, shake, particles), persistence, leaderboard ✓ (2026-04-29)
+- [ ] **Phase 3: UI + Audio + Polish** — All four screens, Howler audio, GSAP juice (squash, shake, particles), persistence, leaderboard — gap closure in progress (2026-04-29)
 - [ ] **Phase 4: PWA + Accessibility + Bundle Audit** — Lighthouse PWA ≥90, offline play, colorblind mode, <250KB confirmed, deploy target locked
 - [ ] **Phase 5: Hardening + Ship** — Memory stability across 10 restarts, iOS audio verified on device, tab-blur music pause, production URL live
 
@@ -64,7 +64,14 @@ Plans:
   3. Squash-and-stretch fires on every flap (~80ms GSAP `back.out` cycle); screen shake fires on death (gated behind `!prefers-reduced-motion`); 20–40 particle burst fires on death
   4. "New best!" golden flash + score pop displays on game-over when score exceeds prior personal best; top-5 leaderboard saves and loads correctly across sessions
   5. All settings (sound, music, motion-reduce, colorblind palette) persist to localStorage and are correctly restored on next app start; `Howl` instances are singletons created once at init
-**Plans**: TBD
+**Plans**: 6 plans (4 original + 2 gap-closure)
+Plans:
+- [x] 03-01-audio-PLAN.md — Howler AudioManager singleton, iOS unlock, synth fallback, SFX/music wiring (AUD-01..05) ✓
+- [x] 03-02-ui-infra-PLAN.md — Preact toolchain, #ui-root overlay, UIBridge, StorageManager v2 (HUD-01, HUD-08, SAVE-03, SAVE-04) ✓
+- [x] 03-03-screens-PLAN.md — 5 screens (Title/HUD/Pause/GameOver/Settings) + 4 components (HUD-02..07) ✓
+- [x] 03-04-juice-PLAN.md — GSAP squash/shake/particles, ParticleEmitter, reduced-motion gate (ANIM-01..06) ✓
+- [x] 03-05-fix-ui-state-PLAN.md — Gap closure: priorBest race fix (HUD-05, ANIM-06), reduceMotion toggle (HUD-06), 120ms transition (HUD-07) ✓
+- [ ] 03-06-fix-audio-motion-PLAN.md — Gap closure: visibilitychange auto-pause (HUD-04), paused audio branch (AUD-03), music volume reset (AUD-03), squashStretch gate (CLAUDE.md)
 **UI hint**: yes
 
 ### Phase 4: PWA + Accessibility + Bundle Audit
@@ -100,7 +107,7 @@ Plans:
 |-------|----------------|--------|-----------|
 | 1. Scaffold + Core Loop | 4/4 | Complete | 2026-04-28 |
 | 2. Game Machine + Obstacles + Rendering | 3/3 | Complete | 2026-04-29 |
-| 3. UI + Audio + Polish | 4/4 | Complete | 2026-04-29 |
+| 3. UI + Audio + Polish | 5/6 | Gap closure in progress (03-06 remaining) | 2026-04-29 |
 | 4. PWA + Accessibility + Bundle Audit | 0/? | Not started | - |
 | 5. Hardening + Ship | 0/? | Not started | - |
 
@@ -135,4 +142,4 @@ Plans:
 
 ---
 
-*Last updated: 2026-04-28 after Phase 2 planning*
+*Last updated: 2026-04-29 — Phase 3 gap closure plans 03-05 and 03-06 added*
