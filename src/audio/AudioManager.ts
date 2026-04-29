@@ -130,6 +130,10 @@ export class AudioManager {
     this.sfxMuted = muted
   }
 
+  setMusicVolume(volume: number): void {
+    this.music.volume(volume)
+  }
+
   setMusicMuted(muted: boolean): void {
     this.musicMuted = muted
     if (muted) {

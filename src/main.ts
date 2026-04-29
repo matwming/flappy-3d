@@ -110,12 +110,29 @@ if (!WebGL.isWebGL2Available()) {
     }
   })
 
+  let bobTime = 0
+
   loop.add(physics)
   loop.add(scrollSystem)
   loop.add(spawner)
   loop.add(scoreSystem)
   loop.add(collision)
   loop.add({ step: (dt: number) => particles.step(dt) })
+  loop.add({
+    step: (dt: number) => {
+      const s = actor.getSnapshot().value
+      if (s !== 'title') {
+        if (s === 'playing') bobTime = 0
+        return
+      }
+      if (prefersReducedMotion(storage)) {
+        bird.mesh.position.y = bird.position.y
+        return
+      }
+      bobTime += dt
+      bird.mesh.position.y = bird.position.y + Math.sin(bobTime * Math.PI * 2) * 0.15
+    },
+  })
 
   const composerResult = createComposer(renderer, scene, camera, ac.signal)
   if (composerResult !== null) {
@@ -186,12 +203,17 @@ if (!WebGL.isWebGL2Available()) {
     // Music control: play in 'playing', fade on 'dying', stop elsewhere
     if (s === 'playing') {
       audio.setMusicPlaying(true)
+      audio.setMusicVolume(0.4)  // restore gameplay volume (was lowered on title)
     } else if (s === 'dying') {
       audio.fadeMusicOut(600)
       audio.playDeath()
     } else if (s === 'paused') {
       audio.setMusicPlaying(false)
-    } else if (s === 'gameOver' || s === 'title') {
+    } else if (s === 'title') {
+      // Music plays softly on title screen (BEAUTY-02 / D-07)
+      audio.setMusicPlaying(true)
+      audio.setMusicVolume(0.2)
+    } else if (s === 'gameOver') {
       audio.setMusicPlaying(false)
     }
 
