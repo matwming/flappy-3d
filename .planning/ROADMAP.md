@@ -127,7 +127,7 @@ Plans:
 | 5. Hardening + Ship | 2/3 (05-03 partial) | In progress — awaiting human real-device verify | - |
 | 6. Title-Screen Liveliness | 2/2 | Complete (v1.1) | 2026-04-29 |
 | 7. In-Game Juice | 2/2 | Complete (v1.1) | 2026-04-29 |
-| 8. Glass UI Refresh | 0/TBD | Not started (v1.1) | - |
+| 8. Glass UI Refresh | 0/1 | Not started (v1.1) | - |
 
 ---
 
@@ -172,7 +172,9 @@ Plans:
   2. PauseScreen, GameOverScreen, SettingsModal use `backdrop-filter: blur(12px) saturate(120%)`; falls back gracefully on browsers without `backdrop-filter` support (solid-color background)
   3. Button component has a linear-gradient background + subtle inset shadow; hover and active states distinct; touch-target minimums (≥44×44px) preserved
   4. Focus ring polished — 2-color outline (inner glow + outer ring) via `:focus-visible`; remains WCAG-AA contrast against all overlay backgrounds; verify in dark + colorblind palettes
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [ ] 08-01-PLAN.md — Press Start 2P font, glass blur overlays, gradient buttons, focus ring (BEAUTY-09..12)
 **UI hint**: yes (CSS + 1 font asset)
 
 ---
