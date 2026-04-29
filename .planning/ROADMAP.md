@@ -125,7 +125,7 @@ Plans:
 | 3. UI + Audio + Polish | 6/6 | Complete | 2026-04-29 |
 | 4. PWA + Accessibility + Bundle Audit | 4/4 | Complete | 2026-04-29 |
 | 5. Hardening + Ship | 2/3 (05-03 partial) | In progress — awaiting human real-device verify | - |
-| 6. Title-Screen Liveliness | 0/TBD | Not started (v1.1) | - |
+| 6. Title-Screen Liveliness | 0/2 | Not started (v1.1) | - |
 | 7. In-Game Juice | 0/TBD | Not started (v1.1) | - |
 | 8. Glass UI Refresh | 0/TBD | Not started (v1.1) | - |
 
@@ -142,7 +142,10 @@ Plans:
   2. Pipes scroll past in title state (no collision, despawn-and-respawn loop); music plays at lower volume than gameplay
   3. "Flappy 3D" logo letters fade in staggered ~50ms apart on title mount; one-shot, no re-trigger
   4. "Tap to start" CTA opacity pulses 0.6 ↔ 1.0 over 1.6s ease-in-out; static when reduced-motion
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+- [ ] 06-01-PLAN.md — Bird sine bob (BEAUTY-01) + demo pipes via ScrollSystem/ObstacleSpawner title gate (BEAUTY-02) + AudioManager.setMusicVolume
+- [ ] 06-02-PLAN.md — Logo letter-stagger GSAP entrance + hasAnimated guard (BEAUTY-03) + CTA pulse CSS with motion gate (BEAUTY-04)
 **UI hint**: yes (frontend-heavy)
 
 ### Phase 7: In-Game Juice
@@ -162,10 +165,10 @@ Plans:
 **Depends on**: Phase 6, Phase 7 (juice in place; this is the static-style coat of paint on top)
 **Requirements**: BEAUTY-09, BEAUTY-10, BEAUTY-11, BEAUTY-12
 **Success Criteria** (what must be TRUE):
-  1. `Press Start 2P` (or comparable arcade font) is locally hosted as woff2 (≤12KB), used for `<h1>`/`<h2>` only — body text remains system stack for readability
-  2. PauseScreen, GameOverScreen, SettingsModal use `backdrop-filter: blur(12px) saturate(120%)`; falls back gracefully when unsupported
-  3. Button component has a linear-gradient background + subtle inset shadow; hover/active states distinct; touch-target ≥44px preserved
-  4. Focus ring polished from Phase 4's basic 2px solid to a 2-color outline (inner glow + outer ring) using `:focus-visible`; remains WCAG-AA contrast against backgrounds
+  1. `Press Start 2P` (or comparable arcade font) is locally hosted as woff2 at ≤12KB; used for `<h1>`/`<h2>` only; body text remains the system stack for readability
+  2. PauseScreen, GameOverScreen, SettingsModal use `backdrop-filter: blur(12px) saturate(120%)`; falls back gracefully on browsers without `backdrop-filter` support (solid-color background)
+  3. Button component has a linear-gradient background + subtle inset shadow; hover and active states distinct; touch-target minimums (≥44×44px) preserved
+  4. Focus ring polished — 2-color outline (inner glow + outer ring) via `:focus-visible`; remains WCAG-AA contrast against all overlay backgrounds; verify in dark + colorblind palettes
 **Plans**: TBD
 **UI hint**: yes (CSS + 1 font asset)
 
@@ -202,4 +205,4 @@ Plans:
 
 ---
 
-*Last updated: 2026-04-29 — v1.1 Beauty Pass milestone added (Phases 6-8)*
+*Last updated: 2026-04-29 — Phase 6 plans finalized (06-01, 06-02)*
