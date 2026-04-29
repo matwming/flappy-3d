@@ -3,19 +3,19 @@ gsd_state_version: 1.0
 milestone: v1.0.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-04-29T05:46:25.107Z"
+last_updated: "2026-04-29T06:24:00.000Z"
 progress:
   total_phases: 5
   completed_phases: 2
   total_plans: 20
-  completed_plans: 15
-  percent: 75
+  completed_plans: 17
+  percent: 85
 ---
 
 # Project State — Flappy 3D
 
 **Last updated:** 2026-04-29
-**Updated by:** gsd-executor (05-01)
+**Updated by:** gsd-executor (05-02)
 
 ---
 
@@ -29,14 +29,14 @@ progress:
 ## Current Position
 
 Phase: 5
-Plan: 1 → COMPLETE
+Plan: 2 → COMPLETE
 | Field | Value |
 |-------|-------|
 | Phase | 5 — in progress |
 | Phase name | Hardening + Ship |
-| Plans complete | 05-01 (hardening-audit) |
-| Plans planned not executed | 05-02 (ios-audio), 05-03 (final-qa) |
-| Status | 1/3 plans complete |
+| Plans complete | 05-01 (hardening-audit) ✓, 05-02 (real-audio) ✓ |
+| Plans planned not executed | 05-03 (final-qa) |
+| Status | 2/3 plans complete |
 | Phase goal | Memory stable, event listeners clean, iOS audio unlock, final QA |
 
 **Progress bar:**
@@ -46,7 +46,7 @@ Phase 1 [██████████] 100% ✓ (user-verified 2026-04-28)
 Phase 2 [██████████] 100% ✓ (user-verified 2026-04-29)
 Phase 3 [██████████] 100% ✓ (03-01 audio ✓, 03-02 ui-infra ✓, 03-03 screens ✓, 03-04 juice ✓, 03-05 fix-ui-state ✓, 03-06 fix-audio-motion ✓)
 Phase 4 [██████████] 100% ✓ (04-01 pwa-setup ✓, 04-02 a11y ✓, 04-03 bundle-audit ✓, 04-04 deploy ✓)
-Phase 5 [███       ] 33% (05-01 hardening-audit ✓)
+Phase 5 [██████    ] 67% (05-01 hardening-audit ✓, 05-02 real-audio ✓)
 ```
 
 ---
@@ -93,16 +93,19 @@ Phase 5 [███       ] 33% (05-01 hardening-audit ✓)
 
 **What was done last (this session):**
 
-- Phase 4 Plan 04 (deploy) executed: 2 tasks, 2 commits.
-  - Task 1 (53a8698): .github/workflows/deploy.yml — 3-job workflow (build → deploy → lighthouse). build job runs bundle-check.sh gate. deploy job has job-level outputs.page_url for cross-job chaining. lighthouse job audits live URL with npx lighthouse, fails if PWA score < 0.90.
-  - Task 2 (30e45db): README.md Deployment section — one-time Pages setup, workflow steps, manual preview, CI artifacts, Cloudflare Pages migration path.
-- Current bundle: 188.01 KB gzip (61.98 KB headroom under 250 KB budget)
-- Requirements PWA-05, DEPLOY-02, DEPLOY-03 now SATISFIED
-- Phase 4 COMPLETE — all 4 plans executed
+- Phase 5 Plan 02 (real-audio) executed: 2 tasks, 2 commits.
+  - Task 1 (63987ab): Replaced 4 zero-byte placeholder MP3s with real CC0 samples sourced from kenney.nl (SFX) and opengameart.org (music). Converted OGG→MP3 at 64kbps via ffmpeg.
+  - Task 2 (62994b0): Updated CREDITS.md with full source URLs, author, license, bundle budget notes.
+- Audio files: flap.mp3 (2.3KB), score.mp3 (2.9KB), death.mp3 (1.9KB), music.mp3 (329KB)
+- Music loop: Juhani Junkala Chiptune Adventures Stage 1 (CC0, 41s, opengameart.org)
+- SFX: Kenney Interface Sounds pack (CC0, kenney.nl)
+- JS bundle unchanged: 188.03 KB gzip (61.96 KB headroom under 250 KB budget)
+- Requirement AUD-02 now SATISFIED
+- flapLoaded/scoreLoaded/deathLoaded flags will be true after page load (synth fallback no longer fires)
 
 **What's next:**
 
-Phase 5 — Hardening + Ship (iOS on-device audio, memory stability, final QA).
+Phase 5 Plan 03 — Final QA (iOS audio real-device verify, memory probe, ship checklist, v1.0.0 tag).
 
 **Phase 3 plan summary:**
 
@@ -143,6 +146,7 @@ Phase 5 — Hardening + Ship (iOS on-device audio, memory stability, final QA).
 | Phase 04 P02 | 258 | 2 tasks | 9 files |
 | Phase 04 P04 | 6 | 2 tasks | 2 files |
 | Phase 05 P01 | 2 | 3 tasks | 6 files |
+| Phase 05 P02 | 1480 | 2 tasks | 5 files |
 
 ## Phase Log
 
@@ -152,7 +156,7 @@ Phase 5 — Hardening + Ship (iOS on-device audio, memory stability, final QA).
 | 2 | ✓ Complete | 2026-04-29 | 3 plans, 6 atomic commits; user-verified in browser |
 | 3 | ✓ Complete | 2026-04-29 | 6 plans, 12 atomic commits; HUD-04, AUD-03, ANIM-06 closed; 194.49 KB gzip |
 | 4 | ✓ Complete | 2026-04-29 | 4 plans, 8 atomic commits; PWA-05, DEPLOY-02, DEPLOY-03 closed; 188.01 KB gzip |
-| 5 | In progress | - | 05-01 hardening-audit ✓; AbortController resize, DEV memory probe, actor.send audit |
+| 5 | In progress | - | 05-01 hardening-audit ✓; 05-02 real-audio ✓ (AUD-02 closed); 05-03 final-qa pending |
 
 ---
 

@@ -103,8 +103,8 @@ Plans:
   4. No "Event sent to stopped actor" warnings in console across 20 play cycles; `getEventListeners(document)` count is stable after 10 restarts
 **Plans**: 3 plans
 Plans:
-- [ ] 05-01-PLAN.md — Hardening audit: DEV memory probe + AbortController resize fix + actor.send site audit
-- [ ] 05-02-PLAN.md — Real CC0 audio sourcing: replace placeholder MP3s + update CREDITS.md
+- [x] 05-01-PLAN.md — Hardening audit: DEV memory probe + AbortController resize fix + actor.send site audit
+- [x] 05-02-PLAN.md — Real CC0 audio sourcing: replace placeholder MP3s + update CREDITS.md
 - [ ] 05-03-PLAN.md — Real-device verification + README polish + SettingsModal iOS note + v1.0.0 tag
 **UI hint**: yes
 
@@ -117,8 +117,8 @@ Plans:
 | 1. Scaffold + Core Loop | 4/4 | Complete | 2026-04-28 |
 | 2. Game Machine + Obstacles + Rendering | 3/3 | Complete | 2026-04-29 |
 | 3. UI + Audio + Polish | 6/6 | Complete | 2026-04-29 |
-| 4. PWA + Accessibility + Bundle Audit | 1/4 | In progress | - |
-| 5. Hardening + Ship | 0/? | Not started | - |
+| 4. PWA + Accessibility + Bundle Audit | 4/4 | Complete | 2026-04-29 |
+| 5. Hardening + Ship | 2/3 | In progress | - |
 
 ---
 
