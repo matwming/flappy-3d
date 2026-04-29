@@ -238,6 +238,12 @@ dialog.settings-modal::backdrop {
 .settings-rows { display: flex; flex-direction: column; gap: 4px; }
 .settings-rows .toggle { background: rgba(255,255,255,0.06); width: 100%; justify-content: space-between; }
 .settings-rows .toggle-label { color: white; font-weight: 600; }
+.settings-note {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.55);
+  margin: -0.25rem 0 0.5rem 0;
+  padding: 0;
+}
 
 /* ── Button row util ── */
 .btn-row { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }

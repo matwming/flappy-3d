@@ -76,6 +76,9 @@ export function SettingsModal({ storage, audio, onClose, onPaletteChange }: Prop
         checked: settings.music,
         onChange: (v) => update({ music: v }),
       }),
+      h('p', { className: 'settings-note' },
+        'On iOS, the silent switch mutes all app audio.',
+      ),
       h(Toggle, {
         label: 'Reduce Motion',
         checked: reduceMotionOn,
