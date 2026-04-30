@@ -8,9 +8,11 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "generate-icons": "node scripts/generate-icons.cjs",
-    "bundle-check": "npm run build && bash scripts/bundle-check.sh"
+    "bundle-check": "npm run build && bash scripts/bundle-check.sh",
+    "test:uat": "playwright test"
   },
   "devDependencies": {
+    "@playwright/test": "^1.59.1",
     "@preact/preset-vite": "^2.10.5",
     "@types/three": "^0.184.0",
     "rollup-plugin-visualizer": "^7.0.1",
