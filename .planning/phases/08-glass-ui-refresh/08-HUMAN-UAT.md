@@ -25,7 +25,7 @@ result: PASSED — Playwright C11 regression-tested for the minifier issue (esbu
 ### 3. Gradient buttons + states (BEAUTY-11)
 expected: Buttons show subtle vertical gradient, lift slightly on hover (desktop only), press inward on click. Touch targets ≥44×44px.
 how_to_test: Hover Settings button on desktop → lift. Tap on mobile → press. No sticky hover after release on mobile.
-result: PARTIAL — Playwright C12 confirmed `linear-gradient` is on button rule. Hover/press transform states are visual-only — not measured by Playwright. [Pending visual confirmation]
+result: FAILED (mobile) — user reports button hover/press states not visible on iPhone (2026-04-29). `@media (hover: hover)` correctly excludes mobile (no real hover on touch); `:active` press state on iOS Safari may require explicit `cursor: pointer` or `-webkit-tap-highlight-color` adjustments. Investigation skipped per user request. Gradient on resting state still confirmed via Playwright C12.
 
 ### 4. 2-layer focus ring (BEAUTY-12)
 expected: Tab through buttons. Yellow inner glow + dark outer halo visible on focused element. Contrast against all overlays.
@@ -45,10 +45,10 @@ result: PASSED — Playwright C4 (logo letter spans) + C6 (CTA pulse class) conf
 ## Summary
 total: 6
 passed: 5
-issues: 0
-pending: 1 (button hover/press visual confirmation)
+issues: 1 (button :active state on iPhone)
+pending: 0
 skipped: 0
 blocked: 0
 
 ## Gaps
-None blocking. Item 3 hover/press states are observable but require human visual inspection — not Playwright-automatable.
+Item 3 button press state on iPhone — minor mobile UX quirk, doesn't block ship. Investigation skipped per user request.
