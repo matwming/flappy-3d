@@ -161,6 +161,24 @@ Visual polish layer on top of the shipped v1. Each requirement is motion-gated w
 
 ---
 
+## v1.2 — Modes
+
+Time-attack + daily-seed modes layered on top of endless. Adds mode picker, per-mode leaderboard schema, deterministic-seed RNG. Seeds SEED-004 + SEED-005 consumed.
+
+### Mode infrastructure (MODE)
+
+- [ ] **MODE-01**: `gameMachine.context.mode` is one of `'endless' | 'timeAttack' | 'daily'` (defaults to `'endless'`); persists across rounds within a session; reset only by explicit `SET_MODE` event
+- [ ] **MODE-02**: StorageManager v3 schema: `leaderboardByMode: { endless: LeaderboardEntry[], timeAttack: LeaderboardEntry[], daily: LeaderboardEntry[] }`; existing v2 `leaderboard` migrates into `leaderboardByMode.endless` on first read; backward-compatible with v2 saves
+- [ ] **MODE-03**: Title screen shows a 3-option mode picker (Endless / Time-Attack / Daily); selection sends `SET_MODE` event; selected mode visually highlighted; selection persists in StorageManager settings
+- [ ] **MODE-04**: In `mode === 'timeAttack'`, a 60-second countdown timer starts on round start (`roundStarted` event); timer ticks down at 1s intervals
+- [ ] **MODE-05**: HUD displays the timer in time-attack mode (top-right, mm:ss format); ARIA-live label for screen readers
+- [ ] **MODE-06**: When time-attack timer reaches 0, `gameMachine` transitions to `gameOver` (auto-end, no death required); GameOver shows mode-specific PB and leaderboard
+- [ ] **MODE-07**: In `mode === 'daily'`, ObstacleSpawner uses a seeded RNG (mulberry32 implementation, ~10 LOC) instead of `Math.random()`; seed derived from UTC date `parseInt(YYYYMMDD, 10) % 0xFFFFFFFF`
+- [ ] **MODE-08**: StorageManager tracks daily attempts: `dailyAttempts: { 'YYYY-MM-DD': { count, best } }`; Title shows "Today's best: N (M attempts)" when daily mode is selected
+- [ ] **MODE-09**: GameOver in daily mode offers a "Share" button copying `Daily YYYY-MM-DD: <score> 🐦` to clipboard via `navigator.clipboard.writeText()`; gracefully no-ops on browsers without clipboard API
+
+---
+
 ## v2 / Deferred
 
 These are valuable but deliberately out of v1 scope. Add post-launch.
@@ -283,3 +301,12 @@ Populated by `gsd-roadmapper` on 2026-04-28. Every v1 REQ-ID maps to exactly one
 | BEAUTY-10 | Phase 8 | Pending |
 | BEAUTY-11 | Phase 8 | Pending |
 | BEAUTY-12 | Phase 8 | Pending |
+| MODE-01 | Phase 9 | Pending |
+| MODE-02 | Phase 9 | Pending |
+| MODE-03 | Phase 9 | Pending |
+| MODE-04 | Phase 10 | Pending |
+| MODE-05 | Phase 10 | Pending |
+| MODE-06 | Phase 10 | Pending |
+| MODE-07 | Phase 11 | Pending |
+| MODE-08 | Phase 11 | Pending |
+| MODE-09 | Phase 11 | Pending |

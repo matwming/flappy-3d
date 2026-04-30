@@ -1,6 +1,6 @@
 ---
 id: SEED-005
-status: dormant
+status: consumed-in-v1.2
 planted: 2026-04-29
 planted_during: v1.1 Beauty Pass (post-Phase 8)
 trigger_when: "modes / variants milestone OR daily-engagement / habit-loop milestone"

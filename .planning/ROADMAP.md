@@ -18,8 +18,14 @@
 ### v1.1 — Beauty Pass
 
 - [x] **Phase 6: Title-Screen Liveliness** — Bird bob, demo pipes scrolling on title, logo entrance, CTA pulse — first-impression beauty ✓ (2026-04-29)
-- [x] **Phase 7: In-Game Juice** — `+1` score popups, flap trail, milestone celebrations at 10/25/50, per-pair pipe color cycling ✓ (2026-04-29)
-- [ ] **Phase 8: Glass UI Refresh** — Press Start 2P font for headings, backdrop-filter blur on overlays, gradient buttons, focus polish
+- [x] **Phase 7: In-Game Juice** — `+1` score popups, flap trail, milestone celebrations at 10/25/50, per-pair pipe color cycling ✓ (2026-04-29; 5 visual items reported failing on iPhone — wiring confirmed in production bundle, investigation deferred)
+- [x] **Phase 8: Glass UI Refresh** — Press Start 2P font for headings, backdrop-filter blur on overlays, gradient buttons, focus polish ✓ (2026-05-01; backdrop-filter minifier regression fixed mid-flight)
+
+### v1.2 — Modes
+
+- [ ] **Phase 9: Mode Infrastructure** — gameMachine `mode` context, StorageManager v3 (per-mode leaderboards + v2 migration), Title mode picker UI
+- [ ] **Phase 10: Time-Attack Mode** — 60s countdown timer in HUD, mode-aware leaderboard, GameOver shows time-attack PB
+- [ ] **Phase 11: Daily-Seed Mode** — Seeded RNG (mulberry32) for deterministic obstacle layout per UTC date, daily attempt tracking, optional share-result
 
 ---
 
@@ -179,10 +185,52 @@ Plans:
 
 ---
 
+## v1.2 Phase Details
+
+### Phase 9: Mode Infrastructure
+**Goal**: After Phase 9, the game supports a `mode` context (`'endless' | 'timeAttack' | 'daily'`), Title shows a mode picker, and per-mode leaderboards persist via StorageManager v3 (with safe migration from v2). No new playable mode yet — just the rails.
+**Depends on**: v1.1 (Phase 8) — Title screen + Settings infrastructure must be in place.
+**Requirements**: MODE-01, MODE-02, MODE-03
+**Seeds consumed**: SEED-004, SEED-005 (both depend on this phase)
+**Success Criteria** (what must be TRUE):
+  1. `gameMachine.context.mode` is one of `'endless'`, `'timeAttack'`, `'daily'`; defaults to `'endless'`; persists across rounds within a session
+  2. StorageManager v3 schema: `leaderboardByMode: { endless: LeaderboardEntry[], timeAttack: [], daily: [] }`; existing v2 `leaderboard` migrates into `leaderboardByMode.endless` on first read
+  3. Title screen shows a 3-option mode picker (Endless / Time-Attack / Daily); selection sets `actor.send({type:'SET_MODE', mode})`; selected mode visually highlighted
+  4. Endless mode behavior unchanged from v1.1 — no regression
+**Plans**: TBD
+**UI hint**: yes (mode picker component)
+
+### Phase 10: Time-Attack Mode
+**Goal**: After Phase 10, selecting Time-Attack starts a 60-second countdown; player scores as much as possible before time runs out; HUD shows the timer; GameOver shows time-attack PB; mode-aware leaderboard.
+**Depends on**: Phase 9 (mode infrastructure)
+**Requirements**: MODE-04, MODE-05, MODE-06
+**Success Criteria**:
+  1. In time-attack mode, a 60-second timer starts on START; HUD shows seconds remaining
+  2. When timer reaches 0, machine transitions to `gameOver` (auto-end, no death required)
+  3. GameOver shows time-attack PB and time-attack-specific leaderboard
+  4. Endless mode still works (no regression on Phase 9 work)
+**Plans**: TBD
+**UI hint**: yes (timer display in HUD)
+
+### Phase 11: Daily-Seed Mode
+**Goal**: After Phase 11, selecting Daily Seed plays a deterministic obstacle layout based on today's UTC date — every player on a given day sees the same pipes. Daily attempt tracking; optional share-result via clipboard.
+**Depends on**: Phase 9 (mode infrastructure)
+**Requirements**: MODE-07, MODE-08, MODE-09
+**Success Criteria**:
+  1. ObstacleSpawner uses a seeded RNG (mulberry32) when `mode === 'daily'`; seed derived from `YYYYMMDD` UTC date
+  2. Two players on the same UTC date see the same pipe sequence (deterministic)
+  3. Daily attempts tracked in StorageManager v3 (`dailyAttempts: { [date]: number }`); UI shows "Today's best: N (M attempts)" on Title
+  4. Share-result button (optional) copies "Daily YYYY-MM-DD: score 🐦" to clipboard
+**Plans**: TBD
+**UI hint**: yes (daily UI affordances)
+
+---
+
 ## Requirement Coverage
 
 **v1 requirements:** 62 / 62 mapped, 0 orphaned
 **v1.1 requirements:** 12 / 12 mapped (BEAUTY-01..12)
+**v1.2 requirements:** 9 / 9 mapped (MODE-01..09)
 
 | Category | Phase |
 |----------|-------|
@@ -207,7 +255,10 @@ Plans:
 | BEAUTY-01..04 (4) | Phase 6 |
 | BEAUTY-05..08 (4) | Phase 7 |
 | BEAUTY-09..12 (4) | Phase 8 |
+| MODE-01..03 (3) | Phase 9 |
+| MODE-04..06 (3) | Phase 10 |
+| MODE-07..09 (3) | Phase 11 |
 
 ---
 
-*Last updated: 2026-04-29 — Phase 6 plans finalized (06-01, 06-02)*
+*Last updated: 2026-05-01 — v1.2 Modes milestone added (Phases 9-11), v1.1 marked code-complete*

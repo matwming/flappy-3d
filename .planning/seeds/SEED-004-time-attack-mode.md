@@ -1,6 +1,6 @@
 ---
 id: SEED-004
-status: dormant
+status: consumed-in-v1.2
 planted: 2026-04-29
 planted_during: v1.1 Beauty Pass (post-Phase 8)
 trigger_when: "modes / variants / replayability milestone OR when player retention becomes a metric"

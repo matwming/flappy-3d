@@ -14,14 +14,23 @@ The game must feel **palpably more crafted** than the baseline within 30 seconds
 
 (v1 awaiting human-verify on 7 runtime/device items + v1.0.0 tag — see `.planning/phases/05-hardening-ship/05-HUMAN-UAT.md`)
 
-### v1.1 Milestone — Beauty Pass (CODE-COMPLETE 2026-04-29)
+### v1.1 Milestone — Beauty Pass (CODE-COMPLETE 2026-05-01)
 
 Visual polish shipped on top of v1. Three phases (6, 7, 8) all delivered:
-- Phase 6 — Title-screen liveliness (bird bob, demo pipes, logo entrance, CTA pulse) ✓
-- Phase 7 — In-game juice (`+1` score popups, flap trail toggle, milestone celebrations at 10/25/50, pipe color cycling) ✓
-- Phase 8 — Glass UI refresh (Press Start 2P arcade font, backdrop-filter blur, gradient buttons, 2-layer focus ring) ✓
+- Phase 6 — Title-screen liveliness (bird bob, demo pipes, logo entrance, CTA pulse) ✓ user-confirmed on iPhone
+- Phase 7 — In-game juice (`+1` score popups, flap trail toggle, milestone celebrations at 10/25/50, pipe color cycling) ✓ code-complete; 5 visual items reported failing on iPhone runtime — wiring confirmed in production bundle, investigation deferred
+- Phase 8 — Glass UI refresh (Press Start 2P arcade font, backdrop-filter blur, gradient buttons, 2-layer focus ring) ✓ user-confirmed; backdrop-filter Chromium-minifier regression fixed mid-flight
 
-12 BEAUTY-* requirements all coded and verified. Final bundle: 196KB / 250KB budget. 19 visual UAT items pending in `*-HUMAN-UAT.md` files. v1.1.0 tag pending user sign-off.
+12 BEAUTY-* requirements all coded. Final bundle: 196KB / 250KB budget. v1.1.0 tag pending user sign-off (Phase 7 visual issues are non-blocking for tag).
+
+### v1.2 Milestone — Modes (PLANNED 2026-05-01)
+
+Time-attack + daily-seed modes layered on top of endless. Three phases (9, 10, 11):
+- Phase 9 — Mode infrastructure: gameMachine `mode` context, StorageManager v3 (per-mode leaderboards + v2 migration), Title mode picker
+- Phase 10 — Time-attack mode (60s countdown, HUD timer, mode-aware leaderboard)
+- Phase 11 — Daily-seed mode (deterministic obstacle layout per UTC date, daily attempts, optional share-result)
+
+9 MODE-* requirements (MODE-01..09). Seeds SEED-004 + SEED-005 consumed. Constraints inherited from v1: bundle ≤250KB, motion-gated effects, no new heavy libs.
 
 ### Active
 
