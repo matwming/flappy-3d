@@ -219,8 +219,9 @@ body.palette-colorblind {
 /* ── Pause screen ── */
 .pause-screen {
   background: rgba(14, 20, 40, 0.82);
+  /* Unprefixed only — esbuild's CSS minifier dedupes (drops unprefixed) when both are
+     present. iOS Safari 16.4+ supports unprefixed; older iOS gets the solid-color fallback. */
   backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   color: white;
   gap: 16px;
 }
@@ -234,7 +235,6 @@ body.palette-colorblind {
 .gameover-screen {
   background: rgba(10, 10, 20, 0.82);
   backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   color: white;
   gap: 12px;
 }
@@ -271,7 +271,6 @@ dialog.settings-modal {
   width: 90vw;
   background: rgba(15, 25, 50, 0.92);
   backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
   color: white;
   box-shadow: 0 8px 40px rgba(0,0,0,0.5);
 }
