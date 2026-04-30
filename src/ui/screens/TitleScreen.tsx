@@ -2,10 +2,11 @@ import { h } from 'preact'
 import { useEffect, useRef } from 'preact/hooks'
 import { gsap } from 'gsap'
 import type { Actor } from 'xstate'
-import type { gameMachine } from '../../machine/gameMachine'
+import type { gameMachine, GameMode } from '../../machine/gameMachine'
 import type { LeaderboardEntry } from '../../storage/StorageManager'
 import { Button } from '../components/Button'
 import { LeaderboardList } from '../components/LeaderboardList'
+import { ModePicker } from '../components/ModePicker'
 
 type GameActor = Actor<typeof gameMachine>
 
@@ -16,12 +17,14 @@ interface Props {
   onSettings: () => void
   onInstall?: () => void
   showInstall?: boolean
+  mode: GameMode
+  onModeChange: (mode: GameMode) => void
 }
 
 const LOGO_TEXT = 'FLAPPY 3D'
 const logoLetters = LOGO_TEXT.split('')
 
-export function TitleScreen({ active, actor, leaderboard, onSettings, onInstall, showInstall }: Props) {
+export function TitleScreen({ active, actor, leaderboard, onSettings, onInstall, showInstall, mode, onModeChange }: Props) {
   const hasAnimated = useRef(false)
 
   useEffect(() => {
@@ -85,6 +88,7 @@ export function TitleScreen({ active, actor, leaderboard, onSettings, onInstall,
         )
       )
     ),
+    h(ModePicker, { mode, onModeChange }),
     h(
       'div',
       { style: 'margin: 8px 0 16px; width: 100%; max-width: 300px;' },

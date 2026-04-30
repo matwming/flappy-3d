@@ -1,7 +1,7 @@
 import { h, render } from 'preact'
 import { useState, useEffect, useRef } from 'preact/hooks'
 import type { Actor, SnapshotFrom } from 'xstate'
-import type { gameMachine } from '../machine/gameMachine'
+import type { gameMachine, GameMode } from '../machine/gameMachine'
 import type { AudioManager } from '../audio/AudioManager'
 import type { StorageManager } from '../storage/StorageManager'
 import type { LeaderboardEntry } from '../storage/StorageManager'
@@ -128,8 +128,9 @@ export class UIBridge {
 function App(props: AppProps) {
   const [snap, setSnap] = useState<Snap>(props.actor.getSnapshot())
   const [settingsOpen, setSettingsOpen] = useState(false)
+  const [mode, setMode] = useState<GameMode>(() => props.storage.getLastMode())
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>(() =>
-    props.storage.getLeaderboard('endless'),
+    props.storage.getLeaderboard(props.storage.getLastMode()),
   )
   const [priorBest, setPriorBest] = useState<number>(() => props.storage.getBestScore())
   const priorBestRef = useRef<number>(props.storage.getBestScore())
@@ -163,6 +164,13 @@ function App(props: AppProps) {
     return () => window.removeEventListener('beforeinstallprompt', checkPrompt)
   }, [])
 
+  function handleModeChange(newMode: GameMode): void {
+    props.actor.send({ type: 'SET_MODE', mode: newMode })
+    props.storage.setLastMode(newMode)
+    setMode(newMode)
+    setLeaderboard(props.storage.getLeaderboard(newMode))
+  }
+
   function handleInstall() {
     const prompt = window.deferredInstallPrompt
     if (!prompt) return
@@ -185,6 +193,8 @@ function App(props: AppProps) {
       onSettings: () => setSettingsOpen(true),
       onInstall: handleInstall,
       showInstall,
+      mode,
+      onModeChange: handleModeChange,
     }),
     h(HUD, {
       active: value === 'playing' || value === 'dying',
