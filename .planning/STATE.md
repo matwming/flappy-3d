@@ -1,21 +1,22 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.1
-milestone_name: — Beauty Pass
-status: unknown
-last_updated: "2026-04-30T16:12:10.962Z"
+milestone: v1.2
+milestone_name: — Modes (first phase)
+status: phase-complete
+stopped_at: Completed 09-02-PLAN.md
+last_updated: "2026-04-29T00:00:00.000Z"
 progress:
   total_phases: 9
-  completed_phases: 6
+  completed_phases: 8
   total_plans: 27
-  completed_plans: 23
-  percent: 85
+  completed_plans: 25
+  percent: 93
 ---
 
 # Project State — Flappy 3D
 
-**Last updated:** 2026-04-30
-**Updated by:** gsd-executor (09-01)
+**Last updated:** 2026-04-29
+**Updated by:** gsd-executor (09-02)
 
 ---
 
@@ -29,15 +30,15 @@ progress:
 ## Current Position
 
 Phase: 09
-Plan: 01 complete
+Plan: 02 complete (phase complete)
 | Field | Value |
 |-------|-------|
-| Phase | 9 — In Progress |
+| Phase | 9 — Complete |
 | Phase name | Mode Infrastructure |
-| Plans complete | 09-01 (GameMode + StorageManager v3 + main.ts seed) ✓ |
+| Plans complete | 09-01 (GameMode + StorageManager v3 + main.ts seed) ✓, 09-02 (Title mode picker UI) ✓ |
 | Plans in progress | None |
-| Status | 1/2 plans complete |
-| Phase goal | Typed contracts for multi-mode play (GameMode, context.mode, SET_MODE, StorageManager v3) that Phase 10 (time-attack) and Phase 11 (daily-seed) build on |
+| Status | 2/2 plans complete — Phase 9 done |
+| Phase goal | Typed contracts for multi-mode play (GameMode, context.mode, SET_MODE, StorageManager v3) + Title screen mode picker UI |
 | Blocked on | None |
 
 **Progress bar:**
@@ -51,7 +52,7 @@ Phase 5 [████████  ] 80% (05-01 ✓, 05-02 ✓, 05-03 tasks 1-3 
 Phase 6 [██████████] 100% ✓ (06-01 bird-bob+demo-pipes ✓ | 06-02 logo+CTA ✓)
 Phase 7 [██████████] 100% ✓ (07-01 +1 popup + milestones ✓ | 07-02 flap trail + pipe colors ✓)
 Phase 8 [██████████] 100% ✓ (08-01 glass UI refresh ✓ | BEAUTY-09..12 closed)
-Phase 9 [█████     ] 50% (09-01 GameMode + StorageManager v3 ✓ | 09-02 Title mode picker pending)
+Phase 9 [██████████] 100% ✓ (09-01 GameMode + StorageManager v3 ✓ | 09-02 Title mode picker ✓)
 ```
 
 ---
@@ -98,16 +99,15 @@ Phase 9 [█████     ] 50% (09-01 GameMode + StorageManager v3 ✓ | 09-
 
 **What was done last (this session):**
 
-- Phase 9 Plan 01 (GameMode + StorageManager v3 + main.ts seed) executed: 3 tasks, 3 commits.
-  - Task 1 (eb4994f): GameMode type, mode: GameMode in GameContext, SET_MODE event in GameEvent union, SET_MODE handler in title state (assign, no transition).
-  - Task 2 (8a8ef37): StorageManager v3 — SettingsV3 (lastMode), SaveV3 (leaderboardByMode, dailyAttempts), v1/v2->v3 migration (read-only on load), getLeaderboard(mode), pushLeaderboard(mode, entry), getLastMode(), setLastMode(), deprecated compat preserved.
-  - Task 3 (2923782): UIBridge gameOver routes pushLeaderboard to s.context.mode; main.ts seeds gameMachine input with storage.getLastMode().
-- tsc --noEmit: exit 0. Build: clean. Bundle: 196.55KB gzip (+0.22KB).
-- MODE-01, MODE-02 requirements addressed by this plan.
+- Phase 9 Plan 02 (Title mode picker UI) executed: 2 tasks, 2 commits.
+  - Task 1 (9c2c0f7): Created ModePicker.tsx — 3-button segmented picker (Endless/Time-Attack/Daily), aria-pressed, e.stopPropagation(); added .mode-picker + #ui-root .mode-btn CSS rules to styles.css.
+  - Task 2 (b4d83a7): TitleScreen extended with mode/onModeChange props and ModePicker rendered above leaderboard; UIBridge adds mode state from getLastMode(), handleModeChange sends SET_MODE + setLastMode + leaderboard refresh.
+- tsc --noEmit: exit 0. Build: clean. Bundle: 196.75KB gzip (+0.20KB from 09-01).
+- MODE-03 requirement addressed. Phase 9 complete.
 
 **What's next:**
 
-09-02 Title mode picker UI (mode selector on TitleScreen, SET_MODE dispatch, setLastMode persistence).
+Phase 10 — Time-Attack mechanics (timer, countdown, speed, leaderboard).
 
 **Blockers:**
 
@@ -119,7 +119,7 @@ Phase 9 [█████     ] 50% (09-01 GameMode + StorageManager v3 ✓ | 09-
 
 | Metric | Target | Current |
 |--------|--------|---------|
-| JS bundle gzipped | <250KB | 196.55KB (Phase 9 plan 01 complete; GameMode + StorageManager v3 added) |
+| JS bundle gzipped | <250KB | 196.75KB (Phase 9 complete; ModePicker UI added) |
 | FPS on Pixel 6 class | 60fps | Unmeasured (Phase 4 PERF-03) |
 | Lighthouse PWA | ≥90 | 0 (Phase 4 PWA-05) |
 | tsc --noEmit | 0 errors | ✓ 0 errors (strict + noUncheckedIndexedAccess) |
@@ -141,6 +141,7 @@ Phase 9 [█████     ] 50% (09-01 GameMode + StorageManager v3 ✓ | 09-
 | Phase 07-in-game-juice P02 | 6 | 2 tasks | 7 files |
 | Phase 08-glass-ui-refresh P01 | 5 | 4 tasks | 3 files |
 | Phase 09-mode-infrastructure P01 | 1989 | 3 tasks | 4 files |
+| Phase 09-mode-infrastructure P02 | 480 | 2 tasks | 4 files |
 
 ## Phase Log
 
@@ -154,11 +155,11 @@ Phase 9 [█████     ] 50% (09-01 GameMode + StorageManager v3 ✓ | 09-
 | 6 | ✓ Complete | 2026-04-29 | 06-01 bird-bob+demo-pipes ✓ (BEAUTY-01, BEAUTY-02 closed; 188KB gzip); 06-02 logo+CTA ✓ (BEAUTY-03, BEAUTY-04 closed; 196.78KB gzip) |
 | 7 | ✓ Complete | 2026-04-29 | 07-01 +1 popup + milestones ✓ (BEAUTY-05, BEAUTY-07 closed; 195.81KB gzip); 07-02 flap trail + pipe colors ✓ (BEAUTY-06, BEAUTY-08 closed; 196.33KB gzip) |
 | 8 | ✓ Complete | 2026-04-30 | 08-01 glass UI refresh ✓ (BEAUTY-09..12 closed; 196.33KB gzip; v1.1 Beauty Pass code complete) |
-| 9 | In Progress | - | 09-01 GameMode + StorageManager v3 ✓ (MODE-01, MODE-02 addressed; 196.55KB gzip); 09-02 Title mode picker pending |
+| 9 | ✓ Complete | 2026-04-29 | 09-01 GameMode + StorageManager v3 ✓ (MODE-01, MODE-02); 09-02 Title mode picker ✓ (MODE-03); 196.75KB gzip |
 
 ---
 
 *This file is the project's memory. Update at every phase transition and plan completion.*
 
-**Stopped At:** Completed 09-01-PLAN.md
-**Resume:** 09-02 Title mode picker UI
+**Stopped At:** Completed 09-02-PLAN.md
+**Resume:** Phase 10 — Time-Attack mechanics
