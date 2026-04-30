@@ -3,10 +3,14 @@ html, body {
   padding: 0;
   overflow: hidden;
   background: #000;
+  /* Kill iOS double-tap-zoom + 300ms tap delay site-wide; pinch-zoom still works on overlays. */
+  touch-action: manipulation;
 }
 
 #scene {
   display: block;
   width: 100vw;
   height: 100vh;
+  /* Canvas owns its own input via InputManager — no browser gestures should interfere (HYG-03). */
+  touch-action: none;
 }
