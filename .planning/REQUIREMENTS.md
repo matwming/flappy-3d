@@ -113,7 +113,7 @@
 
 - [ ] **HYG-01**: `tsconfig.json` has `"strict": true` and `"noUncheckedIndexedAccess": true`
 - [ ] **HYG-02**: `tsc --noEmit` returns 0 errors; runs as part of `npm run build`
-- [ ] **HYG-03**: `touch-action: none` on canvas to prevent scroll-pull and pinch-zoom interference
+- [x] **HYG-03**: `touch-action: none` on canvas + `manipulation` on body — closes iOS double-tap-zoom + 300ms tap delay (validated 2026-04-29)
 - [ ] **HYG-04**: WebGL2 capability check on init; show graceful fallback message if unsupported
 
 ### Deployment (DEPLOY)

@@ -118,6 +118,16 @@ export const gameMachine = setup({
             emit({ type: 'roundStarted' }),
           ],
         },
+        START: {
+          // GameOverScreen "Back to Title" button — reset and return to title.
+          // Reuses roundStarted to reset bird position + clear obstacles + reset
+          // milestone-fired set + ghost meshes + pipe color cycle index.
+          target: 'title',
+          actions: [
+            assign({ score: 0, runDuration: 0 }),
+            emit({ type: 'roundStarted' }),
+          ],
+        },
       },
     },
   },
