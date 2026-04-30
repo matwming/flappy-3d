@@ -1,11 +1,19 @@
 const STORAGE_KEY = 'flappy-3d:v1'
 
+// GameMode is duplicated here so StorageManager has zero dependency on src/machine/.
+// TypeScript structural typing makes this compatible with gameMachine.ts's GameMode.
+export type GameMode = 'endless' | 'timeAttack' | 'daily'
+
 export interface SettingsV2 {
   sound: boolean
   music: boolean
   reduceMotion: 'auto' | 'on' | 'off'
   palette: 'default' | 'colorblind'
   flapTrail: boolean  // Phase 7 BEAUTY-06; default false
+}
+
+export interface SettingsV3 extends SettingsV2 {
+  lastMode: GameMode
 }
 
 export interface LeaderboardEntry {
@@ -21,6 +29,11 @@ const DEFAULT_SETTINGS: SettingsV2 = {
   flapTrail: false,
 }
 
+const DEFAULT_SETTINGS_V3: SettingsV3 = {
+  ...DEFAULT_SETTINGS,
+  lastMode: 'endless',
+}
+
 interface SaveV1 {
   schemaVersion: 1
   bestScore: number
@@ -33,30 +46,56 @@ interface SaveV2 {
   settings: SettingsV2
 }
 
+interface SaveV3 {
+  schemaVersion: 3
+  bestScore: number
+  settings: SettingsV3
+  leaderboardByMode: {
+    endless: LeaderboardEntry[]
+    timeAttack: LeaderboardEntry[]
+    daily: LeaderboardEntry[]
+  }
+  dailyAttempts: Record<string, { count: number; best: number }>
+}
+
 export class StorageManager {
-  private load(): SaveV2 {
+  private load(): SaveV3 {
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (raw === null) return this.defaults()
-      const parsed = JSON.parse(raw) as SaveV1 | SaveV2
+      const parsed = JSON.parse(raw) as SaveV1 | SaveV2 | SaveV3
       if (parsed.schemaVersion === 1) {
-        // Migrate v1 → v2
+        // v1 → v3: no leaderboard in v1
         return {
-          schemaVersion: 2,
+          schemaVersion: 3,
           bestScore: parsed.bestScore,
-          leaderboard:
-            parsed.bestScore > 0 ? [{ score: parsed.bestScore, ts: Date.now() }] : [],
-          settings: { ...DEFAULT_SETTINGS },
+          settings: { ...DEFAULT_SETTINGS_V3 },
+          leaderboardByMode: {
+            endless: parsed.bestScore > 0 ? [{ score: parsed.bestScore, ts: Date.now() }] : [],
+            timeAttack: [],
+            daily: [],
+          },
+          dailyAttempts: {},
         }
       }
-      if (parsed.schemaVersion === 2) return parsed
+      if (parsed.schemaVersion === 2) {
+        // v2 → v3: migrate flat leaderboard into endless bucket (read-only, no write)
+        return {
+          schemaVersion: 3,
+          bestScore: parsed.bestScore,
+          settings: { ...DEFAULT_SETTINGS_V3, ...parsed.settings },
+          leaderboardByMode: { endless: parsed.leaderboard, timeAttack: [], daily: [] },
+          dailyAttempts: {},
+        }
+      }
+      if (parsed.schemaVersion === 3) return parsed as SaveV3
       return this.defaults()
     } catch {
       return this.defaults()
     }
   }
 
-  private save(data: SaveV2): void {
+  private save(data: SaveV3): void {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
     } catch {
@@ -64,12 +103,13 @@ export class StorageManager {
     }
   }
 
-  private defaults(): SaveV2 {
+  private defaults(): SaveV3 {
     return {
-      schemaVersion: 2,
+      schemaVersion: 3,
       bestScore: 0,
-      leaderboard: [],
-      settings: { ...DEFAULT_SETTINGS },
+      settings: { ...DEFAULT_SETTINGS_V3 },
+      leaderboardByMode: { endless: [], timeAttack: [], daily: [] },
+      dailyAttempts: {},
     }
   }
 
@@ -85,30 +125,54 @@ export class StorageManager {
     }
   }
 
-  getLeaderboard(): LeaderboardEntry[] {
-    return this.load().leaderboard.slice()
+  /** @deprecated Use getLeaderboard(mode) */
+  getLeaderboard(): LeaderboardEntry[]
+  getLeaderboard(mode: GameMode): LeaderboardEntry[]
+  getLeaderboard(mode: GameMode = 'endless'): LeaderboardEntry[] {
+    return this.load().leaderboardByMode[mode].slice()
   }
 
-  pushLeaderboard(score: number): { isNewBest: boolean; rank: number | null } {
+  /** Push entry to mode-specific leaderboard. Returns isNewBest and rank within that mode's list. */
+  pushLeaderboard(mode: GameMode, entry: LeaderboardEntry): { isNewBest: boolean; rank: number | null }
+  /** @deprecated Use pushLeaderboard(mode, entry) */
+  pushLeaderboard(score: number): { isNewBest: boolean; rank: number | null }
+  pushLeaderboard(
+    modeOrScore: GameMode | number,
+    entry?: LeaderboardEntry,
+  ): { isNewBest: boolean; rank: number | null } {
+    const mode: GameMode = typeof modeOrScore === 'number' ? 'endless' : modeOrScore
+    const e: LeaderboardEntry =
+      entry ?? { score: modeOrScore as number, ts: Date.now() }
+
     const data = this.load()
-    const before = data.leaderboard.length > 0 ? (data.leaderboard[0]?.score ?? 0) : 0
-    data.leaderboard = [...data.leaderboard, { score, ts: Date.now() }]
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 5)
-    const idx = data.leaderboard.findIndex((e) => e.score === score)
+    const bucket = data.leaderboardByMode[mode]
+    const before = bucket.length > 0 ? (bucket[0]?.score ?? 0) : 0
+    const updated = [...bucket, e].sort((a, b) => b.score - a.score).slice(0, 5)
+    data.leaderboardByMode[mode] = updated
+    const idx = updated.findIndex((x) => x.score === e.score && x.ts === e.ts)
     const rank = idx >= 0 ? idx + 1 : null
-    if (score > data.bestScore) data.bestScore = score
+    if (e.score > data.bestScore) data.bestScore = e.score
     this.save(data)
-    return { isNewBest: score > before, rank }
+    return { isNewBest: e.score > before, rank }
   }
 
-  getSettings(): SettingsV2 {
-    return { ...DEFAULT_SETTINGS, ...this.load().settings }
+  getSettings(): SettingsV3 {
+    return { ...DEFAULT_SETTINGS_V3, ...this.load().settings }
   }
 
-  setSettings(partial: Partial<SettingsV2>): void {
+  setSettings(partial: Partial<SettingsV3>): void {
     const data = this.load()
     data.settings = { ...data.settings, ...partial }
+    this.save(data)
+  }
+
+  getLastMode(): GameMode {
+    return this.load().settings.lastMode ?? 'endless'
+  }
+
+  setLastMode(mode: GameMode): void {
+    const data = this.load()
+    data.settings = { ...data.settings, lastMode: mode }
     this.save(data)
   }
 }
