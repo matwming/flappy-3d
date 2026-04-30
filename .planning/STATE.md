@@ -3,41 +3,41 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: — Beauty Pass
 status: unknown
-last_updated: "2026-04-30T15:05:24.013Z"
+last_updated: "2026-04-30T16:12:10.962Z"
 progress:
   total_phases: 9
   completed_phases: 6
   total_plans: 27
-  completed_plans: 22
-  percent: 81
+  completed_plans: 23
+  percent: 85
 ---
 
 # Project State — Flappy 3D
 
 **Last updated:** 2026-04-30
-**Updated by:** gsd-executor (08-01)
+**Updated by:** gsd-executor (09-01)
 
 ---
 
 ## Project Reference
 
 **Core value:** The game must feel palpably more crafted than `guiguan/flappy-anna-3d` within 30 seconds of play — polished motion, real menus, real audio, 60fps on a mid-tier phone.
-**Current focus:** Phase 08 — Glass UI Refresh (v1.1 Beauty Pass final)
+**Current focus:** Phase 09 — Mode Infrastructure (v1.2 Modes milestone start)
 
 ---
 
 ## Current Position
 
-Phase: 08
-Plan: Not started
+Phase: 09
+Plan: 01 complete
 | Field | Value |
 |-------|-------|
-| Phase | 8 — Complete |
-| Phase name | Glass UI Refresh |
-| Plans complete | 08-01 (arcade font + glass overlays + gradient buttons + focus ring) ✓ |
+| Phase | 9 — In Progress |
+| Phase name | Mode Infrastructure |
+| Plans complete | 09-01 (GameMode + StorageManager v3 + main.ts seed) ✓ |
 | Plans in progress | None |
-| Status | 1/1 plans complete |
-| Phase goal | DOM screens match 3D scene polish — arcade font, frosted glass, gradient buttons, 2-layer focus ring |
+| Status | 1/2 plans complete |
+| Phase goal | Typed contracts for multi-mode play (GameMode, context.mode, SET_MODE, StorageManager v3) that Phase 10 (time-attack) and Phase 11 (daily-seed) build on |
 | Blocked on | None |
 
 **Progress bar:**
@@ -51,6 +51,7 @@ Phase 5 [████████  ] 80% (05-01 ✓, 05-02 ✓, 05-03 tasks 1-3 
 Phase 6 [██████████] 100% ✓ (06-01 bird-bob+demo-pipes ✓ | 06-02 logo+CTA ✓)
 Phase 7 [██████████] 100% ✓ (07-01 +1 popup + milestones ✓ | 07-02 flap trail + pipe colors ✓)
 Phase 8 [██████████] 100% ✓ (08-01 glass UI refresh ✓ | BEAUTY-09..12 closed)
+Phase 9 [█████     ] 50% (09-01 GameMode + StorageManager v3 ✓ | 09-02 Title mode picker pending)
 ```
 
 ---
@@ -97,17 +98,16 @@ Phase 8 [██████████] 100% ✓ (08-01 glass UI refresh ✓ | 
 
 **What was done last (this session):**
 
-- Phase 8 Plan 01 (Glass UI Refresh) executed: 3 code tasks + 1 verification task, 3 commits.
-  - Task 1 (c0b53cc): Press Start 2P woff2 font downloaded to public/fonts/; @font-face + h1,h2 rule in styles.css; preload hint in index.html.
-  - Task 2 (a34a7e7): backdrop-filter blur(12px) saturate(120%) on .pause-screen (new), .gameover-screen (upgraded), dialog.settings-modal (saturate added); -webkit- prefix on all three.
-  - Task 3 (5447bf3): :root CSS tokens --btn-top/--btn-bottom/--focus-inner/--focus-outer; button rewrite to linear-gradient + box-shadow depth; @media(hover:hover) hover lift; active press; 2-layer box-shadow focus ring; outline:2px solid removed.
-- tsc --noEmit: exit 0. Build: clean. Bundle: 196.33KB gzip.
-- BEAUTY-09, BEAUTY-10, BEAUTY-11, BEAUTY-12 requirements marked complete.
-- Phase 8 complete (1/1 plans). v1.1 Beauty Pass all code phases done.
+- Phase 9 Plan 01 (GameMode + StorageManager v3 + main.ts seed) executed: 3 tasks, 3 commits.
+  - Task 1 (eb4994f): GameMode type, mode: GameMode in GameContext, SET_MODE event in GameEvent union, SET_MODE handler in title state (assign, no transition).
+  - Task 2 (8a8ef37): StorageManager v3 — SettingsV3 (lastMode), SaveV3 (leaderboardByMode, dailyAttempts), v1/v2->v3 migration (read-only on load), getLeaderboard(mode), pushLeaderboard(mode, entry), getLastMode(), setLastMode(), deprecated compat preserved.
+  - Task 3 (2923782): UIBridge gameOver routes pushLeaderboard to s.context.mode; main.ts seeds gameMachine input with storage.getLastMode().
+- tsc --noEmit: exit 0. Build: clean. Bundle: 196.55KB gzip (+0.22KB).
+- MODE-01, MODE-02 requirements addressed by this plan.
 
 **What's next:**
 
-/gsd-verify-work 8 (visual verification of Glass UI) or v1.1 tag + deploy.
+09-02 Title mode picker UI (mode selector on TitleScreen, SET_MODE dispatch, setLastMode persistence).
 
 **Blockers:**
 
@@ -119,7 +119,7 @@ Phase 8 [██████████] 100% ✓ (08-01 glass UI refresh ✓ | 
 
 | Metric | Target | Current |
 |--------|--------|---------|
-| JS bundle gzipped | <250KB | 196.33KB (Phase 7 plan 02 complete; flap trail + pipe color cycling added) |
+| JS bundle gzipped | <250KB | 196.55KB (Phase 9 plan 01 complete; GameMode + StorageManager v3 added) |
 | FPS on Pixel 6 class | 60fps | Unmeasured (Phase 4 PERF-03) |
 | Lighthouse PWA | ≥90 | 0 (Phase 4 PWA-05) |
 | tsc --noEmit | 0 errors | ✓ 0 errors (strict + noUncheckedIndexedAccess) |
@@ -140,6 +140,7 @@ Phase 8 [██████████] 100% ✓ (08-01 glass UI refresh ✓ | 
 | Phase 07-in-game-juice P01 | 6 | 3 tasks | 5 files |
 | Phase 07-in-game-juice P02 | 6 | 2 tasks | 7 files |
 | Phase 08-glass-ui-refresh P01 | 5 | 4 tasks | 3 files |
+| Phase 09-mode-infrastructure P01 | 1989 | 3 tasks | 4 files |
 
 ## Phase Log
 
@@ -153,9 +154,11 @@ Phase 8 [██████████] 100% ✓ (08-01 glass UI refresh ✓ | 
 | 6 | ✓ Complete | 2026-04-29 | 06-01 bird-bob+demo-pipes ✓ (BEAUTY-01, BEAUTY-02 closed; 188KB gzip); 06-02 logo+CTA ✓ (BEAUTY-03, BEAUTY-04 closed; 196.78KB gzip) |
 | 7 | ✓ Complete | 2026-04-29 | 07-01 +1 popup + milestones ✓ (BEAUTY-05, BEAUTY-07 closed; 195.81KB gzip); 07-02 flap trail + pipe colors ✓ (BEAUTY-06, BEAUTY-08 closed; 196.33KB gzip) |
 | 8 | ✓ Complete | 2026-04-30 | 08-01 glass UI refresh ✓ (BEAUTY-09..12 closed; 196.33KB gzip; v1.1 Beauty Pass code complete) |
+| 9 | In Progress | - | 09-01 GameMode + StorageManager v3 ✓ (MODE-01, MODE-02 addressed; 196.55KB gzip); 09-02 Title mode picker pending |
 
 ---
 
 *This file is the project's memory. Update at every phase transition and plan completion.*
 
-**Planned Phase:** 09 (mode-infrastructure) — 2 plans — 2026-04-30T15:05:24.001Z
+**Stopped At:** Completed 09-01-PLAN.md
+**Resume:** 09-02 Title mode picker UI

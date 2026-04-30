@@ -134,7 +134,7 @@ Plans:
 | 6. Title-Screen Liveliness | 2/2 | Complete (v1.1) | 2026-04-29 |
 | 7. In-Game Juice | 2/2 | Complete (v1.1) | 2026-04-29 |
 | 8. Glass UI Refresh | 1/1 | Complete (v1.1) | 2026-04-30 |
-| 9. Mode Infrastructure | 0/2 | In planning (v1.2) | - |
+| 9. Mode Infrastructure | 1/2 | In progress (v1.2) | - |
 
 ---
 
@@ -200,7 +200,7 @@ Plans:
   4. Endless mode behavior unchanged from v1.1 — no regression
 **Plans**: 2 plans
 Plans:
-- [ ] 09-01-PLAN.md — gameMachine GameMode + SET_MODE event; StorageManager v3 schema + v2→v3 migration + per-mode methods; UIBridge mode-aware leaderboard push (MODE-01, MODE-02)
+- [x] 09-01-PLAN.md — gameMachine GameMode + SET_MODE event; StorageManager v3 schema + v2→v3 migration + per-mode methods; UIBridge mode-aware leaderboard push (MODE-01, MODE-02)
 - [ ] 09-02-PLAN.md — ModePicker component; TitleScreen integration; UIBridge mode state + leaderboard refresh (MODE-03)
 **UI hint**: yes (mode picker component)
 
