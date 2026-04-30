@@ -3,11 +3,14 @@
 import { setup, assign, emit } from 'xstate'
 import { StorageManager } from '../storage/StorageManager'
 
+export type GameMode = 'endless' | 'timeAttack' | 'daily'
+
 export type GameContext = {
   score: number
   bestScore: number
   runDuration: number  // seconds since playing began (reserved for Phase 3 difficulty)
   paused: boolean      // false always in Phase 2
+  mode: GameMode
 }
 
 export type GameEvent =
@@ -18,6 +21,7 @@ export type GameEvent =
   | { type: 'HIT' }
   | { type: 'RESTART' }
   | { type: 'SCORE' }
+  | { type: 'SET_MODE'; mode: GameMode }
 
 // Emitted to subscribers via `actor.on(...)`. Used to signal "fresh round
 // starting" so external systems (Three.js entities, pools) can reset.
@@ -33,17 +37,18 @@ export const gameMachine = setup({
     context: {} as GameContext,
     events: {} as GameEvent,
     emitted: {} as GameEmitted,
-    input: {} as { bestScore: number },
+    input: {} as { bestScore: number; mode?: GameMode },
   },
 }).createMachine({
   id: 'flappy',
   // Context seeded from createActor input (see main.ts):
-  //   createActor(gameMachine, { input: { bestScore } })
+  //   createActor(gameMachine, { input: { bestScore, mode } })
   context: ({ input }) => ({
     score: 0,
     bestScore: input.bestScore,
     runDuration: 0,
     paused: false,
+    mode: input.mode ?? 'endless',
   }),
   initial: 'title',
   states: {
@@ -55,6 +60,9 @@ export const gameMachine = setup({
             assign({ score: 0, runDuration: 0 }),
             emit({ type: 'roundStarted' }),
           ],
+        },
+        SET_MODE: {
+          actions: assign({ mode: ({ event }) => event.mode }),
         },
       },
     },
