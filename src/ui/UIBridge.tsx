@@ -129,7 +129,7 @@ function App(props: AppProps) {
   const [snap, setSnap] = useState<Snap>(props.actor.getSnapshot())
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>(() =>
-    props.storage.getLeaderboard(),
+    props.storage.getLeaderboard('endless'),
   )
   const [priorBest, setPriorBest] = useState<number>(() => props.storage.getBestScore())
   const priorBestRef = useRef<number>(props.storage.getBestScore())
@@ -146,8 +146,9 @@ function App(props: AppProps) {
       }
       if (nextValue === 'gameOver' && prevValue !== 'gameOver') {
         setPriorBest(priorBestRef.current)
-        props.storage.pushLeaderboard(s.context.score)
-        setLeaderboard(props.storage.getLeaderboard())
+        const mode = s.context.mode
+        props.storage.pushLeaderboard(mode, { score: s.context.score, ts: Date.now() })
+        setLeaderboard(props.storage.getLeaderboard(mode))
       }
       prevValue = nextValue
       setSnap(s)

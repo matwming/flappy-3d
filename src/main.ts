@@ -51,7 +51,7 @@ if (!WebGL.isWebGL2Available()) {
 
   const storage = new StorageManager()
   const actor = createActor(gameMachine, {
-    input: { bestScore: storage.getBestScore() },
+    input: { bestScore: storage.getBestScore(), mode: storage.getLastMode() },
   })
 
   const gradient = createToonGradient()
