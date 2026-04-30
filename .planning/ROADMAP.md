@@ -133,7 +133,8 @@ Plans:
 | 5. Hardening + Ship | 2/3 (05-03 partial) | In progress — awaiting human real-device verify | - |
 | 6. Title-Screen Liveliness | 2/2 | Complete (v1.1) | 2026-04-29 |
 | 7. In-Game Juice | 2/2 | Complete (v1.1) | 2026-04-29 |
-| 8. Glass UI Refresh | 0/1 | Not started (v1.1) | - |
+| 8. Glass UI Refresh | 1/1 | Complete (v1.1) | 2026-04-30 |
+| 9. Mode Infrastructure | 0/2 | In planning (v1.2) | - |
 
 ---
 
@@ -197,7 +198,10 @@ Plans:
   2. StorageManager v3 schema: `leaderboardByMode: { endless: LeaderboardEntry[], timeAttack: [], daily: [] }`; existing v2 `leaderboard` migrates into `leaderboardByMode.endless` on first read
   3. Title screen shows a 3-option mode picker (Endless / Time-Attack / Daily); selection sets `actor.send({type:'SET_MODE', mode})`; selected mode visually highlighted
   4. Endless mode behavior unchanged from v1.1 — no regression
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+- [ ] 09-01-PLAN.md — gameMachine GameMode + SET_MODE event; StorageManager v3 schema + v2→v3 migration + per-mode methods; UIBridge mode-aware leaderboard push (MODE-01, MODE-02)
+- [ ] 09-02-PLAN.md — ModePicker component; TitleScreen integration; UIBridge mode state + leaderboard refresh (MODE-03)
 **UI hint**: yes (mode picker component)
 
 ### Phase 10: Time-Attack Mode
