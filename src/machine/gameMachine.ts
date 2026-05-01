@@ -22,6 +22,7 @@ export type GameEvent =
   | { type: 'RESTART' }
   | { type: 'SCORE' }
   | { type: 'SET_MODE'; mode: GameMode }
+  | { type: 'TIME_UP' }
 
 // Emitted to subscribers via `actor.on(...)`. Used to signal "fresh round
 // starting" so external systems (Three.js entities, pools) can reset.
@@ -70,6 +71,7 @@ export const gameMachine = setup({
     playing: {
       on: {
         HIT: { target: 'dying' },
+        TIME_UP: { target: 'dying' },
         SCORE: {
           actions: assign({
             score: ({ context }) => context.score + 1,
