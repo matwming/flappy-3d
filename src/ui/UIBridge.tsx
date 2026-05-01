@@ -12,6 +12,7 @@ import { GameOverScreen } from './screens/GameOverScreen'
 import { SettingsModal } from './screens/SettingsModal'
 import { Vector3 } from 'three'
 import type { Camera } from 'three'
+import type { TimerSystem } from '../systems/TimerSystem'
 
 type GameActor = Actor<typeof gameMachine>
 type Snap = SnapshotFrom<typeof gameMachine>
@@ -60,6 +61,7 @@ interface AppProps {
   audio: AudioManager
   storage: StorageManager
   onPaletteChange: (palette: 'default' | 'colorblind') => void
+  timerSystem: TimerSystem | null
 }
 
 export class UIBridge {
@@ -71,6 +73,7 @@ export class UIBridge {
   private popupPool: ScorePopupPool | null = null
   private milestoneFlash: HTMLDivElement | null = null
   private camera: Camera | null = null
+  private timerSystem: TimerSystem | null = null
 
   constructor(
     actor: GameActor,
@@ -78,12 +81,14 @@ export class UIBridge {
     storage: StorageManager,
     onPaletteChange: (palette: 'default' | 'colorblind') => void,
     camera?: Camera,
+    timerSystem?: TimerSystem,
   ) {
     this.actor = actor
     this.audio = audio
     this.storage = storage
     this.onPaletteChange = onPaletteChange
     this.camera = camera ?? null
+    this.timerSystem = timerSystem ?? null
   }
 
   mount(): void {
@@ -103,6 +108,7 @@ export class UIBridge {
         audio: this.audio,
         storage: this.storage,
         onPaletteChange: this.onPaletteChange,
+        timerSystem: this.timerSystem,
       }),
       this.mountEl,
     )
@@ -201,6 +207,8 @@ function App(props: AppProps) {
       actor: props.actor,
       score: snap.context.score,
       onPause: () => props.actor.send({ type: 'PAUSE' }),
+      mode: snap.context.mode,
+      timerSystem: props.timerSystem,
     }),
     h(PauseScreen, {
       active: value === 'paused',

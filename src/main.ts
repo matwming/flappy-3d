@@ -95,7 +95,7 @@ if (!WebGL.isWebGL2Available()) {
       applyDefaultPalette(birdMaterial, pipeMaterial)
     }
     spawner.setColorblindMode(palette === 'colorblind')
-  }, camera)
+  }, camera, timer)
   const particles = createParticles(scene)
 
   input.onFlap(() => {

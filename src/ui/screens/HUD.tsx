@@ -1,8 +1,10 @@
 import { h } from 'preact'
 import { useEffect, useRef, useState } from 'preact/hooks'
 import type { Actor } from 'xstate'
-import type { gameMachine } from '../../machine/gameMachine'
+import type { gameMachine, GameMode } from '../../machine/gameMachine'
+import type { TimerSystem } from '../../systems/TimerSystem'
 import { Button } from '../components/Button'
+import { TimerDisplay } from '../components/TimerDisplay'
 
 type GameActor = Actor<typeof gameMachine>
 
@@ -11,9 +13,11 @@ interface Props {
   actor: GameActor
   score: number
   onPause: () => void
+  mode: GameMode
+  timerSystem: TimerSystem | null
 }
 
-export function HUD({ active, actor: _actor, score, onPause }: Props) {
+export function HUD({ active, actor: _actor, score, onPause, mode, timerSystem }: Props) {
   const [displayScore, setDisplayScore] = useState(score)
   const [popping, setPopping] = useState(false)
   const popTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -49,6 +53,9 @@ export function HUD({ active, actor: _actor, score, onPause }: Props) {
       },
       displayScore,
     ),
+    mode === 'timeAttack' && timerSystem !== null
+      ? h(TimerDisplay, { timerSystem })
+      : null,
     h(Button, { className: 'hud-pause-btn', onClick: onPause, 'aria-label': 'Pause' }, '⏸'),
   )
 }

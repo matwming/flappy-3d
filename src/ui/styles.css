@@ -407,6 +407,34 @@ dialog.settings-modal::backdrop {
     inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
+/* ── HUD Timer (TIME-ATTACK mode) ── */
+.hud-timer {
+  position: absolute;
+  top: 68px;
+  right: 16px;
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: white;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  pointer-events: none;
+  user-select: none;
+  line-height: 1;
+  min-width: 3ch;
+  text-align: right;
+}
+.hud-timer.timer-urgent {
+  color: #ef4444;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hud-timer.timer-urgent {
+    animation: timerPulse 0.5s ease-in-out infinite;
+  }
+}
+@keyframes timerPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
 /* ── Milestone screen flash ── */
 .milestone-flash {
   position: fixed;
