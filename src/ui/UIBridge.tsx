@@ -225,6 +225,7 @@ function App(props: AppProps) {
       score: snap.context.score,
       priorBest,
       leaderboard,
+      mode: snap.context.mode,
     }),
     settingsOpen
       ? h(SettingsModal, {

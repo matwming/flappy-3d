@@ -1,8 +1,9 @@
 import { h } from 'preact'
-import { useEffect } from 'preact/hooks'
+import { useEffect, useState } from 'preact/hooks'
 import type { Actor } from 'xstate'
-import type { gameMachine } from '../../machine/gameMachine'
+import type { gameMachine, GameMode } from '../../machine/gameMachine'
 import type { LeaderboardEntry } from '../../storage/StorageManager'
+import { todayDate } from '../../utils/rng'
 import { Button } from '../components/Button'
 import { LeaderboardList } from '../components/LeaderboardList'
 import { NewBestBadge } from '../components/NewBestBadge'
@@ -15,10 +16,12 @@ interface Props {
   score: number
   priorBest: number
   leaderboard: LeaderboardEntry[]
+  mode: GameMode
 }
 
-export function GameOverScreen({ active, actor, score, priorBest, leaderboard }: Props) {
+export function GameOverScreen({ active, actor, score, priorBest, leaderboard, mode }: Props) {
   const isNewBest = score > 0 && score > priorBest
+  const [copyLabel, setCopyLabel] = useState<'Share' | 'Copied!'>('Share')
 
   useEffect(() => {
     const ac = new AbortController()
@@ -59,6 +62,18 @@ export function GameOverScreen({ active, actor, score, priorBest, leaderboard }:
       { className: 'btn-row' },
       h(Button, { onClick: (e: MouseEvent) => { e.stopPropagation(); actor.send({ type: 'RESTART' }) } }, 'Restart'),
       h(Button, { onClick: (e: MouseEvent) => { e.stopPropagation(); actor.send({ type: 'START' }) } }, 'Back to Title'),
+      mode === 'daily' ? h(Button, {
+        onClick: (e: MouseEvent) => {
+          e.stopPropagation()
+          const text = `Daily ${todayDate()}: ${score} 🐦`
+          if (navigator.clipboard) {
+            navigator.clipboard.writeText(text).then(() => {
+              setCopyLabel('Copied!')
+              setTimeout(() => setCopyLabel('Share'), 2000)
+            }).catch(() => { /* silent */ })
+          }
+        },
+      }, copyLabel) : null,
     ),
   )
 }
