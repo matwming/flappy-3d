@@ -213,7 +213,9 @@ Plans:
   2. When timer reaches 0, machine transitions to `gameOver` (auto-end, no death required)
   3. GameOver shows time-attack PB and time-attack-specific leaderboard
   4. Endless mode still works (no regression on Phase 9 work)
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [ ] 10-01-PLAN.md — TimerSystem + TIME_UP event + HUD timer display (MODE-04, MODE-05, MODE-06)
 **UI hint**: yes (timer display in HUD)
 
 ### Phase 11: Daily-Seed Mode
