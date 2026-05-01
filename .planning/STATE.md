@@ -4,19 +4,19 @@ milestone: v1.1
 milestone_name: — Beauty Pass
 status: unknown
 stopped_at: Completed 09-02-PLAN.md
-last_updated: "2026-05-01T07:51:33.377Z"
+last_updated: "2026-05-01T07:56:13.370Z"
 progress:
-  total_phases: 5
-  completed_phases: 3
-  total_plans: 20
-  completed_plans: 17
-  percent: 85
+  total_phases: 10
+  completed_phases: 8
+  total_plans: 28
+  completed_plans: 26
+  percent: 93
 ---
 
 # Project State — Flappy 3D
 
 **Last updated:** 2026-04-29
-**Updated by:** gsd-executor (09-02)
+**Updated by:** gsd-executor (10-01)
 
 ---
 
@@ -33,12 +33,12 @@ Phase: 09
 Plan: Not started
 | Field | Value |
 |-------|-------|
-| Phase | 9 — Complete |
-| Phase name | Mode Infrastructure |
-| Plans complete | 09-01 (GameMode + StorageManager v3 + main.ts seed) ✓, 09-02 (Title mode picker UI) ✓ |
+| Phase | 10 — Complete |
+| Phase name | Time-Attack Mode |
+| Plans complete | 10-01 (TimerSystem + TIME_UP + HUD timer display) ✓ |
 | Plans in progress | None |
-| Status | 2/2 plans complete — Phase 9 done |
-| Phase goal | Typed contracts for multi-mode play (GameMode, context.mode, SET_MODE, StorageManager v3) + Title screen mode picker UI |
+| Status | 1/1 plans complete — Phase 10 done |
+| Phase goal | 60s countdown timer, TIME_UP → dying transition, HUD timer display conditional on timeAttack mode |
 | Blocked on | None |
 
 **Progress bar:**
@@ -53,6 +53,7 @@ Phase 6 [██████████] 100% ✓ (06-01 bird-bob+demo-pipes ✓
 Phase 7 [██████████] 100% ✓ (07-01 +1 popup + milestones ✓ | 07-02 flap trail + pipe colors ✓)
 Phase 8 [██████████] 100% ✓ (08-01 glass UI refresh ✓ | BEAUTY-09..12 closed)
 Phase 9 [██████████] 100% ✓ (09-01 GameMode + StorageManager v3 ✓ | 09-02 Title mode picker ✓)
+Phase 10 [██████████] 100% ✓ (10-01 TimerSystem + TIME_UP + HUD timer ✓)
 ```
 
 ---
@@ -99,15 +100,16 @@ Phase 9 [██████████] 100% ✓ (09-01 GameMode + StorageManag
 
 **What was done last (this session):**
 
-- Phase 9 Plan 02 (Title mode picker UI) executed: 2 tasks, 2 commits.
-  - Task 1 (9c2c0f7): Created ModePicker.tsx — 3-button segmented picker (Endless/Time-Attack/Daily), aria-pressed, e.stopPropagation(); added .mode-picker + #ui-root .mode-btn CSS rules to styles.css.
-  - Task 2 (b4d83a7): TitleScreen extended with mode/onModeChange props and ModePicker rendered above leaderboard; UIBridge adds mode state from getLastMode(), handleModeChange sends SET_MODE + setLastMode + leaderboard refresh.
-- tsc --noEmit: exit 0. Build: clean. Bundle: 196.75KB gzip (+0.20KB from 09-01).
-- MODE-03 requirement addressed. Phase 9 complete.
+- Phase 10 Plan 01 (Time-Attack Mode) executed: 3 tasks, 3 commits.
+  - Task 1 (8a2a306): Created TimerSystem.ts — 60s countdown, step(dt) guards on playing+timeAttack, hasFired+actor.status double-fire guard; added TIME_UP to GameEvent union and playing.on in gameMachine.
+  - Task 2 (b2e339b): Wired TimerSystem in main.ts — import+instantiate, loop.add(timer), timer.reset() in roundStarted handler, timer passed to UIBridge constructor.
+  - Task 3 (c4dcf6b): Created TimerDisplay.tsx (mm:ss, aria-live polite, timer-urgent at <=10s); HUD gains mode+timerSystem props with conditional TimerDisplay render; UIBridge threads timerSystem; CSS .hud-timer + timerPulse animation.
+- tsc --noEmit: exit 0. Build: clean. Bundle: ~194.6KB gzip (+0 delta — slight reduction).
+- MODE-04, MODE-05, MODE-06 requirements addressed. Phase 10 complete.
 
 **What's next:**
 
-Phase 10 — Time-Attack mechanics (timer, countdown, speed, leaderboard).
+Phase 11 — Daily-seed mode, or UAT verification of Phase 10.
 
 **Blockers:**
 
@@ -119,7 +121,7 @@ Phase 10 — Time-Attack mechanics (timer, countdown, speed, leaderboard).
 
 | Metric | Target | Current |
 |--------|--------|---------|
-| JS bundle gzipped | <250KB | 196.75KB (Phase 9 complete; ModePicker UI added) |
+| JS bundle gzipped | <250KB | ~194.6KB (Phase 10 complete; TimerSystem + TimerDisplay added) |
 | FPS on Pixel 6 class | 60fps | Unmeasured (Phase 4 PERF-03) |
 | Lighthouse PWA | ≥90 | 0 (Phase 4 PWA-05) |
 | tsc --noEmit | 0 errors | ✓ 0 errors (strict + noUncheckedIndexedAccess) |
@@ -142,6 +144,7 @@ Phase 10 — Time-Attack mechanics (timer, countdown, speed, leaderboard).
 | Phase 08-glass-ui-refresh P01 | 5 | 4 tasks | 3 files |
 | Phase 09-mode-infrastructure P01 | 1989 | 3 tasks | 4 files |
 | Phase 09-mode-infrastructure P02 | 480 | 2 tasks | 4 files |
+| Phase 10-time-attack-mode P01 | 161 | 3 tasks | 7 files |
 
 ## Phase Log
 
@@ -156,12 +159,13 @@ Phase 10 — Time-Attack mechanics (timer, countdown, speed, leaderboard).
 | 7 | ✓ Complete | 2026-04-29 | 07-01 +1 popup + milestones ✓ (BEAUTY-05, BEAUTY-07 closed; 195.81KB gzip); 07-02 flap trail + pipe colors ✓ (BEAUTY-06, BEAUTY-08 closed; 196.33KB gzip) |
 | 8 | ✓ Complete | 2026-04-30 | 08-01 glass UI refresh ✓ (BEAUTY-09..12 closed; 196.33KB gzip; v1.1 Beauty Pass code complete) |
 | 9 | ✓ Complete | 2026-04-29 | 09-01 GameMode + StorageManager v3 ✓ (MODE-01, MODE-02); 09-02 Title mode picker ✓ (MODE-03); 196.75KB gzip |
+| 10 | ✓ Complete | 2026-04-29 | 10-01 TimerSystem + TIME_UP + HUD timer ✓ (MODE-04, MODE-05, MODE-06); ~194.6KB gzip |
 
 ---
 
 *This file is the project's memory. Update at every phase transition and plan completion.*
 
-**Stopped At:** Completed 09-02-PLAN.md
-**Resume:** Phase 10 — Time-Attack mechanics
+**Stopped At:** Completed 10-01-PLAN.md
+**Resume:** Phase 11 — Daily-seed mode (or UAT verification of Phase 10)
 
 **Planned Phase:** 10 (time-attack-mode) — 1 plans — 2026-05-01T07:51:33.371Z

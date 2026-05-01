@@ -24,7 +24,7 @@
 ### v1.2 — Modes
 
 - [x] **Phase 9: Mode Infrastructure** — gameMachine `mode` context, StorageManager v3 (per-mode leaderboards + v2 migration), Title mode picker UI ✓ (2026-04-29)
-- [ ] **Phase 10: Time-Attack Mode** — 60s countdown timer in HUD, mode-aware leaderboard, GameOver shows time-attack PB
+- [x] **Phase 10: Time-Attack Mode** — 60s countdown timer in HUD, mode-aware leaderboard, GameOver shows time-attack PB ✓ (2026-04-29)
 - [ ] **Phase 11: Daily-Seed Mode** — Seeded RNG (mulberry32) for deterministic obstacle layout per UTC date, daily attempt tracking, optional share-result
 
 ---
@@ -135,6 +135,7 @@ Plans:
 | 7. In-Game Juice | 2/2 | Complete (v1.1) | 2026-04-29 |
 | 8. Glass UI Refresh | 1/1 | Complete (v1.1) | 2026-04-30 |
 | 9. Mode Infrastructure | 2/2 | Complete (v1.2) | 2026-04-29 |
+| 10. Time-Attack Mode | 1/1 | Complete (v1.2) | 2026-04-29 |
 
 ---
 
@@ -215,7 +216,7 @@ Plans:
   4. Endless mode still works (no regression on Phase 9 work)
 **Plans**: 1 plan
 Plans:
-- [ ] 10-01-PLAN.md — TimerSystem + TIME_UP event + HUD timer display (MODE-04, MODE-05, MODE-06)
+- [x] 10-01-PLAN.md — TimerSystem + TIME_UP event + HUD timer display (MODE-04, MODE-05, MODE-06) ✓
 **UI hint**: yes (timer display in HUD)
 
 ### Phase 11: Daily-Seed Mode

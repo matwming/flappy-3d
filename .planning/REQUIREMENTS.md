@@ -170,9 +170,12 @@ Time-attack + daily-seed modes layered on top of endless. Adds mode picker, per-
 - [ ] **MODE-01**: `gameMachine.context.mode` is one of `'endless' | 'timeAttack' | 'daily'` (defaults to `'endless'`); persists across rounds within a session; reset only by explicit `SET_MODE` event
 - [ ] **MODE-02**: StorageManager v3 schema: `leaderboardByMode: { endless: LeaderboardEntry[], timeAttack: LeaderboardEntry[], daily: LeaderboardEntry[] }`; existing v2 `leaderboard` migrates into `leaderboardByMode.endless` on first read; backward-compatible with v2 saves
 - [ ] **MODE-03**: Title screen shows a 3-option mode picker (Endless / Time-Attack / Daily); selection sends `SET_MODE` event; selected mode visually highlighted; selection persists in StorageManager settings
-- [ ] **MODE-04**: In `mode === 'timeAttack'`, a 60-second countdown timer starts on round start (`roundStarted` event); timer ticks down at 1s intervals
-- [ ] **MODE-05**: HUD displays the timer in time-attack mode (top-right, mm:ss format); ARIA-live label for screen readers
-- [ ] **MODE-06**: When time-attack timer reaches 0, `gameMachine` transitions to `gameOver` (auto-end, no death required); GameOver shows mode-specific PB and leaderboard
+- [x] **MODE-04
+**: In `mode === 'timeAttack'`, a 60-second countdown timer starts on round start (`roundStarted` event); timer ticks down at 1s intervals
+- [x] **MODE-05
+**: HUD displays the timer in time-attack mode (top-right, mm:ss format); ARIA-live label for screen readers
+- [x] **MODE-06
+**: When time-attack timer reaches 0, `gameMachine` transitions to `gameOver` (auto-end, no death required); GameOver shows mode-specific PB and leaderboard
 - [ ] **MODE-07**: In `mode === 'daily'`, ObstacleSpawner uses a seeded RNG (mulberry32 implementation, ~10 LOC) instead of `Math.random()`; seed derived from UTC date `parseInt(YYYYMMDD, 10) % 0xFFFFFFFF`
 - [ ] **MODE-08**: StorageManager tracks daily attempts: `dailyAttempts: { 'YYYY-MM-DD': { count, best } }`; Title shows "Today's best: N (M attempts)" when daily mode is selected
 - [ ] **MODE-09**: GameOver in daily mode offers a "Share" button copying `Daily YYYY-MM-DD: <score> 🐦` to clipboard via `navigator.clipboard.writeText()`; gracefully no-ops on browsers without clipboard API
