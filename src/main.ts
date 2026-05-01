@@ -35,6 +35,7 @@ import { squashStretch, screenShake } from './anim/anim'
 import { createParticles } from './particles/createParticles'
 import { prefersReducedMotion } from './a11y/motion'
 import { PIPE_WIDTH, PIPE_DEPTH, PIPE_COLOR, POOL_SIZE } from './constants'
+import { mulberry32, dailySeed } from './utils/rng'
 import './style.css'
 import './ui/styles.css'
 
@@ -192,6 +193,13 @@ if (!WebGL.isWebGL2Available()) {
     bird.resetGhosts()
     spawner.resetColorIndex()
     timer.reset()
+
+    const currentMode = actor.getSnapshot().context.mode
+    if (currentMode === 'daily') {
+      spawner.setRng(mulberry32(dailySeed()))
+    } else {
+      spawner.setRng(Math.random)
+    }
 
     if (import.meta.env.DEV) {
       const mem = renderer.info.memory

@@ -20,10 +20,15 @@ export class ObstacleSpawner {
   private elapsed = 0
   private spawnIndex = 0
   private colorblindMode = false
+  private rng: () => number = Math.random
 
   constructor(pool: ObjectPool<ObstaclePair>, actor: GameActor) {
     this.pool = pool
     this.actor = actor
+  }
+
+  setRng(rng: () => number): void {
+    this.rng = rng
   }
 
   resetColorIndex(): void {
@@ -55,7 +60,7 @@ export class ObstacleSpawner {
       this.elapsed = 0
       const pair = this.pool.acquire()
       if (pair === null) return
-      const gapCenterY = (Math.random() * 2 - 1) * GAP_CENTER_RANGE
+      const gapCenterY = (this.rng() * 2 - 1) * GAP_CENTER_RANGE
       pair.reset(OBSTACLE_SPAWN_X, gapCenterY, difficulty.gapHeight)
       // Color cycling (BEAUTY-08): skip when colorblind palette active (D-19)
       if (!this.colorblindMode) {
