@@ -135,7 +135,7 @@ Plans:
 | 7. In-Game Juice | 2/2 | Complete (v1.1) | 2026-04-29 |
 | 8. Glass UI Refresh | 1/1 | Complete (v1.1) | 2026-04-30 |
 | 9. Mode Infrastructure | 2/2 | Complete (v1.2) | 2026-04-29 |
-| 10. Time-Attack Mode | 1/1 | Complete (v1.2) | 2026-04-29 |
+| 10. Time-Attack Mode | 1/1 | Complete    | 2026-05-01 |
 
 ---
 
