@@ -435,6 +435,9 @@ dialog.settings-modal::backdrop {
   50% { transform: scale(1.1); }
 }
 
+/* ── Daily mode stats line (MODE-08) ── */
+.daily-stats { font-size: 0.9rem; opacity: 0.85; margin-bottom: 8px; color: white; pointer-events: none; }
+
 /* ── Milestone screen flash ── */
 .milestone-flash {
   position: fixed;

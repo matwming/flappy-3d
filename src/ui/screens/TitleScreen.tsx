@@ -3,7 +3,8 @@ import { useEffect, useRef } from 'preact/hooks'
 import { gsap } from 'gsap'
 import type { Actor } from 'xstate'
 import type { gameMachine, GameMode } from '../../machine/gameMachine'
-import type { LeaderboardEntry } from '../../storage/StorageManager'
+import type { LeaderboardEntry, StorageManager } from '../../storage/StorageManager'
+import { todayDate } from '../../utils/rng'
 import { Button } from '../components/Button'
 import { LeaderboardList } from '../components/LeaderboardList'
 import { ModePicker } from '../components/ModePicker'
@@ -19,12 +20,13 @@ interface Props {
   showInstall?: boolean
   mode: GameMode
   onModeChange: (mode: GameMode) => void
+  storage: StorageManager
 }
 
 const LOGO_TEXT = 'FLAPPY 3D'
 const logoLetters = LOGO_TEXT.split('')
 
-export function TitleScreen({ active, actor, leaderboard, onSettings, onInstall, showInstall, mode, onModeChange }: Props) {
+export function TitleScreen({ active, actor, leaderboard, onSettings, onInstall, showInstall, mode, onModeChange, storage }: Props) {
   const hasAnimated = useRef(false)
 
   useEffect(() => {
@@ -89,6 +91,12 @@ export function TitleScreen({ active, actor, leaderboard, onSettings, onInstall,
       )
     ),
     h(ModePicker, { mode, onModeChange }),
+    mode === 'daily' ? (() => {
+      const attempt = storage.getDailyAttempt(todayDate())
+      return attempt !== null
+        ? h('p', { className: 'daily-stats' }, `Today's best: ${attempt.best} (${attempt.count} attempt${attempt.count === 1 ? '' : 's'})`)
+        : h('p', { className: 'daily-stats' }, 'First attempt today')
+    })() : null,
     h(
       'div',
       { style: 'margin: 8px 0 16px; width: 100%; max-width: 300px;' },

@@ -156,6 +156,23 @@ export class StorageManager {
     return { isNewBest: e.score > before, rank }
   }
 
+  getDailyAttempt(date: string): { count: number; best: number } | null {
+    const data = this.load()
+    return data.dailyAttempts[date] ?? null
+  }
+
+  recordDailyAttempt(date: string, score: number): void {
+    const data = this.load()
+    const existing = data.dailyAttempts[date]
+    if (existing === undefined) {
+      data.dailyAttempts[date] = { count: 1, best: score }
+    } else {
+      existing.count++
+      if (score > existing.best) existing.best = score
+    }
+    this.save(data)
+  }
+
   getSettings(): SettingsV3 {
     return { ...DEFAULT_SETTINGS_V3, ...this.load().settings }
   }

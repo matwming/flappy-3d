@@ -5,6 +5,7 @@ import type { gameMachine, GameMode } from '../machine/gameMachine'
 import type { AudioManager } from '../audio/AudioManager'
 import type { StorageManager } from '../storage/StorageManager'
 import type { LeaderboardEntry } from '../storage/StorageManager'
+import { todayDate } from '../utils/rng'
 import { TitleScreen } from './screens/TitleScreen'
 import { HUD } from './screens/HUD'
 import { PauseScreen } from './screens/PauseScreen'
@@ -155,6 +156,9 @@ function App(props: AppProps) {
         setPriorBest(priorBestRef.current)
         const mode = s.context.mode
         props.storage.pushLeaderboard(mode, { score: s.context.score, ts: Date.now() })
+        if (mode === 'daily') {
+          props.storage.recordDailyAttempt(todayDate(), s.context.score)
+        }
         setLeaderboard(props.storage.getLeaderboard(mode))
       }
       prevValue = nextValue
@@ -201,6 +205,7 @@ function App(props: AppProps) {
       showInstall,
       mode,
       onModeChange: handleModeChange,
+      storage: props.storage,
     }),
     h(HUD, {
       active: value === 'playing' || value === 'dying',
