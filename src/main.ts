@@ -20,6 +20,7 @@ import { InputManager } from './input/InputManager'
 import { Bird } from './entities/Bird'
 import { PhysicsSystem } from './systems/PhysicsSystem'
 import { CollisionSystem } from './systems/CollisionSystem'
+import { TimerSystem } from './systems/TimerSystem'
 import { ObstacleSpawner } from './systems/ObstacleSpawner'
 import { ScrollSystem } from './systems/ScrollSystem'
 import { ScoreSystem } from './systems/ScoreSystem'
@@ -76,6 +77,7 @@ if (!WebGL.isWebGL2Available()) {
   const spawner = new ObstacleSpawner(obstaclePool, actor)
   const scoreSystem = new ScoreSystem(obstaclePool, actor)
   const collision = new CollisionSystem(bird, obstaclePool, actor)
+  const timer = new TimerSystem(actor)
 
   const audio = new AudioManager()
 
@@ -122,6 +124,7 @@ if (!WebGL.isWebGL2Available()) {
   loop.add(spawner)
   loop.add(scoreSystem)
   loop.add(collision)
+  loop.add(timer)
   loop.add({ step: (dt: number) => particles.step(dt) })
   loop.add({ step: (dt: number) => bird.stepGhosts(dt) })
   loop.add({
@@ -188,6 +191,7 @@ if (!WebGL.isWebGL2Available()) {
     firedMilestones.clear()
     bird.resetGhosts()
     spawner.resetColorIndex()
+    timer.reset()
 
     if (import.meta.env.DEV) {
       const mem = renderer.info.memory
