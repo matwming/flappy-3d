@@ -1,16 +1,16 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.1
-milestone_name: — Beauty Pass
+milestone: v1.2
+milestone_name: — Modes
 status: milestone_complete
-stopped_at: Completed 09-02-PLAN.md
-last_updated: "2026-05-01T07:56:13.370Z"
+stopped_at: Completed 11-01-PLAN.md
+last_updated: "2026-05-01T22:13:00Z"
 progress:
-  total_phases: 10
-  completed_phases: 9
-  total_plans: 28
-  completed_plans: 26
-  percent: 90
+  total_phases: 11
+  completed_phases: 11
+  total_plans: 29
+  completed_plans: 27
+  percent: 100
 ---
 
 # Project State — Flappy 3D
@@ -29,16 +29,16 @@ progress:
 
 ## Current Position
 
-Phase: 10
-Plan: Not started
+Phase: 11
+Plan: Complete
 | Field | Value |
 |-------|-------|
-| Phase | 10 — Complete |
-| Phase name | Time-Attack Mode |
-| Plans complete | 10-01 (TimerSystem + TIME_UP + HUD timer display) ✓ |
+| Phase | 11 — Complete |
+| Phase name | Daily-Seed Mode |
+| Plans complete | 11-01 (mulberry32 RNG + daily attempt tracking + Share button) ✓ |
 | Plans in progress | None |
-| Status | 1/1 plans complete — Phase 10 done |
-| Phase goal | 60s countdown timer, TIME_UP → dying transition, HUD timer display conditional on timeAttack mode |
+| Status | 1/1 plans complete — Phase 11 done — v1.2 Modes milestone complete |
+| Phase goal | Seeded RNG for deterministic daily pipes, attempt tracking, TitleScreen stats, GameOver Share button |
 | Blocked on | None |
 
 **Progress bar:**
@@ -54,6 +54,7 @@ Phase 7 [██████████] 100% ✓ (07-01 +1 popup + milestones �
 Phase 8 [██████████] 100% ✓ (08-01 glass UI refresh ✓ | BEAUTY-09..12 closed)
 Phase 9 [██████████] 100% ✓ (09-01 GameMode + StorageManager v3 ✓ | 09-02 Title mode picker ✓)
 Phase 10 [██████████] 100% ✓ (10-01 TimerSystem + TIME_UP + HUD timer ✓)
+Phase 11 [██████████] 100% ✓ (11-01 mulberry32 RNG + daily tracking + Share button ✓)
 ```
 
 ---
@@ -100,16 +101,16 @@ Phase 10 [██████████] 100% ✓ (10-01 TimerSystem + TIME_UP 
 
 **What was done last (this session):**
 
-- Phase 10 Plan 01 (Time-Attack Mode) executed: 3 tasks, 3 commits.
-  - Task 1 (8a2a306): Created TimerSystem.ts — 60s countdown, step(dt) guards on playing+timeAttack, hasFired+actor.status double-fire guard; added TIME_UP to GameEvent union and playing.on in gameMachine.
-  - Task 2 (b2e339b): Wired TimerSystem in main.ts — import+instantiate, loop.add(timer), timer.reset() in roundStarted handler, timer passed to UIBridge constructor.
-  - Task 3 (c4dcf6b): Created TimerDisplay.tsx (mm:ss, aria-live polite, timer-urgent at <=10s); HUD gains mode+timerSystem props with conditional TimerDisplay render; UIBridge threads timerSystem; CSS .hud-timer + timerPulse animation.
-- tsc --noEmit: exit 0. Build: clean. Bundle: ~194.6KB gzip (+0 delta — slight reduction).
-- MODE-04, MODE-05, MODE-06 requirements addressed. Phase 10 complete.
+- Phase 11 Plan 01 (Daily-Seed Mode) executed: 3 tasks, 3 commits.
+  - Task 1 (9bca6b1): Created src/utils/rng.ts (mulberry32, dailySeed, todayDate); ObstacleSpawner.setRng() + private rng field + step() uses this.rng(); main.ts roundStarted sets seeded RNG for daily mode.
+  - Task 2 (554ddd7): StorageManager.getDailyAttempt() + recordDailyAttempt(); UIBridge calls recordDailyAttempt on gameOver when mode=daily; TitleScreen renders "Today's best: N (M attempts)" / "First attempt today"; .daily-stats CSS.
+  - Task 3 (28d933a): GameOverScreen Share button (daily mode only) — clipboard.writeText "Daily YYYY-MM-DD: score 🐦", useState toggles "Copied!" for 2s; UIBridge passes mode to GameOverScreen.
+- tsc --noEmit: exit 0. Build: clean. Bundle: 197.65KB gzip (+3KB delta).
+- MODE-07, MODE-08, MODE-09 requirements addressed. Phase 11 complete. v1.2 Modes milestone complete.
 
 **What's next:**
 
-Phase 11 — Daily-seed mode, or UAT verification of Phase 10.
+UAT verification of Phase 11 (or Phase 10 if not yet verified). v1.2 Modes milestone is code-complete.
 
 **Blockers:**
 
@@ -121,7 +122,7 @@ Phase 11 — Daily-seed mode, or UAT verification of Phase 10.
 
 | Metric | Target | Current |
 |--------|--------|---------|
-| JS bundle gzipped | <250KB | ~194.6KB (Phase 10 complete; TimerSystem + TimerDisplay added) |
+| JS bundle gzipped | <250KB | 197.65KB (Phase 11 complete; mulberry32 + daily UI added) |
 | FPS on Pixel 6 class | 60fps | Unmeasured (Phase 4 PERF-03) |
 | Lighthouse PWA | ≥90 | 0 (Phase 4 PWA-05) |
 | tsc --noEmit | 0 errors | ✓ 0 errors (strict + noUncheckedIndexedAccess) |
@@ -145,6 +146,7 @@ Phase 11 — Daily-seed mode, or UAT verification of Phase 10.
 | Phase 09-mode-infrastructure P01 | 1989 | 3 tasks | 4 files |
 | Phase 09-mode-infrastructure P02 | 480 | 2 tasks | 4 files |
 | Phase 10-time-attack-mode P01 | 161 | 3 tasks | 7 files |
+| Phase 11-daily-seed-mode P01 | 246 | 3 tasks | 8 files |
 
 ## Phase Log
 
@@ -160,12 +162,13 @@ Phase 11 — Daily-seed mode, or UAT verification of Phase 10.
 | 8 | ✓ Complete | 2026-04-30 | 08-01 glass UI refresh ✓ (BEAUTY-09..12 closed; 196.33KB gzip; v1.1 Beauty Pass code complete) |
 | 9 | ✓ Complete | 2026-04-29 | 09-01 GameMode + StorageManager v3 ✓ (MODE-01, MODE-02); 09-02 Title mode picker ✓ (MODE-03); 196.75KB gzip |
 | 10 | ✓ Complete | 2026-04-29 | 10-01 TimerSystem + TIME_UP + HUD timer ✓ (MODE-04, MODE-05, MODE-06); ~194.6KB gzip |
+| 11 | ✓ Complete | 2026-05-01 | 11-01 mulberry32 RNG + daily tracking + Share button ✓ (MODE-07, MODE-08, MODE-09); 197.65KB gzip |
 
 ---
 
 *This file is the project's memory. Update at every phase transition and plan completion.*
 
-**Stopped At:** Completed 10-01-PLAN.md
-**Resume:** Phase 11 — Daily-seed mode (or UAT verification of Phase 10)
+**Stopped At:** Completed 11-01-PLAN.md
+**Resume:** UAT verification of Phase 11 (or Phase 10 if not yet verified). v1.2 Modes milestone code-complete.
 
-**Planned Phase:** 10 (time-attack-mode) — 1 plans — 2026-05-01T07:51:33.371Z
+**Planned Phase:** 11 (daily-seed-mode) — 1 plan — 2026-05-01T22:13:00Z

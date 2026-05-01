@@ -25,7 +25,7 @@
 
 - [x] **Phase 9: Mode Infrastructure** — gameMachine `mode` context, StorageManager v3 (per-mode leaderboards + v2 migration), Title mode picker UI ✓ (2026-04-29)
 - [x] **Phase 10: Time-Attack Mode** — 60s countdown timer in HUD, mode-aware leaderboard, GameOver shows time-attack PB ✓ (2026-04-29)
-- [ ] **Phase 11: Daily-Seed Mode** — Seeded RNG (mulberry32) for deterministic obstacle layout per UTC date, daily attempt tracking, optional share-result
+- [x] **Phase 11: Daily-Seed Mode** — Seeded RNG (mulberry32) for deterministic obstacle layout per UTC date, daily attempt tracking, optional share-result ✓ (2026-05-01)
 
 ---
 
@@ -136,6 +136,7 @@ Plans:
 | 8. Glass UI Refresh | 1/1 | Complete (v1.1) | 2026-04-30 |
 | 9. Mode Infrastructure | 2/2 | Complete (v1.2) | 2026-04-29 |
 | 10. Time-Attack Mode | 1/1 | Complete    | 2026-05-01 |
+| 11. Daily-Seed Mode | 1/1 | Complete (v1.2) | 2026-05-01 |
 
 ---
 
@@ -228,7 +229,9 @@ Plans:
   2. Two players on the same UTC date see the same pipe sequence (deterministic)
   3. Daily attempts tracked in StorageManager v3 (`dailyAttempts: { [date]: number }`); UI shows "Today's best: N (M attempts)" on Title
   4. Share-result button (optional) copies "Daily YYYY-MM-DD: score 🐦" to clipboard
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [x] 11-01-PLAN.md — mulberry32 seeded RNG + ObstacleSpawner.setRng + daily attempt tracking + TitleScreen stats + GameOver Share button (MODE-07, MODE-08, MODE-09) ✓
 **UI hint**: yes (daily UI affordances)
 
 ---
