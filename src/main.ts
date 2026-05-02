@@ -145,6 +145,23 @@ if (!WebGL.isWebGL2Available()) {
   loop.add({ step: (dt: number) => bird.stepGhosts(dt) })
   // Phase 13: animate sky shader colors over a 60s cycle (motion-gated)
   loop.add({ step: (dt: number) => background.cycleSky(dt, prefersReducedMotion(storage)) })
+  // Phase 15 POLISH-03: opt-in camera y-bob following bird velocity
+  // Double-gated: Settings toggle ON AND prefersReducedMotion is false
+  const CAMERA_BASE_Y = 0
+  const CAMERA_BOB_FACTOR = 0.05
+  const CAMERA_BOB_LERP = 0.08
+  loop.add({
+    step: (_dt: number) => {
+      const s = actor.getSnapshot().value
+      if (s !== 'playing' && s !== 'dying') return
+      if (!storage.getSettings().cameraBob || prefersReducedMotion(storage)) {
+        if (camera.position.y !== CAMERA_BASE_Y) camera.position.y = CAMERA_BASE_Y
+        return
+      }
+      const target = CAMERA_BASE_Y + bird.velocity.y * CAMERA_BOB_FACTOR
+      camera.position.y += (target - camera.position.y) * CAMERA_BOB_LERP
+    },
+  })
   loop.add({
     step: (dt: number) => {
       const s = actor.getSnapshot().value
@@ -212,6 +229,7 @@ if (!WebGL.isWebGL2Available()) {
     timer.reset()
     clouds.reset()
     background.resetSkyCycle()
+    camera.position.y = CAMERA_BASE_Y
 
     const currentMode = actor.getSnapshot().context.mode
     if (currentMode === 'daily') {

@@ -14,6 +14,7 @@ export interface SettingsV2 {
 
 export interface SettingsV3 extends SettingsV2 {
   lastMode: GameMode
+  cameraBob: boolean  // Phase 15 POLISH-03; default false (opt-in, motion-sensitive)
 }
 
 export interface LeaderboardEntry {
@@ -32,6 +33,7 @@ const DEFAULT_SETTINGS: SettingsV2 = {
 const DEFAULT_SETTINGS_V3: SettingsV3 = {
   ...DEFAULT_SETTINGS,
   lastMode: 'endless',
+  cameraBob: false,
 }
 
 interface SaveV1 {

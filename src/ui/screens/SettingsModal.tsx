@@ -1,6 +1,6 @@
 import { h } from 'preact'
 import { useEffect, useRef, useState } from 'preact/hooks'
-import type { StorageManager, SettingsV2 } from '../../storage/StorageManager'
+import type { StorageManager, SettingsV3 } from '../../storage/StorageManager'
 import type { AudioManager } from '../../audio/AudioManager'
 import { Button } from '../components/Button'
 import { Toggle } from '../components/Toggle'
@@ -14,7 +14,7 @@ interface Props {
 }
 
 export function SettingsModal({ storage, audio, onClose, onPaletteChange }: Props) {
-  const [settings, setSettings] = useState<SettingsV2>(() => storage.getSettings())
+  const [settings, setSettings] = useState<SettingsV3>(() => storage.getSettings())
   const dialogRef = useRef<HTMLDialogElement>(null)
 
   // Open dialog when mounted, close when unmounted
@@ -33,7 +33,7 @@ export function SettingsModal({ storage, audio, onClose, onPaletteChange }: Prop
     }
   }, [])
 
-  function update(partial: Partial<SettingsV2>) {
+  function update(partial: Partial<SettingsV3>) {
     const next = { ...settings, ...partial }
     setSettings(next)
     storage.setSettings(partial)
@@ -96,6 +96,14 @@ export function SettingsModal({ storage, audio, onClose, onPaletteChange }: Prop
       }),
       h('p', { className: 'settings-note' },
         'Adds ghost echoes after each flap. May reduce performance on older devices.',
+      ),
+      h(Toggle, {
+        label: 'Camera bob',
+        checked: settings.cameraBob ?? false,
+        onChange: (v) => update({ cameraBob: v }),
+      }),
+      h('p', { className: 'settings-note' },
+        'Subtle camera tilt that follows the bird. Off by default — may cause motion discomfort. Disabled when Reduce Motion is on.',
       ),
     ),
   )
