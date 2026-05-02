@@ -2,7 +2,7 @@
 
 A polished 3D Flappy Bird-style PWA built with Three.js (vanilla, no React/R3F). Cel-shaded graphics, full audio, offline-capable via service worker.
 
-**Live:** https://matwming.github.io/flappy-3d/
+**Live:** quietbuildlab.github.io/flappy-3d/
 
 ## v1.1 — Beauty Pass
 
