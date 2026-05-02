@@ -2,6 +2,7 @@ import type { Actor } from 'xstate'
 import type { gameMachine } from '../machine/gameMachine'
 import type { ObjectPool } from '../pools/ObjectPool'
 import type { ObstaclePair } from '../entities/ObstaclePair'
+import type { StorageManager } from '../storage/StorageManager'
 import { OBSTACLE_SPAWN_X, GAP_CENTER_RANGE, PIPE_COLOR_CYCLE } from '../constants'
 import { difficultyFrom } from './Difficulty'
 import type { DifficultyConfig } from './Difficulty'
@@ -17,14 +18,20 @@ type GameActor = Actor<typeof gameMachine>
 export class ObstacleSpawner {
   private readonly pool: ObjectPool<ObstaclePair>
   private readonly actor: GameActor
+  private readonly storage: StorageManager | null
   private elapsed = 0
   private spawnIndex = 0
   private colorblindMode = false
   private rng: () => number = Math.random
 
-  constructor(pool: ObjectPool<ObstaclePair>, actor: GameActor) {
+  constructor(
+    pool: ObjectPool<ObstaclePair>,
+    actor: GameActor,
+    storage: StorageManager | null = null,
+  ) {
     this.pool = pool
     this.actor = actor
+    this.storage = storage
   }
 
   setRng(rng: () => number): void {
@@ -52,9 +59,10 @@ export class ObstacleSpawner {
 
     this.elapsed += dt
 
+    const preset = this.storage?.getSettings().difficulty ?? 'normal'
     const difficulty: DifficultyConfig = isTitleDemo
       ? TITLE_DEMO_DIFFICULTY
-      : difficultyFrom(this.actor.getSnapshot().context.score)
+      : difficultyFrom(this.actor.getSnapshot().context.score, preset)
 
     if (this.elapsed >= difficulty.spawnInterval) {
       this.elapsed = 0

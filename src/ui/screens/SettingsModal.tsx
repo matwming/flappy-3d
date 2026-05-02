@@ -1,21 +1,30 @@
 import { h } from 'preact'
 import { useEffect, useRef, useState } from 'preact/hooks'
-import type { StorageManager, SettingsV3 } from '../../storage/StorageManager'
+import type { StorageManager, SettingsV4, BirdShape } from '../../storage/StorageManager'
 import type { AudioManager } from '../../audio/AudioManager'
+import type { DifficultyPreset } from '../../constants'
 import { Button } from '../components/Button'
 import { Toggle } from '../components/Toggle'
 import { refreshReducedMotion } from '../../a11y/motion'
+
+const MAX_IMAGE_BYTES = 1_500_000  // ~1.5 MB after base64 — fits in localStorage
 
 interface Props {
   storage: StorageManager
   audio: AudioManager
   onClose: () => void
   onPaletteChange: (palette: 'default' | 'colorblind') => void
+  onShapeChange: (shape: BirdShape) => void
+  onImageChange: (image: string | null) => void
 }
 
-export function SettingsModal({ storage, audio, onClose, onPaletteChange }: Props) {
-  const [settings, setSettings] = useState<SettingsV3>(() => storage.getSettings())
+export function SettingsModal({
+  storage, audio, onClose, onPaletteChange, onShapeChange, onImageChange,
+}: Props) {
+  const [settings, setSettings] = useState<SettingsV4>(() => storage.getSettings())
+  const [imageError, setImageError] = useState<string | null>(null)
   const dialogRef = useRef<HTMLDialogElement>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   // Open dialog when mounted, close when unmounted
   useEffect(() => {
@@ -33,7 +42,7 @@ export function SettingsModal({ storage, audio, onClose, onPaletteChange }: Prop
     }
   }, [])
 
-  function update(partial: Partial<SettingsV3>) {
+  function update(partial: Partial<SettingsV4>) {
     const next = { ...settings, ...partial }
     setSettings(next)
     storage.setSettings(partial)
@@ -47,12 +56,67 @@ export function SettingsModal({ storage, audio, onClose, onPaletteChange }: Prop
 
     // Trigger palette swap when colorblind setting changes
     if (partial.palette !== undefined) onPaletteChange(partial.palette)
+
+    // Phase 17: shape + image swaps go to the bird via callback
+    if (partial.birdShape !== undefined) onShapeChange(partial.birdShape)
+    if (partial.birdImage !== undefined) onImageChange(partial.birdImage)
   }
 
   const reduceMotionOn =
     settings.reduceMotion === 'on' ||
     (settings.reduceMotion === 'auto' &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+
+  function handleFile(e: Event) {
+    setImageError(null)
+    const target = e.target as HTMLInputElement
+    const file = target.files?.[0]
+    if (!file) return
+    if (!file.type.startsWith('image/')) {
+      setImageError('Please pick an image file.')
+      return
+    }
+
+    // Resize to 256×256 then store as base64 PNG to keep localStorage small
+    const reader = new FileReader()
+    reader.onload = () => {
+      const dataUrl = reader.result
+      if (typeof dataUrl !== 'string') return
+      const img = new Image()
+      img.onload = () => {
+        const canvas = document.createElement('canvas')
+        canvas.width = 256
+        canvas.height = 256
+        const ctx = canvas.getContext('2d')
+        if (!ctx) {
+          setImageError("Couldn't read the image. Try another file.")
+          return
+        }
+        // Cover-fit so the image fills the square
+        const ratio = Math.max(canvas.width / img.width, canvas.height / img.height)
+        const w = img.width * ratio
+        const hh = img.height * ratio
+        ctx.drawImage(img, (canvas.width - w) / 2, (canvas.height - hh) / 2, w, hh)
+        const resized = canvas.toDataURL('image/png')
+        if (resized.length > MAX_IMAGE_BYTES) {
+          setImageError('Image is too large after resize — pick something simpler.')
+          return
+        }
+        update({ birdImage: resized })
+      }
+      img.onerror = () => setImageError("Couldn't decode the image.")
+      img.src = dataUrl
+    }
+    reader.onerror = () => setImageError("Couldn't read the file.")
+    reader.readAsDataURL(file)
+    target.value = ''  // allow re-uploading the same file later
+  }
+
+  function clearImage() {
+    setImageError(null)
+    update({ birdImage: null })
+    if (fileInputRef.current) fileInputRef.current.value = ''
+  }
 
   return h(
     'dialog',
@@ -105,6 +169,61 @@ export function SettingsModal({ storage, audio, onClose, onPaletteChange }: Prop
       h('p', { className: 'settings-note' },
         'Subtle camera tilt that follows the bird. Off by default — may cause motion discomfort. Disabled when Reduce Motion is on.',
       ),
+
+      // Phase 16 v1.5 — Difficulty preset
+      h('div', { className: 'settings-row settings-pickerrow' },
+        h('span', { className: 'settings-row-label' }, 'Difficulty'),
+        h('div', { className: 'settings-picker', role: 'group', 'aria-label': 'Difficulty preset' },
+          (['easy', 'normal', 'hard'] as const).map((d) =>
+            h(Button, {
+              key: d,
+              className: 'mode-btn' + (settings.difficulty === d ? ' active' : ''),
+              'aria-pressed': settings.difficulty === d,
+              onClick: () => update({ difficulty: d as DifficultyPreset }),
+            }, d.charAt(0).toUpperCase() + d.slice(1)),
+          ),
+        ),
+      ),
+      h('p', { className: 'settings-note' },
+        'Easy = wider gaps + slower scroll. Default for new players. Hard scales the other way.',
+      ),
+
+      // Phase 17 v1.5 — Bird shape (hidden when image is set)
+      settings.birdImage === null ? h('div', { className: 'settings-row settings-pickerrow' },
+        h('span', { className: 'settings-row-label' }, 'Bird shape'),
+        h('div', { className: 'settings-picker', role: 'group', 'aria-label': 'Bird shape' },
+          (['sphere', 'cube', 'pyramid'] as const).map((s) =>
+            h(Button, {
+              key: s,
+              className: 'mode-btn' + (settings.birdShape === s ? ' active' : ''),
+              'aria-pressed': settings.birdShape === s,
+              onClick: () => update({ birdShape: s as BirdShape }),
+            }, s.charAt(0).toUpperCase() + s.slice(1)),
+          ),
+        ),
+      ) : null,
+
+      // Phase 17 v1.5 — Custom bird image
+      h('div', { className: 'settings-row settings-imagerow' },
+        h('span', { className: 'settings-row-label' }, 'Bird image'),
+        h('div', { className: 'settings-imageactions' },
+          h('input', {
+            ref: fileInputRef,
+            type: 'file',
+            accept: 'image/*',
+            'aria-label': 'Upload bird image',
+            onChange: handleFile,
+            className: 'settings-fileinput',
+          }),
+          settings.birdImage !== null
+            ? h(Button, { onClick: clearImage, className: 'settings-clearimage' }, 'Clear')
+            : null,
+        ),
+      ),
+      imageError !== null
+        ? h('p', { className: 'settings-note settings-error' }, imageError)
+        : h('p', { className: 'settings-note' },
+            'Upload your favourite picture to use as the bird. Resized to 256×256 and saved locally.'),
     ),
   )
 }

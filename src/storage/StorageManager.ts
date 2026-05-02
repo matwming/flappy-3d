@@ -1,8 +1,11 @@
+import type { DifficultyPreset } from '../constants'
+
 const STORAGE_KEY = 'flappy-3d:v1'
 
 // GameMode is duplicated here so StorageManager has zero dependency on src/machine/.
 // TypeScript structural typing makes this compatible with gameMachine.ts's GameMode.
 export type GameMode = 'endless' | 'timeAttack' | 'daily'
+export type BirdShape = 'sphere' | 'cube' | 'pyramid'
 
 export interface SettingsV2 {
   sound: boolean
@@ -15,6 +18,12 @@ export interface SettingsV2 {
 export interface SettingsV3 extends SettingsV2 {
   lastMode: GameMode
   cameraBob: boolean  // Phase 15 POLISH-03; default false (opt-in, motion-sensitive)
+}
+
+export interface SettingsV4 extends SettingsV3 {
+  difficulty: DifficultyPreset  // Phase 16 v1.5; default 'easy' (fresh) or 'normal' (existing migrated)
+  birdShape: BirdShape           // Phase 17 v1.5; default 'sphere'
+  birdImage: string | null       // Phase 17 v1.5; data URL (PNG, ≤256×256), null = use shape
 }
 
 export interface LeaderboardEntry {
@@ -34,6 +43,13 @@ const DEFAULT_SETTINGS_V3: SettingsV3 = {
   ...DEFAULT_SETTINGS,
   lastMode: 'endless',
   cameraBob: false,
+}
+
+const DEFAULT_SETTINGS_V4: SettingsV4 = {
+  ...DEFAULT_SETTINGS_V3,
+  difficulty: 'easy',  // fresh-install default — easier for new players (v1.5)
+  birdShape: 'sphere',
+  birdImage: null,
 }
 
 interface SaveV1 {
@@ -60,18 +76,23 @@ interface SaveV3 {
   dailyAttempts: Record<string, { count: number; best: number }>
 }
 
+interface SaveV4 extends Omit<SaveV3, 'schemaVersion' | 'settings'> {
+  schemaVersion: 4
+  settings: SettingsV4
+}
+
 export class StorageManager {
-  private load(): SaveV3 {
+  private load(): SaveV4 {
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (raw === null) return this.defaults()
-      const parsed = JSON.parse(raw) as SaveV1 | SaveV2 | SaveV3
+      const parsed = JSON.parse(raw) as SaveV1 | SaveV2 | SaveV3 | SaveV4
       if (parsed.schemaVersion === 1) {
-        // v1 → v3: no leaderboard in v1
+        // v1 → v4: no leaderboard in v1; existing user → 'normal' difficulty
         return {
-          schemaVersion: 3,
+          schemaVersion: 4,
           bestScore: parsed.bestScore,
-          settings: { ...DEFAULT_SETTINGS_V3 },
+          settings: { ...DEFAULT_SETTINGS_V4, difficulty: 'normal' },
           leaderboardByMode: {
             endless: parsed.bestScore > 0 ? [{ score: parsed.bestScore, ts: Date.now() }] : [],
             timeAttack: [],
@@ -81,23 +102,33 @@ export class StorageManager {
         }
       }
       if (parsed.schemaVersion === 2) {
-        // v2 → v3: migrate flat leaderboard into endless bucket (read-only, no write)
+        // v2 → v4: existing user → 'normal' difficulty
         return {
-          schemaVersion: 3,
+          schemaVersion: 4,
           bestScore: parsed.bestScore,
-          settings: { ...DEFAULT_SETTINGS_V3, ...parsed.settings },
+          settings: { ...DEFAULT_SETTINGS_V4, ...parsed.settings, difficulty: 'normal' },
           leaderboardByMode: { endless: parsed.leaderboard, timeAttack: [], daily: [] },
           dailyAttempts: {},
         }
       }
-      if (parsed.schemaVersion === 3) return parsed as SaveV3
+      if (parsed.schemaVersion === 3) {
+        // v3 → v4: existing user → 'normal' difficulty (don't surprise-buff to easy)
+        return {
+          schemaVersion: 4,
+          bestScore: parsed.bestScore,
+          settings: { ...DEFAULT_SETTINGS_V4, ...parsed.settings, difficulty: 'normal' },
+          leaderboardByMode: parsed.leaderboardByMode,
+          dailyAttempts: parsed.dailyAttempts,
+        }
+      }
+      if (parsed.schemaVersion === 4) return parsed as SaveV4
       return this.defaults()
     } catch {
       return this.defaults()
     }
   }
 
-  private save(data: SaveV3): void {
+  private save(data: SaveV4): void {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
     } catch {
@@ -105,11 +136,11 @@ export class StorageManager {
     }
   }
 
-  private defaults(): SaveV3 {
+  private defaults(): SaveV4 {
     return {
-      schemaVersion: 3,
+      schemaVersion: 4,
       bestScore: 0,
-      settings: { ...DEFAULT_SETTINGS_V3 },
+      settings: { ...DEFAULT_SETTINGS_V4 },
       leaderboardByMode: { endless: [], timeAttack: [], daily: [] },
       dailyAttempts: {},
     }
@@ -175,11 +206,11 @@ export class StorageManager {
     this.save(data)
   }
 
-  getSettings(): SettingsV3 {
-    return { ...DEFAULT_SETTINGS_V3, ...this.load().settings }
+  getSettings(): SettingsV4 {
+    return { ...DEFAULT_SETTINGS_V4, ...this.load().settings }
   }
 
-  setSettings(partial: Partial<SettingsV3>): void {
+  setSettings(partial: Partial<SettingsV4>): void {
     const data = this.load()
     data.settings = { ...data.settings, ...partial }
     this.save(data)

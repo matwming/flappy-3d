@@ -66,6 +66,7 @@ if (!WebGL.isWebGL2Available()) {
 
   const bird = new Bird(scene)
   bird.mesh.material = birdMaterial
+  bird.setBaseMaterial(birdMaterial)
 
   const pipeGeometry = new BoxGeometry(PIPE_WIDTH, 6, PIPE_DEPTH)
   const obstaclePool = new ObjectPool<ObstaclePair>(
@@ -79,8 +80,8 @@ if (!WebGL.isWebGL2Available()) {
   const loop = new GameLoop(renderer, scene, camera)
   const input = new InputManager(canvas)
   const physics = new PhysicsSystem(bird, actor)
-  const scrollSystem = new ScrollSystem(obstaclePool, actor, background)
-  const spawner = new ObstacleSpawner(obstaclePool, actor)
+  const scrollSystem = new ScrollSystem(obstaclePool, actor, background, storage)
+  const spawner = new ObstacleSpawner(obstaclePool, actor, storage)
   const scoreSystem = new ScoreSystem(obstaclePool, actor)
   const collision = new CollisionSystem(bird, obstaclePool, actor)
   const timer = new TimerSystem(actor)
@@ -94,14 +95,27 @@ if (!WebGL.isWebGL2Available()) {
     spawner.setColorblindMode(true)
   }
 
-  const ui = new UIBridge(actor, audio, storage, (palette) => {
-    if (palette === 'colorblind') {
-      applyColorblindPalette(birdMaterial, pipeMaterial)
-    } else {
-      applyDefaultPalette(birdMaterial, pipeMaterial)
-    }
-    spawner.setColorblindMode(palette === 'colorblind')
-  }, camera, timer)
+  // Phase 17 v1.5: apply stored bird shape + image at startup
+  bird.setShape(storedSettings.birdShape)
+  bird.setImage(storedSettings.birdImage)
+
+  const ui = new UIBridge(
+    actor,
+    audio,
+    storage,
+    (palette) => {
+      if (palette === 'colorblind') {
+        applyColorblindPalette(birdMaterial, pipeMaterial)
+      } else {
+        applyDefaultPalette(birdMaterial, pipeMaterial)
+      }
+      spawner.setColorblindMode(palette === 'colorblind')
+    },
+    camera,
+    timer,
+    (shape) => bird.setShape(shape),
+    (image) => bird.setImage(image),
+  )
   const particles = createParticles(scene)
 
   input.onFlap(() => {
@@ -137,7 +151,10 @@ if (!WebGL.isWebGL2Available()) {
     step: (dt: number) => {
       const s = actor.getSnapshot().value
       if (s === 'title' || s === 'playing' || s === 'dying') {
-        const speed = s === 'title' ? 1.8 : difficultyFrom(actor.getSnapshot().context.score).scrollSpeed
+        const preset = storage.getSettings().difficulty
+        const speed = s === 'title'
+          ? 1.8
+          : difficultyFrom(actor.getSnapshot().context.score, preset).scrollSpeed
         clouds.step(dt, speed)
       }
     },

@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'preact/hooks'
 import type { Actor, SnapshotFrom } from 'xstate'
 import type { gameMachine, GameMode } from '../machine/gameMachine'
 import type { AudioManager } from '../audio/AudioManager'
-import type { StorageManager } from '../storage/StorageManager'
+import type { StorageManager, BirdShape } from '../storage/StorageManager'
 import type { LeaderboardEntry } from '../storage/StorageManager'
 import { todayDate } from '../utils/rng'
 import { TitleScreen } from './screens/TitleScreen'
@@ -62,6 +62,8 @@ interface AppProps {
   audio: AudioManager
   storage: StorageManager
   onPaletteChange: (palette: 'default' | 'colorblind') => void
+  onShapeChange: (shape: BirdShape) => void
+  onImageChange: (image: string | null) => void
   timerSystem: TimerSystem | null
 }
 
@@ -70,6 +72,8 @@ export class UIBridge {
   private audio: AudioManager
   private storage: StorageManager
   private onPaletteChange: (palette: 'default' | 'colorblind') => void
+  private onShapeChange: (shape: BirdShape) => void
+  private onImageChange: (image: string | null) => void
   private mountEl: HTMLElement | null = null
   private popupPool: ScorePopupPool | null = null
   private milestoneFlash: HTMLDivElement | null = null
@@ -83,11 +87,15 @@ export class UIBridge {
     onPaletteChange: (palette: 'default' | 'colorblind') => void,
     camera?: Camera,
     timerSystem?: TimerSystem,
+    onShapeChange?: (shape: BirdShape) => void,
+    onImageChange?: (image: string | null) => void,
   ) {
     this.actor = actor
     this.audio = audio
     this.storage = storage
     this.onPaletteChange = onPaletteChange
+    this.onShapeChange = onShapeChange ?? (() => {})
+    this.onImageChange = onImageChange ?? (() => {})
     this.camera = camera ?? null
     this.timerSystem = timerSystem ?? null
   }
@@ -109,6 +117,8 @@ export class UIBridge {
         audio: this.audio,
         storage: this.storage,
         onPaletteChange: this.onPaletteChange,
+        onShapeChange: this.onShapeChange,
+        onImageChange: this.onImageChange,
         timerSystem: this.timerSystem,
       }),
       this.mountEl,
@@ -233,6 +243,8 @@ function App(props: AppProps) {
           audio: props.audio,
           onClose: () => setSettingsOpen(false),
           onPaletteChange: props.onPaletteChange,
+          onShapeChange: props.onShapeChange,
+          onImageChange: props.onImageChange,
         })
       : null,
   )

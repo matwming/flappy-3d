@@ -38,6 +38,22 @@ export const MIN_GAP_HEIGHT = 1.6           // pipe gap (world units) at score 4
 export const GAP_CENTER_RANGE = 1.0         // gap center randomized in [-1.0, +1.0]
 export const DIFFICULTY_SCORE_CAP = 40      // score at which difficulty plateaus
 
+// Phase 16 — user-selectable difficulty presets (v1.5).
+// Each preset scales gameplay difficulty axes. Easy = forgiving for new
+// players (fresh-install default). Normal = original v1.0..v1.4 feel
+// (existing-user default via v3→v4 migration). Hard = veterans only.
+export type DifficultyPreset = 'easy' | 'normal' | 'hard'
+export interface DifficultyMultiplier {
+  gap: number          // multiplied into BASE/MIN_GAP_HEIGHT (>1 = wider gap = easier)
+  scroll: number       // multiplied into BASE/MAX_SCROLL_SPEED (<1 = slower = easier)
+  spawn: number        // multiplied into BASE/MIN_SPAWN_INTERVAL (>1 = longer interval = easier)
+}
+export const DIFFICULTY_MULTIPLIERS: Record<DifficultyPreset, DifficultyMultiplier> = {
+  easy:   { gap: 1.25, scroll: 0.85, spawn: 1.20 },
+  normal: { gap: 1.00, scroll: 1.00, spawn: 1.00 },
+  hard:   { gap: 0.85, scroll: 1.10, spawn: 0.90 },
+}
+
 // Phase 7 — pipe color cycling (BEAUTY-08, D-14, D-18)
 // 4 toon colors cycling per ObstaclePair spawn. PIPE_COLOR_CYCLE[0] === PIPE_COLOR (green).
 // All colors chosen for adequate luminance contrast against sky-blue background.

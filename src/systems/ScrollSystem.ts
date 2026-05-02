@@ -3,6 +3,7 @@ import type { gameMachine } from '../machine/gameMachine'
 import type { ObjectPool } from '../pools/ObjectPool'
 import type { ObstaclePair } from '../entities/ObstaclePair'
 import type { Background } from '../entities/Background'
+import type { StorageManager } from '../storage/StorageManager'
 import { OBSTACLE_DESPAWN_X } from '../constants'
 import { difficultyFrom } from './Difficulty'
 
@@ -14,15 +15,18 @@ export class ScrollSystem {
   private readonly pool: ObjectPool<ObstaclePair>
   private readonly actor: GameActor
   private readonly background: Background | null
+  private readonly storage: StorageManager | null
 
   constructor(
     pool: ObjectPool<ObstaclePair>,
     actor: GameActor,
     background: Background | null = null,
+    storage: StorageManager | null = null,
   ) {
     this.pool = pool
     this.actor = actor
     this.background = background
+    this.storage = storage
   }
 
   // actor.send audit (Phase 5): read-only — no send calls
@@ -32,9 +36,10 @@ export class ScrollSystem {
     if (!isTitleDemo && state !== 'playing' && state !== 'dying') return
 
     const score = this.actor.getSnapshot().context.score
+    const preset = this.storage?.getSettings().difficulty ?? 'normal'
     const scrollSpeed = isTitleDemo
       ? TITLE_DEMO_SCROLL_SPEED  // slower, more relaxed feel
-      : difficultyFrom(score).scrollSpeed
+      : difficultyFrom(score, preset).scrollSpeed
 
     const toRelease: ObstaclePair[] = []
     this.pool.forEachActive((pair) => {

@@ -307,6 +307,54 @@ dialog.settings-modal::backdrop {
   margin: -0.25rem 0 0.5rem 0;
   padding: 0;
 }
+.settings-note.settings-error {
+  color: #ff8a8a;
+  font-weight: 600;
+}
+
+/* Phase 16/17 v1.5 — picker rows (Difficulty / Bird shape) and image upload */
+.settings-row {
+  background: rgba(255,255,255,0.06);
+  border-radius: 12px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.settings-row-label {
+  color: white;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+.settings-picker {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.settings-picker .mode-btn { flex: 1; min-width: 0; }
+.settings-imagerow .settings-imageactions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.settings-fileinput {
+  flex: 1;
+  min-width: 0;
+  color: rgba(255,255,255,0.85);
+  font-size: 0.85rem;
+}
+.settings-fileinput::file-selector-button {
+  background: linear-gradient(180deg, var(--btn-top) 0%, var(--btn-bottom) 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-right: 10px;
+}
+.settings-clearimage { padding: 8px 14px; min-width: 0; min-height: 0; }
 
 /* ── Button row util ── */
 .btn-row { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }

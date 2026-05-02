@@ -6,7 +6,9 @@ import {
   BASE_GAP_HEIGHT,
   MIN_GAP_HEIGHT,
   DIFFICULTY_SCORE_CAP,
+  DIFFICULTY_MULTIPLIERS,
 } from '../constants'
+import type { DifficultyPreset } from '../constants'
 
 export interface DifficultyConfig {
   spawnInterval: number
@@ -14,12 +16,16 @@ export interface DifficultyConfig {
   gapHeight: number
 }
 
-export function difficultyFrom(score: number): DifficultyConfig {
+export function difficultyFrom(
+  score: number,
+  preset: DifficultyPreset = 'normal',
+): DifficultyConfig {
   const t = Math.min(score, DIFFICULTY_SCORE_CAP) / DIFFICULTY_SCORE_CAP
+  const m = DIFFICULTY_MULTIPLIERS[preset]
   return {
-    spawnInterval: lerp(BASE_SPAWN_INTERVAL, MIN_SPAWN_INTERVAL, t),
-    scrollSpeed: lerp(BASE_SCROLL_SPEED, MAX_SCROLL_SPEED, t),
-    gapHeight: lerp(BASE_GAP_HEIGHT, MIN_GAP_HEIGHT, t),
+    spawnInterval: lerp(BASE_SPAWN_INTERVAL, MIN_SPAWN_INTERVAL, t) * m.spawn,
+    scrollSpeed: lerp(BASE_SCROLL_SPEED, MAX_SCROLL_SPEED, t) * m.scroll,
+    gapHeight: lerp(BASE_GAP_HEIGHT, MIN_GAP_HEIGHT, t) * m.gap,
   }
 }
 
