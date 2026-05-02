@@ -201,9 +201,9 @@ Final character + camera polish. Consumes SEED-003. Two phases (14, 15).
 
 ### Bird + camera (POLISH)
 
-- [ ] **POLISH-01**: Bird toon material extends with rim-light contribution (subtle edge glow); strength configurable via uniform; preserves WCAG-AA contrast against sky in default + colorblind palettes
-- [ ] **POLISH-02**: Bird mesh gains 2 small wing geometries (Plane or thin Box) as children; on each `FLAP`, wings rotate via GSAP timeline (~80ms); motion-gated via `prefersReducedMotion(storage)`
-- [ ] **POLISH-03**: New "Camera bob" Settings toggle (default OFF) — when ON AND `prefersReducedMotion(storage)` is false, camera y-offset eases toward `bird.velocity.y * factor` per frame; resets to original on `roundStarted`
+- [x] **POLISH-01**: Bird toon material extends with rim-light contribution (subtle edge glow); strength configurable via uniform; preserves WCAG-AA contrast against sky in default + colorblind palettes ✓ Phase 14
+- [x] **POLISH-02**: Bird mesh gains 2 small wing geometries (Plane or thin Box) as children; on each `FLAP`, wings rotate via GSAP timeline (~80ms); motion-gated via `prefersReducedMotion(storage)` ✓ Phase 14
+- [x] **POLISH-03**: New "Camera bob" Settings toggle (default OFF) — when ON AND `prefersReducedMotion(storage)` is false, camera y-offset eases toward `bird.velocity.y * factor` per frame; resets to original on `roundStarted` ✓ Phase 15
 
 ---
 

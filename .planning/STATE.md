@@ -2,28 +2,28 @@
 gsd_state_version: 1.0
 milestone: v1.4
 milestone_name: — Polish
-status: in_progress
-stopped_at: Completed 14-01-PLAN.md
-last_updated: "2026-05-02T02:47:00Z"
+status: code_complete
+stopped_at: Completed 15-01-PLAN.md
+last_updated: "2026-05-02T03:30:00Z"
 progress:
   total_phases: 15
-  completed_phases: 14
+  completed_phases: 15
   total_plans: 31
-  completed_plans: 29
-  percent: 94
+  completed_plans: 30
+  percent: 100
 ---
 
 # Project State — Flappy 3D
 
 **Last updated:** 2026-05-02
-**Updated by:** gsd-executor (14-01)
+**Updated by:** gsd-executor (15-01)
 
 ---
 
 ## Project Reference
 
 **Core value:** The game must feel palpably more crafted than `guiguan/flappy-anna-3d` within 30 seconds of play — polished motion, real menus, real audio, 60fps on a mid-tier phone.
-**Current focus:** Phase 15 — Camera Depth (opt-in) — final v1.4 Polish phase
+**Current focus:** v1.4 Polish CODE-COMPLETE — all 15 phases done, all 5 seeds consumed
 
 ---
 
@@ -31,12 +31,12 @@ progress:
 
 | Field | Value |
 |-------|-------|
-| Phase | 14 — Complete |
-| Phase name | Bird Polish |
-| Plans complete | 14-01 (rim-light shader + wing meshes + wingFlap GSAP animation) ✓ |
+| Phase | 15 — Complete |
+| Phase name | Camera Depth (opt-in) |
+| Plans complete | 15-01 (cameraBob setting + per-frame y-bob loop step + roundStarted reset) ✓ |
 | Plans in progress | None |
-| Status | 1/1 plans complete — Phase 14 done — v1.4 Polish milestone in progress |
-| Phase goal | Rim-light onBeforeCompile extension on bird toon material; BoxGeometry wing meshes that flap ±0.6rad via GSAP on each jump; motion-gated |
+| Status | 1/1 plans complete — Phase 15 done — v1.4 Polish milestone CODE-COMPLETE |
+| Phase goal | Subtle camera y-offset following bird velocity, double-gated behind new "Camera bob" Settings toggle (default OFF) + prefersReducedMotion |
 | Blocked on | None |
 
 **Progress bar:**
@@ -56,7 +56,7 @@ Phase 11 [██████████] 100% ✓ (11-01 mulberry32 RNG + daily
 Phase 12 [██████████] 100% ✓ (12-01 inline-SVG cloud sprites + parallax scroll ✓)
 Phase 13 [██████████] 100% ✓ (13-01 day/night sky cycle ✓)
 Phase 14 [██████████] 100% ✓ (14-01 rim-light shader + wing meshes + wingFlap animation ✓)
-Phase 15 [          ] 0% (not started)
+Phase 15 [██████████] 100% ✓ (15-01 cameraBob toggle + per-frame y-bob loop + roundStarted reset ✓)
 ```
 
 ---

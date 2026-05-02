@@ -35,7 +35,7 @@
 ### v1.4 — Polish (3D scene)
 
 - [x] **Phase 14: Bird Polish** — rim lighting on toon material + animated wing meshes (rotation tween on flap) ✓ (2026-05-02; 199.25KB gzip)
-- [ ] **Phase 15: Camera Depth (opt-in)** — subtle camera y-bob following bird velocity; double-gated behind new Settings toggle (default OFF) + `prefersReducedMotion`
+- [x] **Phase 15: Camera Depth (opt-in)** — subtle camera y-bob following bird velocity; double-gated behind new Settings toggle (default OFF) + `prefersReducedMotion` ✓
 
 ---
 
@@ -305,7 +305,9 @@ Plans:
   2. When toggle ON AND `prefersReducedMotion(storage)` is false, camera y-offset interpolates toward `bird.velocity.y * factor` (e.g., 0.05) per frame; smooth easing
   3. Camera position resets to original on `roundStarted` (no lingering offset between rounds)
   4. No mobile-perf regression on iPhone 12 / Pixel 6
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [x] 15-01-camera-bob-PLAN.md — cameraBob setting in StorageManager v3 + Settings toggle row + per-frame loop step (lerp 0.08, factor 0.05) + roundStarted reset ✓
 **UI hint**: yes (new Settings toggle row)
 
 ---

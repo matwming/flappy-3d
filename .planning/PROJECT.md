@@ -40,13 +40,13 @@ Cloud parallax + day/night cycle. Two phases (12, 13) both shipped:
 
 4 ATMOS-* requirements coded. Bundle: 198.90KB / 250KB. Seeds SEED-001 + SEED-002 consumed.
 
-### v1.4 Milestone — Polish (PLANNED 2026-05-02)
+### v1.4 Milestone — Polish (CODE-COMPLETE 2026-05-02)
 
-Final character + camera polish. Consumes the last dormant seed (SEED-003). Two phases (14, 15):
-- Phase 14 — Bird Polish: rim lighting on toon material + animated wing meshes (rotation tween on flap)
-- Phase 15 — Camera Depth (opt-in): subtle camera y-bob following bird velocity, double-gated (Settings toggle default OFF + prefersReducedMotion)
+Final character + camera polish. Consumes the last dormant seed (SEED-003). Two phases (14, 15) both shipped:
+- Phase 14 — Bird Polish: rim lighting via `onBeforeCompile` shader extension + 2 BoxGeometry wing meshes flapping ±0.6rad on each FLAP via GSAP, motion-gated ✓
+- Phase 15 — Camera Depth (opt-in): subtle camera y-offset eases toward `bird.velocity.y * 0.05` per frame; double-gated behind new "Camera bob" Settings toggle (default OFF) + `prefersReducedMotion`; resets on `roundStarted` ✓
 
-3 POLISH-* requirements (POLISH-01..03). After v1.4, the seed pool is fully consumed (5 of 5 seeds shipped across v1.2/v1.3/v1.4). Future milestones will need new ideation, not seed-driven planning.
+3 POLISH-* requirements coded. Bundle: 199.43KB / 250KB. Seed SEED-003 consumed (the final dormant seed). After v1.4, the seed pool is fully consumed (5 of 5 seeds shipped across v1.2/v1.3/v1.4). Future milestones will need new ideation, not seed-driven planning.
 
 ### Active
 
