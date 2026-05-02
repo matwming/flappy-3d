@@ -27,6 +27,7 @@ import { ScoreSystem } from './systems/ScoreSystem'
 import { ObjectPool } from './pools/ObjectPool'
 import { ObstaclePair } from './entities/ObstaclePair'
 import { Background } from './entities/Background'
+import { Clouds } from './entities/Clouds'
 import { gameMachine } from './machine/gameMachine'
 import { StorageManager } from './storage/StorageManager'
 import { AudioManager } from './audio/AudioManager'
@@ -36,6 +37,7 @@ import { createParticles } from './particles/createParticles'
 import { prefersReducedMotion } from './a11y/motion'
 import { PIPE_WIDTH, PIPE_DEPTH, PIPE_COLOR, POOL_SIZE } from './constants'
 import { mulberry32, dailySeed } from './utils/rng'
+import { difficultyFrom } from './systems/Difficulty'
 import './style.css'
 import './ui/styles.css'
 
@@ -70,6 +72,7 @@ if (!WebGL.isWebGL2Available()) {
   )
 
   const background = new Background(scene)
+  const clouds = new Clouds(scene)
 
   const loop = new GameLoop(renderer, scene, camera)
   const input = new InputManager(canvas)
@@ -127,6 +130,15 @@ if (!WebGL.isWebGL2Available()) {
   loop.add(collision)
   loop.add(timer)
   loop.add({ step: (dt: number) => particles.step(dt) })
+  loop.add({
+    step: (dt: number) => {
+      const s = actor.getSnapshot().value
+      if (s === 'title' || s === 'playing' || s === 'dying') {
+        const speed = s === 'title' ? 1.8 : difficultyFrom(actor.getSnapshot().context.score).scrollSpeed
+        clouds.step(dt, speed)
+      }
+    },
+  })
   loop.add({ step: (dt: number) => bird.stepGhosts(dt) })
   loop.add({
     step: (dt: number) => {
@@ -193,6 +205,7 @@ if (!WebGL.isWebGL2Available()) {
     bird.resetGhosts()
     spawner.resetColorIndex()
     timer.reset()
+    clouds.reset()
 
     const currentMode = actor.getSnapshot().context.mode
     if (currentMode === 'daily') {
