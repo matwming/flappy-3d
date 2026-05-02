@@ -34,7 +34,7 @@
 
 ### v1.4 — Polish (3D scene)
 
-- [ ] **Phase 14: Bird Polish** — rim lighting on toon material + animated wing meshes (rotation tween on flap)
+- [x] **Phase 14: Bird Polish** — rim lighting on toon material + animated wing meshes (rotation tween on flap) ✓ (2026-05-02; 199.25KB gzip)
 - [ ] **Phase 15: Camera Depth (opt-in)** — subtle camera y-bob following bird velocity; double-gated behind new Settings toggle (default OFF) + `prefersReducedMotion`
 
 ---
@@ -147,6 +147,10 @@ Plans:
 | 9. Mode Infrastructure | 2/2 | Complete (v1.2) | 2026-04-29 |
 | 10. Time-Attack Mode | 1/1 | Complete    | 2026-05-01 |
 | 11. Daily-Seed Mode | 1/1 | Complete    | 2026-05-01 |
+| 12. Cloud Parallax Layer | 1/1 | Complete (v1.3) | 2026-05-02 |
+| 13. Day/Night Cycle | 1/1 | Complete (v1.3) | 2026-05-02 |
+| 14. Bird Polish | 1/1 | Complete (v1.4) | 2026-05-02 |
+| 15. Camera Depth | TBD | Not started | - |
 
 ---
 

@@ -1,61 +1,62 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.3
-milestone_name: — Atmosphere
-status: milestone_complete
-stopped_at: Completed 12-01-PLAN.md
-last_updated: "2026-05-02T00:58:00Z"
+milestone: v1.4
+milestone_name: — Polish
+status: in_progress
+stopped_at: Completed 14-01-PLAN.md
+last_updated: "2026-05-02T02:47:00Z"
 progress:
-  total_phases: 13
-  completed_phases: 13
-  total_plans: 30
-  completed_plans: 28
-  percent: 100
+  total_phases: 15
+  completed_phases: 14
+  total_plans: 31
+  completed_plans: 29
+  percent: 94
 ---
 
 # Project State — Flappy 3D
 
-**Last updated:** 2026-04-29
-**Updated by:** gsd-executor (10-01)
+**Last updated:** 2026-05-02
+**Updated by:** gsd-executor (14-01)
 
 ---
 
 ## Project Reference
 
 **Core value:** The game must feel palpably more crafted than `guiguan/flappy-anna-3d` within 30 seconds of play — polished motion, real menus, real audio, 60fps on a mid-tier phone.
-**Current focus:** Phase 12 — Cloud Parallax Layer (v1.3 Atmosphere milestone start)
+**Current focus:** Phase 15 — Camera Depth (opt-in) — final v1.4 Polish phase
 
 ---
 
 ## Current Position
 
-Phase: 13
-Plan: Not started
 | Field | Value |
 |-------|-------|
-| Phase | 12 — Complete |
-| Phase name | Cloud Parallax Layer |
-| Plans complete | 12-01 (inline-SVG cloud sprites + parallax scroll + roundStarted reset) ✓ |
+| Phase | 14 — Complete |
+| Phase name | Bird Polish |
+| Plans complete | 14-01 (rim-light shader + wing meshes + wingFlap GSAP animation) ✓ |
 | Plans in progress | None |
-| Status | 1/1 plans complete — Phase 12 done — v1.3 Atmosphere milestone in progress |
-| Phase goal | 5 inline-SVG cloud meshes at z=-7 drifting at 0.5× scroll speed; state-gated title/playing/dying |
+| Status | 1/1 plans complete — Phase 14 done — v1.4 Polish milestone in progress |
+| Phase goal | Rim-light onBeforeCompile extension on bird toon material; BoxGeometry wing meshes that flap ±0.6rad via GSAP on each jump; motion-gated |
 | Blocked on | None |
 
 **Progress bar:**
 
 ```
-Phase 1 [██████████] 100% ✓ (user-verified 2026-04-28)
-Phase 2 [██████████] 100% ✓ (user-verified 2026-04-29)
-Phase 3 [██████████] 100% ✓ (03-01 audio ✓, 03-02 ui-infra ✓, 03-03 screens ✓, 03-04 juice ✓, 03-05 fix-ui-state ✓, 03-06 fix-audio-motion ✓)
-Phase 4 [██████████] 100% ✓ (04-01 pwa-setup ✓, 04-02 a11y ✓, 04-03 bundle-audit ✓, 04-04 deploy ✓)
-Phase 5 [████████  ] 80% (05-01 ✓, 05-02 ✓, 05-03 tasks 1-3 ✓ | tasks 4-5 awaiting human)
-Phase 6 [██████████] 100% ✓ (06-01 bird-bob+demo-pipes ✓ | 06-02 logo+CTA ✓)
-Phase 7 [██████████] 100% ✓ (07-01 +1 popup + milestones ✓ | 07-02 flap trail + pipe colors ✓)
-Phase 8 [██████████] 100% ✓ (08-01 glass UI refresh ✓ | BEAUTY-09..12 closed)
-Phase 9 [██████████] 100% ✓ (09-01 GameMode + StorageManager v3 ✓ | 09-02 Title mode picker ✓)
+Phase 1  [██████████] 100% ✓ (user-verified 2026-04-28)
+Phase 2  [██████████] 100% ✓ (user-verified 2026-04-29)
+Phase 3  [██████████] 100% ✓ (03-01 audio ✓, 03-02 ui-infra ✓, 03-03 screens ✓, 03-04 juice ✓, 03-05 fix-ui-state ✓, 03-06 fix-audio-motion ✓)
+Phase 4  [██████████] 100% ✓ (04-01 pwa-setup ✓, 04-02 a11y ✓, 04-03 bundle-audit ✓, 04-04 deploy ✓)
+Phase 5  [████████  ] 80% (05-01 ✓, 05-02 ✓, 05-03 tasks 1-3 ✓ | tasks 4-5 awaiting human)
+Phase 6  [██████████] 100% ✓ (06-01 bird-bob+demo-pipes ✓ | 06-02 logo+CTA ✓)
+Phase 7  [██████████] 100% ✓ (07-01 +1 popup + milestones ✓ | 07-02 flap trail + pipe colors ✓)
+Phase 8  [██████████] 100% ✓ (08-01 glass UI refresh ✓ | BEAUTY-09..12 closed)
+Phase 9  [██████████] 100% ✓ (09-01 GameMode + StorageManager v3 ✓ | 09-02 Title mode picker ✓)
 Phase 10 [██████████] 100% ✓ (10-01 TimerSystem + TIME_UP + HUD timer ✓)
 Phase 11 [██████████] 100% ✓ (11-01 mulberry32 RNG + daily tracking + Share button ✓)
 Phase 12 [██████████] 100% ✓ (12-01 inline-SVG cloud sprites + parallax scroll ✓)
+Phase 13 [██████████] 100% ✓ (13-01 day/night sky cycle ✓)
+Phase 14 [██████████] 100% ✓ (14-01 rim-light shader + wing meshes + wingFlap animation ✓)
+Phase 15 [          ] 0% (not started)
 ```
 
 ---
@@ -102,15 +103,15 @@ Phase 12 [██████████] 100% ✓ (12-01 inline-SVG cloud sprit
 
 **What was done last (this session):**
 
-- Phase 12 Plan 01 (Cloud Parallax Layer) executed: 2 tasks, 2 commits.
-  - Task 1 (293dd16): Created src/entities/Clouds.ts — 5 inline-SVG cloud meshes, shared geometry/material, step()+reset(), z=-7, 0.5x scroll speed, wrap at x<-20.
-  - Task 2 (6492754): Wired Clouds into main.ts — instantiated after Background, loop step gates title/playing/dying states, clouds.reset() in roundStarted handler, difficultyFrom imported.
-- tsc --noEmit: exit 0. Build: clean. Bundle: 198.66KB gzip (+1.01KB delta).
-- ATMOS-01, ATMOS-02 requirements addressed. Phase 12 complete. v1.3 Atmosphere milestone in progress.
+- Phase 14 Plan 01 (Bird Polish) executed: 2 tasks, 2 commits.
+  - Task 1 (6788209): Added addRimLight() to toonMaterial.ts — onBeforeCompile hook injects uRimStrength uniform + rim GLSL into outgoingLight before opaque_fragment. Applied to birdMaterial in main.ts.
+  - Task 2 (3f05c85): Added leftWing+rightWing BoxGeometry children to Bird.ts. Added wingFlap(bird) GSAP timeline in anim.ts. Wired wingFlap call in main.ts onFlap handler, gated by prefersReducedMotion.
+- tsc --noEmit: exit 0. Build: clean. Bundle: 199.25KB gzip (+0.35KB delta).
+- POLISH-01, POLISH-02 requirements addressed. Phase 14 complete. v1.4 Polish milestone in progress.
 
 **What's next:**
 
-Phase 13: Day/Night Cycle on Sky Shader — animate sky shader colors over time/score, gated by prefersReducedMotion.
+Phase 15: Camera Depth (opt-in) — subtle camera y-bob following bird velocity; Settings toggle (default OFF); double-gated by prefersReducedMotion.
 
 **Blockers:**
 
@@ -122,7 +123,7 @@ Phase 13: Day/Night Cycle on Sky Shader — animate sky shader colors over time/
 
 | Metric | Target | Current |
 |--------|--------|---------|
-| JS bundle gzipped | <250KB | 198.66KB (Phase 12 complete; cloud parallax sprites added) |
+| JS bundle gzipped | <250KB | 199.25KB (Phase 14 complete; rim shader + wing meshes added) |
 | FPS on Pixel 6 class | 60fps | Unmeasured (Phase 4 PERF-03) |
 | Lighthouse PWA | ≥90 | 0 (Phase 4 PWA-05) |
 | tsc --noEmit | 0 errors | ✓ 0 errors (strict + noUncheckedIndexedAccess) |
@@ -148,6 +149,7 @@ Phase 13: Day/Night Cycle on Sky Shader — animate sky shader colors over time/
 | Phase 10-time-attack-mode P01 | 161 | 3 tasks | 7 files |
 | Phase 11-daily-seed-mode P01 | 246 | 3 tasks | 8 files |
 | Phase 12-cloud-parallax-layer P01 | 97 | 2 tasks | 3 files |
+| Phase 14-bird-polish P01 | 12 | 2 tasks | 4 files |
 
 ## Phase Log
 
@@ -165,12 +167,14 @@ Phase 13: Day/Night Cycle on Sky Shader — animate sky shader colors over time/
 | 10 | ✓ Complete | 2026-04-29 | 10-01 TimerSystem + TIME_UP + HUD timer ✓ (MODE-04, MODE-05, MODE-06); ~194.6KB gzip |
 | 11 | ✓ Complete | 2026-05-01 | 11-01 mulberry32 RNG + daily tracking + Share button ✓ (MODE-07, MODE-08, MODE-09); 197.65KB gzip |
 | 12 | ✓ Complete | 2026-05-02 | 12-01 inline-SVG cloud sprites + parallax scroll ✓ (ATMOS-01, ATMOS-02); 198.66KB gzip |
+| 13 | ✓ Complete | 2026-05-02 | 13-01 day/night sky cycle ✓ (ATMOS-03, ATMOS-04); 198.90KB gzip |
+| 14 | ✓ Complete | 2026-05-02 | 14-01 rim-light shader + wing meshes + wingFlap ✓ (POLISH-01, POLISH-02); 199.25KB gzip |
 
 ---
 
 *This file is the project's memory. Update at every phase transition and plan completion.*
 
-**Stopped At:** Completed 12-01-PLAN.md
-**Resume:** Phase 13: Day/Night Cycle on Sky Shader. v1.3 Atmosphere milestone in progress.
+**Stopped At:** Completed 14-01-PLAN.md
+**Resume:** Phase 15: Camera Depth (opt-in). v1.4 Polish milestone in progress.
 
-**Planned Phase:** 12 (cloud-parallax-layer) — 1 plan — 2026-05-02T00:58:00Z
+**Planned Phase:** 14 (bird-polish) — 1 plan — 2026-05-02T02:47:00Z
