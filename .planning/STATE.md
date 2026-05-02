@@ -1,16 +1,16 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.2
-milestone_name: — Modes
-status: milestone_complete
-stopped_at: Completed 11-01-PLAN.md
-last_updated: "2026-05-01T22:13:00Z"
+milestone: v1.3
+milestone_name: — Atmosphere
+status: in_progress
+stopped_at: Completed 12-01-PLAN.md
+last_updated: "2026-05-02T00:58:00Z"
 progress:
-  total_phases: 11
+  total_phases: 13
   completed_phases: 12
-  total_plans: 29
-  completed_plans: 27
-  percent: 109
+  total_plans: 30
+  completed_plans: 28
+  percent: 93
 ---
 
 # Project State — Flappy 3D
@@ -23,7 +23,7 @@ progress:
 ## Project Reference
 
 **Core value:** The game must feel palpably more crafted than `guiguan/flappy-anna-3d` within 30 seconds of play — polished motion, real menus, real audio, 60fps on a mid-tier phone.
-**Current focus:** Phase 09 — Mode Infrastructure (v1.2 Modes milestone start)
+**Current focus:** Phase 12 — Cloud Parallax Layer (v1.3 Atmosphere milestone start)
 
 ---
 
@@ -33,12 +33,12 @@ Phase: 11
 Plan: Not started
 | Field | Value |
 |-------|-------|
-| Phase | 11 — Complete |
-| Phase name | Daily-Seed Mode |
-| Plans complete | 11-01 (mulberry32 RNG + daily attempt tracking + Share button) ✓ |
+| Phase | 12 — Complete |
+| Phase name | Cloud Parallax Layer |
+| Plans complete | 12-01 (inline-SVG cloud sprites + parallax scroll + roundStarted reset) ✓ |
 | Plans in progress | None |
-| Status | 1/1 plans complete — Phase 11 done — v1.2 Modes milestone complete |
-| Phase goal | Seeded RNG for deterministic daily pipes, attempt tracking, TitleScreen stats, GameOver Share button |
+| Status | 1/1 plans complete — Phase 12 done — v1.3 Atmosphere milestone in progress |
+| Phase goal | 5 inline-SVG cloud meshes at z=-7 drifting at 0.5× scroll speed; state-gated title/playing/dying |
 | Blocked on | None |
 
 **Progress bar:**
@@ -55,6 +55,7 @@ Phase 8 [██████████] 100% ✓ (08-01 glass UI refresh ✓ | 
 Phase 9 [██████████] 100% ✓ (09-01 GameMode + StorageManager v3 ✓ | 09-02 Title mode picker ✓)
 Phase 10 [██████████] 100% ✓ (10-01 TimerSystem + TIME_UP + HUD timer ✓)
 Phase 11 [██████████] 100% ✓ (11-01 mulberry32 RNG + daily tracking + Share button ✓)
+Phase 12 [██████████] 100% ✓ (12-01 inline-SVG cloud sprites + parallax scroll ✓)
 ```
 
 ---
@@ -101,16 +102,15 @@ Phase 11 [██████████] 100% ✓ (11-01 mulberry32 RNG + daily
 
 **What was done last (this session):**
 
-- Phase 11 Plan 01 (Daily-Seed Mode) executed: 3 tasks, 3 commits.
-  - Task 1 (9bca6b1): Created src/utils/rng.ts (mulberry32, dailySeed, todayDate); ObstacleSpawner.setRng() + private rng field + step() uses this.rng(); main.ts roundStarted sets seeded RNG for daily mode.
-  - Task 2 (554ddd7): StorageManager.getDailyAttempt() + recordDailyAttempt(); UIBridge calls recordDailyAttempt on gameOver when mode=daily; TitleScreen renders "Today's best: N (M attempts)" / "First attempt today"; .daily-stats CSS.
-  - Task 3 (28d933a): GameOverScreen Share button (daily mode only) — clipboard.writeText "Daily YYYY-MM-DD: score 🐦", useState toggles "Copied!" for 2s; UIBridge passes mode to GameOverScreen.
-- tsc --noEmit: exit 0. Build: clean. Bundle: 197.65KB gzip (+3KB delta).
-- MODE-07, MODE-08, MODE-09 requirements addressed. Phase 11 complete. v1.2 Modes milestone complete.
+- Phase 12 Plan 01 (Cloud Parallax Layer) executed: 2 tasks, 2 commits.
+  - Task 1 (293dd16): Created src/entities/Clouds.ts — 5 inline-SVG cloud meshes, shared geometry/material, step()+reset(), z=-7, 0.5x scroll speed, wrap at x<-20.
+  - Task 2 (6492754): Wired Clouds into main.ts — instantiated after Background, loop step gates title/playing/dying states, clouds.reset() in roundStarted handler, difficultyFrom imported.
+- tsc --noEmit: exit 0. Build: clean. Bundle: 198.66KB gzip (+1.01KB delta).
+- ATMOS-01, ATMOS-02 requirements addressed. Phase 12 complete. v1.3 Atmosphere milestone in progress.
 
 **What's next:**
 
-UAT verification of Phase 11 (or Phase 10 if not yet verified). v1.2 Modes milestone is code-complete.
+Phase 13: Day/Night Cycle on Sky Shader — animate sky shader colors over time/score, gated by prefersReducedMotion.
 
 **Blockers:**
 
@@ -122,7 +122,7 @@ UAT verification of Phase 11 (or Phase 10 if not yet verified). v1.2 Modes miles
 
 | Metric | Target | Current |
 |--------|--------|---------|
-| JS bundle gzipped | <250KB | 197.65KB (Phase 11 complete; mulberry32 + daily UI added) |
+| JS bundle gzipped | <250KB | 198.66KB (Phase 12 complete; cloud parallax sprites added) |
 | FPS on Pixel 6 class | 60fps | Unmeasured (Phase 4 PERF-03) |
 | Lighthouse PWA | ≥90 | 0 (Phase 4 PWA-05) |
 | tsc --noEmit | 0 errors | ✓ 0 errors (strict + noUncheckedIndexedAccess) |
@@ -147,6 +147,7 @@ UAT verification of Phase 11 (or Phase 10 if not yet verified). v1.2 Modes miles
 | Phase 09-mode-infrastructure P02 | 480 | 2 tasks | 4 files |
 | Phase 10-time-attack-mode P01 | 161 | 3 tasks | 7 files |
 | Phase 11-daily-seed-mode P01 | 246 | 3 tasks | 8 files |
+| Phase 12-cloud-parallax-layer P01 | 97 | 2 tasks | 3 files |
 
 ## Phase Log
 
@@ -163,12 +164,13 @@ UAT verification of Phase 11 (or Phase 10 if not yet verified). v1.2 Modes miles
 | 9 | ✓ Complete | 2026-04-29 | 09-01 GameMode + StorageManager v3 ✓ (MODE-01, MODE-02); 09-02 Title mode picker ✓ (MODE-03); 196.75KB gzip |
 | 10 | ✓ Complete | 2026-04-29 | 10-01 TimerSystem + TIME_UP + HUD timer ✓ (MODE-04, MODE-05, MODE-06); ~194.6KB gzip |
 | 11 | ✓ Complete | 2026-05-01 | 11-01 mulberry32 RNG + daily tracking + Share button ✓ (MODE-07, MODE-08, MODE-09); 197.65KB gzip |
+| 12 | ✓ Complete | 2026-05-02 | 12-01 inline-SVG cloud sprites + parallax scroll ✓ (ATMOS-01, ATMOS-02); 198.66KB gzip |
 
 ---
 
 *This file is the project's memory. Update at every phase transition and plan completion.*
 
-**Stopped At:** Completed 11-01-PLAN.md
-**Resume:** UAT verification of Phase 11 (or Phase 10 if not yet verified). v1.2 Modes milestone code-complete.
+**Stopped At:** Completed 12-01-PLAN.md
+**Resume:** Phase 13: Day/Night Cycle on Sky Shader. v1.3 Atmosphere milestone in progress.
 
-**Planned Phase:** 11 (daily-seed-mode) — 1 plan — 2026-05-01T22:13:00Z
+**Planned Phase:** 12 (cloud-parallax-layer) — 1 plan — 2026-05-02T00:58:00Z
