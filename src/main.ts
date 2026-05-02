@@ -14,7 +14,7 @@ import { BoxGeometry } from 'three'
 import WebGL from 'three/addons/capabilities/WebGL.js'
 import { createRenderer } from './render/createRenderer'
 import { createComposer } from './render/createComposer'
-import { createToonGradient, createToonMaterial, applyColorblindPalette, applyDefaultPalette } from './render/toonMaterial'
+import { createToonGradient, createToonMaterial, addRimLight, applyColorblindPalette, applyDefaultPalette } from './render/toonMaterial'
 import { GameLoop } from './loop/GameLoop'
 import { InputManager } from './input/InputManager'
 import { Bird } from './entities/Bird'
@@ -61,6 +61,8 @@ if (!WebGL.isWebGL2Available()) {
   const gradient = createToonGradient()
   const birdMaterial = createToonMaterial(gradient, 0xff7043)
   const pipeMaterial = createToonMaterial(gradient, PIPE_COLOR)
+
+  addRimLight(birdMaterial)
 
   const bird = new Bird(scene)
   bird.mesh.material = birdMaterial
