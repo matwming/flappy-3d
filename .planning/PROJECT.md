@@ -46,7 +46,15 @@ Final character + camera polish. Consumes the last dormant seed (SEED-003). Two 
 - Phase 14 — Bird Polish: rim lighting via `onBeforeCompile` shader extension + 2 BoxGeometry wing meshes flapping ±0.6rad on each FLAP via GSAP, motion-gated ✓
 - Phase 15 — Camera Depth (opt-in): subtle camera y-offset eases toward `bird.velocity.y * 0.05` per frame; double-gated behind new "Camera bob" Settings toggle (default OFF) + `prefersReducedMotion`; resets on `roundStarted` ✓
 
-3 POLISH-* requirements coded. Bundle: 199.43KB / 250KB. Seed SEED-003 consumed (the final dormant seed). After v1.4, the seed pool is fully consumed (5 of 5 seeds shipped across v1.2/v1.3/v1.4). Future milestones will need new ideation, not seed-driven planning.
+3 POLISH-* requirements coded. Bundle: 199.43KB / 250KB. Seed SEED-003 consumed (the final dormant seed). After v1.4, the seed pool is fully consumed (5 of 5 seeds shipped across v1.2/v1.3/v1.4).
+
+### v1.5 Milestone — Approachability + Customization (CODE-COMPLETE 2026-05-02)
+
+Direct user feedback after v1.4 ship: "make it easier to play" and "let players change the bird shape or upload a picture". Two phases (16, 17), both shipped:
+- Phase 16 — Difficulty Presets: Easy/Normal/Hard picker in Settings. Easy = wider gaps + slower scroll (default for new players). Existing v1.0..v1.4 saves grandfather to Normal via v3→v4 migration. ✓
+- Phase 17 — Bird Customization: Shape picker (Sphere / Cube / Pyramid) replaces the body geometry; image upload resizes the user's picture to 256×256 PNG and applies it as a textured plane (wings hide in image mode). ✓
+
+3 POLISH-* requirements coded (POLISH-04, 05, 06). StorageManager schema bumped to v4. Bundle: 200.77KB / 250KB. First user-feedback-driven milestone (no seed).
 
 ### Active
 

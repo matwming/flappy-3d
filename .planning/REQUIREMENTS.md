@@ -207,6 +207,18 @@ Final character + camera polish. Consumes SEED-003. Two phases (14, 15).
 
 ---
 
+## v1.5 — Approachability + Customization
+
+Direct user feedback after v1.4 ship: "make it easier to play" and "let players change the bird shape or upload a picture". Two phases (16, 17). Schema bump v3 → v4.
+
+### Difficulty + bird customization (POLISH)
+
+- [x] **POLISH-04**: New "Difficulty" Settings picker (Easy / Normal / Hard) — Easy multiplies gap×1.25, scroll×0.85, spawn×1.20; Hard inverts (gap×0.85, scroll×1.10, spawn×0.90). Fresh-install default is Easy; v1/v2/v3 saves migrate to Normal so existing players don't get a surprise re-balance. ✓ Phase 16
+- [x] **POLISH-05**: New "Bird shape" Settings picker (Sphere / Cube / Pyramid) — `bird.setShape()` swaps body geometry while preserving wings, rim light, squash-stretch, and ghost trail. Default sphere. Hidden when a custom image is set. ✓ Phase 17
+- [x] **POLISH-06**: "Bird image" upload in Settings — user picks an image file, it's resized to 256×256 PNG via canvas, stored as base64 data URL in `localStorage` (≤1.5 MB cap), applied as a textured plane that replaces the body. Wings hide in image mode. "Clear" button restores selected shape. ✓ Phase 17
+
+---
+
 ## v2 / Deferred
 
 These are valuable but deliberately out of v1 scope. Add post-launch.
@@ -345,3 +357,6 @@ Populated by `gsd-roadmapper` on 2026-04-28. Every v1 REQ-ID maps to exactly one
 | POLISH-01 | Phase 14 | Pending |
 | POLISH-02 | Phase 14 | Pending |
 | POLISH-03 | Phase 15 | Pending |
+| POLISH-04 | Phase 16 | Pending |
+| POLISH-05 | Phase 17 | Pending |
+| POLISH-06 | Phase 17 | Pending |

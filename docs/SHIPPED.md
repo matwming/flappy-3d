@@ -1,15 +1,15 @@
 # Flappy 3D — Ship Summary
 
 **Live URL:** https://quietbuildlab.github.io/flappy-3d/
-**Code-complete:** v1.0 + v1.1 + v1.2 + v1.3 + v1.4 — 2026-05-02
-**Bundle:** 199.43 KB gzip (50 KB under 250 KB budget)
+**Code-complete:** v1.0 + v1.1 + v1.2 + v1.3 + v1.4 + v1.5 — 2026-05-02
+**Bundle:** 200.77 KB gzip (49 KB under 250 KB budget)
 **Lighthouse PWA:** 1.00 / 1.00 (last measured at v1.1)
 
 ---
 
 ## What shipped
 
-A polished 3D Flappy Bird-style PWA delivered across five milestones (v1.0 mechanical core → v1.1 visual polish → v1.2 modes → v1.3 atmosphere → v1.4 character + camera polish):
+A polished 3D Flappy Bird-style PWA delivered across six milestones (v1.0 mechanical core → v1.1 visual polish → v1.2 modes → v1.3 atmosphere → v1.4 character + camera polish → v1.5 approachability + customization):
 
 - **3D scene:** Cel-shaded toon materials (Three.js `MeshToonMaterial` + gradient ramp), parallax background (sky shader + mountains + trees), post-processing bloom + vignette gated for desktop / hi-tier mobile, DPR cap at 2 for mobile fragment cost
 - **Audio:** Howler.js singletons with iOS Safari `AudioContext` unlock on first `pointerup`, real CC0 samples (Kenney SFX + Juhani Junkala chiptune music), WebAudio synth fallback if files unavailable, music volume drops on title and pauses on tab-blur
@@ -20,6 +20,7 @@ A polished 3D Flappy Bird-style PWA delivered across five milestones (v1.0 mecha
 - **Modes (v1.2):** XState machine `mode` context (`endless` | `timeAttack` | `daily`); StorageManager v3 schema with per-mode leaderboards + idempotent v1/v2 → v3 migration; Title-screen segmented mode picker with persistence (Phase 9); 60-second time-attack with HUD `mm:ss` countdown that fires `TIME_UP` event (Phase 10); deterministic daily-seed mode via mulberry32 PRNG seeded by UTC date, daily attempt tracking with "Today's best" line on Title, native Share/Copy fallback button on GameOver (Phase 11)
 - **Atmosphere (v1.3):** 5 inline-SVG cloud sprites at z=-7 with 0.5× parallax scroll (Phase 12); 60-second day/night sky-shader cycle with 4 keyframes lerping `topColor`/`bottomColor` uniforms, motion-gated (Phase 13)
 - **Character + camera polish (v1.4):** Toon-material rim-light extension via `onBeforeCompile` injecting `uRimStrength` uniform; 2 BoxGeometry wing meshes parented to bird that flap ±0.6rad on each FLAP via GSAP timeline, motion-gated (Phase 14); opt-in subtle camera y-bob following `bird.velocity.y * 0.05` with smoothing lerp 0.08, double-gated behind new "Camera bob" Settings toggle (default OFF) + `prefersReducedMotion` (Phase 15)
+- **Approachability + customization (v1.5):** Difficulty preset picker (Easy / Normal / Hard) with multipliers on gap, scroll, and spawn — default Easy for fresh installs, existing saves grandfathered to Normal via v3→v4 migration (Phase 16); bird shape picker (Sphere / Cube / Pyramid) and custom-image upload resized to 256×256 PNG with localStorage persistence (Phase 17)
 - **Accessibility:** `prefers-reduced-motion` checked in JS (gates all aggressive tweens), colorblind palette toggle (deuteranopia-safe), WCAG-AA contrast verified across 8 audit pairs, ≥44×44px touch targets, `aria-live="polite"` on score
 - **PWA:** vite-plugin-pwa with `generateSW` + `autoUpdate` + `skipWaiting`, Web App Manifest (192/512/maskable-512 icons), Workbox cache (CacheFirst for audio, StaleWhileRevalidate for everything else), install prompt deferred until first round complete, GitHub Actions deploy with Lighthouse PWA gate ≥0.90
 
@@ -27,7 +28,7 @@ A polished 3D Flappy Bird-style PWA delivered across five milestones (v1.0 mecha
 
 ## Requirements coverage
 
-90/90 requirements shipped (62 v1.0 + 12 v1.1 BEAUTY-* + 9 v1.2 MODE-* + 4 v1.3 ATMOS-* + 3 v1.4 POLISH-*) across 15 phases, ~30 plans, ~80 atomic commits.
+93/93 requirements shipped (62 v1.0 + 12 v1.1 BEAUTY-* + 9 v1.2 MODE-* + 4 v1.3 ATMOS-* + 3 v1.4 POLISH-* + 3 v1.5 POLISH-*) across 17 phases, ~32 plans, ~85 atomic commits.
 
 ### v1.0 — Mechanical core
 
@@ -68,6 +69,13 @@ A polished 3D Flappy Bird-style PWA delivered across five milestones (v1.0 mecha
 |-------|-------------|--------|
 | 14 — Bird Polish | POLISH-01..02 | Complete |
 | 15 — Camera Depth (opt-in) | POLISH-03 | Complete |
+
+### v1.5 — Approachability + Customization
+
+| Phase | Requirements | Status |
+|-------|-------------|--------|
+| 16 — Difficulty Presets | POLISH-04 | Complete |
+| 17 — Bird Customization | POLISH-05..06 | Complete |
 
 ---
 

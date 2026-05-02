@@ -43,13 +43,21 @@ body.palette-colorblind {
   align-items: center;
   justify-content: center;
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
-  transition: opacity 120ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 120ms cubic-bezier(0.16, 1, 0.3, 1), visibility 0s linear 120ms;
 }
 #ui-root .screen.active {
   opacity: 1;
+  visibility: visible;
   pointer-events: auto;
+  transition: opacity 120ms cubic-bezier(0.16, 1, 0.3, 1), visibility 0s linear 0s;
 }
+/* visibility: hidden is critical here: without it, the global
+   `#ui-root button { pointer-events: auto }` keeps invisible buttons (HUD
+   Pause, GameOver Restart) clickable in the title-screen viewport corner —
+   intercepting taps on the Settings gear that occupies the same position.
+   The 120ms visibility delay on inactive lets the opacity fade-out finish first. */
 
 #ui-root button {
   pointer-events: auto;
@@ -139,9 +147,19 @@ body.palette-colorblind {
   inset: 0;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 120ms cubic-bezier(0.16, 1, 0.3, 1);
+  visibility: hidden;
+  transition: opacity 120ms cubic-bezier(0.16, 1, 0.3, 1), visibility 0s linear 120ms;
 }
-.hud-screen.active { opacity: 1; pointer-events: none; }
+.hud-screen.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: none;
+  transition: opacity 120ms cubic-bezier(0.16, 1, 0.3, 1), visibility 0s linear 0s;
+}
+/* visibility: hidden when not active is critical: without it, the global
+   `#ui-root button { pointer-events: auto }` keeps the invisible Pause
+   button clickable in the title-screen top-right, intercepting taps on
+   the Settings gear that occupies the same viewport position. */
 .hud-score {
   position: absolute;
   top: 20px;

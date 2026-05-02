@@ -1,29 +1,29 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.4
-milestone_name: — Polish
+milestone: v1.5
+milestone_name: — Approachability + Customization
 status: code_complete
-stopped_at: Completed 15-01-PLAN.md
-last_updated: "2026-05-02T03:30:00Z"
+stopped_at: Completed Phase 17 (combined v1.5 increment)
+last_updated: "2026-05-02T05:10:00Z"
 progress:
-  total_phases: 15
-  completed_phases: 15
-  total_plans: 31
-  completed_plans: 30
+  total_phases: 17
+  completed_phases: 17
+  total_plans: 33
+  completed_plans: 32
   percent: 100
 ---
 
 # Project State — Flappy 3D
 
 **Last updated:** 2026-05-02
-**Updated by:** gsd-executor (15-01)
+**Updated by:** gsd-executor (v1.5 combined commit)
 
 ---
 
 ## Project Reference
 
 **Core value:** The game must feel palpably more crafted than `guiguan/flappy-anna-3d` within 30 seconds of play — polished motion, real menus, real audio, 60fps on a mid-tier phone.
-**Current focus:** v1.4 Polish CODE-COMPLETE — all 15 phases done, all 5 seeds consumed
+**Current focus:** v1.5 Approachability + Customization CODE-COMPLETE — first user-feedback-driven milestone (no seed)
 
 ---
 
@@ -31,12 +31,12 @@ progress:
 
 | Field | Value |
 |-------|-------|
-| Phase | 15 — Complete |
-| Phase name | Camera Depth (opt-in) |
-| Plans complete | 15-01 (cameraBob setting + per-frame y-bob loop step + roundStarted reset) ✓ |
+| Phase | 17 — Complete |
+| Phase name | Bird Customization |
+| Plans complete | v1.5 single combined increment (Phases 16+17 shipped together per user request) ✓ |
 | Plans in progress | None |
-| Status | 1/1 plans complete — Phase 15 done — v1.4 Polish milestone CODE-COMPLETE |
-| Phase goal | Subtle camera y-offset following bird velocity, double-gated behind new "Camera bob" Settings toggle (default OFF) + prefersReducedMotion |
+| Status | v1.5 CODE-COMPLETE — difficulty presets + bird shape + image upload all shipped |
+| Phase goal | User-feedback features: easier default for new players, customizable bird (shape OR uploaded image) |
 | Blocked on | None |
 
 **Progress bar:**
@@ -57,6 +57,8 @@ Phase 12 [██████████] 100% ✓ (12-01 inline-SVG cloud sprit
 Phase 13 [██████████] 100% ✓ (13-01 day/night sky cycle ✓)
 Phase 14 [██████████] 100% ✓ (14-01 rim-light shader + wing meshes + wingFlap animation ✓)
 Phase 15 [██████████] 100% ✓ (15-01 cameraBob toggle + per-frame y-bob loop + roundStarted reset ✓)
+Phase 16 [██████████] 100% ✓ (16-01 difficulty presets Easy/Normal/Hard + schema v4 migration ✓)
+Phase 17 [██████████] 100% ✓ (17-01 bird shape picker + image upload + textured-plane swap ✓)
 ```
 
 ---
