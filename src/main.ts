@@ -32,7 +32,7 @@ import { gameMachine } from './machine/gameMachine'
 import { StorageManager } from './storage/StorageManager'
 import { AudioManager } from './audio/AudioManager'
 import { UIBridge } from './ui/UIBridge'
-import { squashStretch, screenShake } from './anim/anim'
+import { squashStretch, screenShake, wingFlap } from './anim/anim'
 import { createParticles } from './particles/createParticles'
 import { prefersReducedMotion } from './a11y/motion'
 import { PIPE_WIDTH, PIPE_DEPTH, PIPE_COLOR, POOL_SIZE } from './constants'
@@ -114,6 +114,7 @@ if (!WebGL.isWebGL2Available()) {
       audio.playFlap()
       if (!prefersReducedMotion(storage)) {
         squashStretch(bird.mesh)
+        wingFlap(bird)
       }
       if (storage.getSettings().flapTrail && !prefersReducedMotion(storage)) {
         bird.snapshotGhost()

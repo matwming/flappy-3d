@@ -1,5 +1,6 @@
 import { gsap } from 'gsap'
 import type { Object3D } from 'three'
+import type { Bird } from '../entities/Bird'
 
 // Squash-and-stretch on flap (D-23 / ANIM-02)
 export function squashStretch(target: Object3D): void {
@@ -38,4 +39,14 @@ export function scorePop(el: HTMLElement | null): void {
   // force reflow
   void el.offsetWidth
   el.classList.add('score-pop')
+}
+
+// Wing flap animation on each jump (POLISH-02 / D-08)
+// Left wing rotates +z, right wing mirrors to -z; both return to 0.
+export function wingFlap(bird: Bird): void {
+  const tl = gsap.timeline()
+  tl.to(bird.leftWing.rotation, { z: 0.6, duration: 0.04, ease: 'power2.out', overwrite: true })
+    .to(bird.rightWing.rotation, { z: -0.6, duration: 0.04, ease: 'power2.out', overwrite: true }, '<')
+    .to(bird.leftWing.rotation, { z: 0, duration: 0.06, ease: 'power2.in' })
+    .to(bird.rightWing.rotation, { z: 0, duration: 0.06, ease: 'power2.in' }, '<')
 }

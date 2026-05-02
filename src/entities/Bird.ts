@@ -1,12 +1,15 @@
 import {
   Mesh,
   SphereGeometry,
+  BoxGeometry,
   MeshStandardMaterial,
+  MeshToonMaterial,
   MeshBasicMaterial,
   Material,
   Vector3,
   Box3,
   Scene,
+  DoubleSide,
 } from 'three'
 
 const GHOST_COUNT = 3
@@ -16,6 +19,8 @@ const GHOST_FADE_SPEED = 1 / 0.18 // opacity → 0 in 180ms
 
 export class Bird {
   readonly mesh: Mesh<SphereGeometry, Material>
+  readonly leftWing: Mesh<BoxGeometry, MeshToonMaterial>
+  readonly rightWing: Mesh<BoxGeometry, MeshToonMaterial>
   readonly position: Vector3 = new Vector3(0, 0, 0)
   readonly velocity: Vector3 = new Vector3(0, 0, 0)
   private readonly boundingBox: Box3 = new Box3()
@@ -28,6 +33,17 @@ export class Bird {
     this.mesh = new Mesh(geo, mat)
     this.mesh.scale.set(1, 0.65, 0.8)
     scene.add(this.mesh)
+
+    // Wing meshes — thin boxes, children of bird.mesh so they inherit squashStretch
+    const wingGeo = new BoxGeometry(0.6, 0.05, 0.3)
+    const wingMat = new MeshToonMaterial({ color: 0xff7043, side: DoubleSide })
+    this.leftWing = new Mesh(wingGeo, wingMat)
+    this.leftWing.position.set(-0.4, 0, 0)
+    this.mesh.add(this.leftWing)
+
+    this.rightWing = new Mesh(wingGeo, wingMat.clone())
+    this.rightWing.position.set(0.4, 0, 0)
+    this.mesh.add(this.rightWing)
 
     // Pre-create ghost meshes (flap trail — BEAUTY-06, D-09)
     const ghostGeo = new SphereGeometry(0.35, 8, 6)  // lower poly — they're ephemeral
@@ -92,6 +108,11 @@ export class Bird {
     scene.remove(this.mesh)
     this.mesh.geometry.dispose()
     this.mesh.material.dispose()
+    // Wings are children of mesh (removed above); dispose their GPU resources
+    this.leftWing.geometry.dispose()
+    this.leftWing.material.dispose()
+    this.rightWing.geometry.dispose()
+    this.rightWing.material.dispose()
     for (const ghost of this.ghosts) {
       scene.remove(ghost)
       ghost.geometry.dispose()
