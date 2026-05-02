@@ -5,11 +5,14 @@ interface UpdatableSystem {
   step(dt: number): void
 }
 
+type Interpolator = (alpha: number) => void
+
 export class GameLoop {
   private renderer: WebGLRenderer
   private scene: Scene
   private camera: PerspectiveCamera
   private systems: UpdatableSystem[] = []
+  private interpolators: Interpolator[] = []
   private accumulator = 0
   private lastTime = 0
   private renderFn: () => void
@@ -23,6 +26,14 @@ export class GameLoop {
 
   add(system: UpdatableSystem): void {
     this.systems.push(system)
+  }
+
+  /** Phase 18: register a per-frame interpolation hook that runs AFTER all
+   * fixed-step updates and BEFORE render. Receives `alpha = accumulator / FIXED_DT`
+   * in [0, 1) — the fractional progress toward the next fixed step. Use to
+   * lerp(prev, curr, alpha) for visually smooth motion on >60Hz displays. */
+  addInterpolator(fn: Interpolator): void {
+    this.interpolators.push(fn)
   }
 
   setRenderFn(fn: () => void): void {
@@ -52,6 +63,9 @@ export class GameLoop {
       }
       this.accumulator -= FIXED_DT
     }
+
+    const alpha = this.accumulator / FIXED_DT
+    for (const interp of this.interpolators) interp(alpha)
 
     this.renderFn()
   }

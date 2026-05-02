@@ -179,6 +179,11 @@ if (!WebGL.isWebGL2Available()) {
       camera.position.y += (target - camera.position.y) * CAMERA_BOB_LERP
     },
   })
+  // Title-screen mascot positioning: lift bird above viewport center so it
+  // doesn't sit behind the mode picker / leaderboard, and pull forward in z
+  // so it reads as the foreground character. Resets to (0,0,0) on roundStarted.
+  const TITLE_MASCOT_Y = 1.2
+  const TITLE_MASCOT_Z = 0.5
   loop.add({
     step: (dt: number) => {
       const s = actor.getSnapshot().value
@@ -186,16 +191,28 @@ if (!WebGL.isWebGL2Available()) {
         if (s === 'playing') bobTime = 0
         return
       }
+      // Showcase position — slightly above center, slightly forward
+      bird.mesh.position.z = TITLE_MASCOT_Z
       if (prefersReducedMotion(storage)) {
-        bird.mesh.position.y = bird.position.y
+        bird.mesh.position.y = TITLE_MASCOT_Y
         return
       }
       bobTime += dt
-      bird.mesh.position.y = bird.position.y + Math.sin(bobTime * Math.PI * 2) * 0.15
+      bird.mesh.position.y = TITLE_MASCOT_Y + Math.sin(bobTime * Math.PI * 2) * 0.15
     },
   })
 
-  const composerResult = createComposer(renderer, scene, camera, ac.signal)
+  // Render-time interpolation for the bird only (the most motion-visible
+  // entity). Title bob writes mesh.position directly, so interp is gated to
+  // 'playing'/'dying' where physics drives the position.
+  loop.addInterpolator((alpha) => {
+    const s = actor.getSnapshot().value
+    if (s === 'playing' || s === 'dying') {
+      bird.interpolate(alpha)
+    }
+  })
+
+  const composerResult = createComposer(renderer, scene, camera, ac.signal, storage.getSettings().quality)
   if (composerResult !== null) {
     loop.setRenderFn(composerResult.render)
   }
@@ -232,7 +249,9 @@ if (!WebGL.isWebGL2Available()) {
     roundCount++
     bird.position.set(0, 0, 0)
     bird.velocity.set(0, 0, 0)
+    bird.prevPosition.set(0, 0, 0)  // reset interp anchor (no first-frame snap)
     bird.mesh.rotation.z = 0
+    bird.mesh.position.z = 0  // clear title-mascot z-offset
     bird.syncMesh()
     const toRelease: ObstaclePair[] = []
     obstaclePool.forEachActive((pair) => {

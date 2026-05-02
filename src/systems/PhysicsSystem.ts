@@ -37,6 +37,9 @@ export class PhysicsSystem {
       return
     }
 
+    // Snapshot prev position for render interpolation (Phase 18 #3 v1.6)
+    this.bird.snapshotPosition()
+
     if (this.flapQueued) {
       this.bird.velocity.y = FLAP_IMPULSE
       this.flapQueued = false
@@ -61,6 +64,8 @@ export class PhysicsSystem {
       this.bird.velocity.y = 0
     }
 
-    this.bird.syncMesh()
+    // syncMesh is intentionally NOT called here — the GameLoop interpolator
+    // (in main.ts) lerps mesh.position from prevPosition→position by alpha
+    // each render frame, giving smoother motion on >60Hz screens.
   }
 }

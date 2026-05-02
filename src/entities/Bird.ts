@@ -36,8 +36,12 @@ export class Bird {
   readonly mesh: Mesh<BufferGeometry, Material>
   readonly leftWing: Mesh<BoxGeometry, MeshToonMaterial>
   readonly rightWing: Mesh<BoxGeometry, MeshToonMaterial>
+  readonly leftEye: Mesh<SphereGeometry, MeshBasicMaterial>
+  readonly rightEye: Mesh<SphereGeometry, MeshBasicMaterial>
+  readonly beak: Mesh<ConeGeometry, MeshToonMaterial>
   readonly position: Vector3 = new Vector3(0, 0, 0)
   readonly velocity: Vector3 = new Vector3(0, 0, 0)
+  readonly prevPosition: Vector3 = new Vector3(0, 0, 0)  // for render interpolation
   private readonly boundingBox: Box3 = new Box3()
   private ghosts: Mesh<SphereGeometry, MeshBasicMaterial>[] = []
   private ghostHead = 0  // ring buffer head index
@@ -66,6 +70,26 @@ export class Bird {
     this.rightWing = new Mesh(wingGeo, wingMat.clone())
     this.rightWing.position.set(0.4, 0, 0)
     this.mesh.add(this.rightWing)
+
+    // Eyes — two small black spheres on the front (toward +X = facing scroll direction)
+    const eyeGeo = new SphereGeometry(0.07, 10, 8)
+    const eyeMat = new MeshBasicMaterial({ color: 0x111111 })
+    this.leftEye = new Mesh(eyeGeo, eyeMat)
+    this.leftEye.position.set(0.20, 0.18, 0.22)
+    this.mesh.add(this.leftEye)
+
+    this.rightEye = new Mesh(eyeGeo, eyeMat)
+    this.rightEye.position.set(0.20, 0.18, -0.22)
+    this.mesh.add(this.rightEye)
+
+    // Beak — small forward-pointing cone (orange-yellow). Rotated so the
+    // cone tip points in +X (the bird's facing direction).
+    const beakGeo = new ConeGeometry(0.10, 0.22, 6)
+    const beakMat = new MeshToonMaterial({ color: 0xffb74d })
+    this.beak = new Mesh(beakGeo, beakMat)
+    this.beak.position.set(0.36, 0, 0)
+    this.beak.rotation.z = -Math.PI / 2  // tip → +X
+    this.mesh.add(this.beak)
 
     // Pre-create ghost meshes (flap trail — BEAUTY-06, D-09)
     const ghostGeo = new SphereGeometry(0.35, 8, 6)  // lower poly — they're ephemeral
@@ -112,8 +136,7 @@ export class Bird {
       this.mesh.geometry = createShapeGeometry(this.currentShape)
       this.mesh.scale.set(1, 0.65, 0.8)  // squash silhouette
       if (this.baseMaterial !== null) this.mesh.material = this.baseMaterial
-      this.leftWing.visible = true
-      this.rightWing.visible = true
+      this.setBodyAccentsVisible(true)
     } else {
       // Emoji animal preset → flat plane with rendered emoji texture
       const emoji = EMOJI_FOR_SHAPE[this.currentShape]
@@ -124,8 +147,7 @@ export class Bird {
       this.imageTexture = tex
       this.imageMaterial = new MeshBasicMaterial({ map: tex, transparent: true })
       this.mesh.material = this.imageMaterial
-      this.leftWing.visible = false
-      this.rightWing.visible = false
+      this.setBodyAccentsVisible(false)
     }
   }
 
@@ -147,8 +169,7 @@ export class Bird {
     this.mesh.geometry = new PlaneGeometry(0.9, 0.9)
     this.mesh.scale.set(1, 1, 1)
     this.disposeImageResources()
-    this.leftWing.visible = false
-    this.rightWing.visible = false
+    this.setBodyAccentsVisible(false)
 
     const canvas = document.createElement('canvas')
     canvas.width = canvas.height = 256
@@ -182,6 +203,14 @@ export class Bird {
       this.imageMaterial.dispose()
       this.imageMaterial = null
     }
+  }
+
+  private setBodyAccentsVisible(on: boolean): void {
+    this.leftWing.visible = on
+    this.rightWing.visible = on
+    this.leftEye.visible = on
+    this.rightEye.visible = on
+    this.beak.visible = on
   }
 
   // Called on each flap — snapshots current bird world position into next ghost slot
@@ -225,16 +254,36 @@ export class Bird {
     this.mesh.position.copy(this.position)
   }
 
+  /** Snapshot the current logical position as the "previous" frame anchor.
+   * Called by PhysicsSystem at the START of each fixed step so render-time
+   * interpolation can lerp(prev, curr, alpha) for smooth motion on >60Hz. */
+  snapshotPosition(): void {
+    this.prevPosition.copy(this.position)
+  }
+
+  /** Lerp mesh.position from prevPosition → position by alpha ∈ [0,1).
+   * Caller is responsible for state-gating (only valid during 'playing' /
+   * 'dying' — title bob writes mesh.position directly). */
+  interpolate(alpha: number): void {
+    this.mesh.position.lerpVectors(this.prevPosition, this.position, alpha)
+  }
+
   dispose(scene: Scene): void {
     scene.remove(this.mesh)
     this.mesh.geometry.dispose()
     this.mesh.material.dispose()
     this.disposeImageResources()
-    // Wings are children of mesh (removed above); dispose their GPU resources
+    // Wings + eyes + beak are children of mesh (removed above); dispose GPU resources
     this.leftWing.geometry.dispose()
     this.leftWing.material.dispose()
     this.rightWing.geometry.dispose()
     this.rightWing.material.dispose()
+    this.leftEye.geometry.dispose()
+    this.leftEye.material.dispose()
+    this.rightEye.geometry.dispose()  // shares geometry with leftEye, double dispose is safe
+    this.rightEye.material.dispose()  // shares material with leftEye, double dispose is safe
+    this.beak.geometry.dispose()
+    this.beak.material.dispose()
     for (const ghost of this.ghosts) {
       scene.remove(ghost)
       ghost.geometry.dispose()

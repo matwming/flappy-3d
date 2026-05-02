@@ -1,8 +1,10 @@
 import { h } from 'preact'
+import type { ComponentChildren } from 'preact'
 import { useEffect, useRef, useState } from 'preact/hooks'
 import type { StorageManager, SettingsV4, BirdShape } from '../../storage/StorageManager'
 import type { AudioManager } from '../../audio/AudioManager'
 import type { DifficultyPreset } from '../../constants'
+import type { QualityTier } from '../../render/createComposer'
 import { Button } from '../components/Button'
 import { Toggle } from '../components/Toggle'
 import { refreshReducedMotion } from '../../a11y/motion'
@@ -18,6 +20,15 @@ interface Props {
   onImageChange: (image: string | null) => void
 }
 
+function Section({ title, children }: { title: string; children?: ComponentChildren }) {
+  return h(
+    'div',
+    { className: 'settings-section' },
+    h('div', { className: 'settings-section-title' }, title),
+    children,
+  )
+}
+
 export function SettingsModal({
   storage, audio, onClose, onPaletteChange, onShapeChange, onImageChange,
 }: Props) {
@@ -26,7 +37,6 @@ export function SettingsModal({
   const dialogRef = useRef<HTMLDialogElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  // Open dialog when mounted, close when unmounted
   useEffect(() => {
     const el = dialogRef.current
     if (el && !el.open) el.showModal()
@@ -47,17 +57,10 @@ export function SettingsModal({
     setSettings(next)
     storage.setSettings(partial)
 
-    // Apply audio side-effects
     if (partial.sound !== undefined) audio.setSfxMuted(!partial.sound)
     if (partial.music !== undefined) audio.setMusicMuted(!partial.music)
-
-    // Refresh reduce-motion gate if that setting changed
     if (partial.reduceMotion !== undefined) refreshReducedMotion(storage)
-
-    // Trigger palette swap when colorblind setting changes
     if (partial.palette !== undefined) onPaletteChange(partial.palette)
-
-    // Phase 17: shape + image swaps go to the bird via callback
     if (partial.birdShape !== undefined) onShapeChange(partial.birdShape)
     if (partial.birdImage !== undefined) onImageChange(partial.birdImage)
   }
@@ -77,10 +80,6 @@ export function SettingsModal({
       target.value = ''
       return
     }
-
-    // createImageBitmap accepts a File/Blob directly and decodes natively,
-    // dodging HTMLImageElement's flaky onerror behaviour with data URLs.
-    // Available on all modern browsers + iOS Safari 15+.
     try {
       const bitmap = await createImageBitmap(file)
       const canvas = document.createElement('canvas')
@@ -91,7 +90,6 @@ export function SettingsModal({
         setImageError("Couldn't read the image. Try another file.")
         return
       }
-      // Cover-fit so the image fills the square
       const ratio = Math.max(canvas.width / bitmap.width, canvas.height / bitmap.height)
       const w = bitmap.width * ratio
       const hh = bitmap.height * ratio
@@ -106,7 +104,7 @@ export function SettingsModal({
     } catch {
       setImageError("Couldn't decode the image. Try another file.")
     } finally {
-      target.value = ''  // allow re-uploading the same file later
+      target.value = ''
     }
   }
 
@@ -115,6 +113,17 @@ export function SettingsModal({
     update({ birdImage: null })
     if (fileInputRef.current) fileInputRef.current.value = ''
   }
+
+  const pickerButton = <T extends string>(
+    current: T, id: T, label: string, onPick: (id: T) => void, ariaLabel?: string,
+  ) =>
+    h(Button, {
+      key: id,
+      className: 'mode-btn' + (current === id ? ' active' : ''),
+      'aria-pressed': current === id,
+      'aria-label': ariaLabel ?? id,
+      onClick: () => onPick(id),
+    }, label)
 
   return h(
     'dialog',
@@ -128,111 +137,127 @@ export function SettingsModal({
     h(
       'div',
       { className: 'settings-rows' },
-      h(Toggle, {
-        label: 'Sound',
-        checked: settings.sound,
-        onChange: (v) => update({ sound: v }),
-      }),
-      h(Toggle, {
-        label: 'Music',
-        checked: settings.music,
-        onChange: (v) => update({ music: v }),
-      }),
-      h('p', { className: 'settings-note' },
-        'On iOS, the silent switch mutes all app audio.',
-      ),
-      h(Toggle, {
-        label: 'Reduce Motion',
-        checked: reduceMotionOn,
-        onChange: (v) => update({ reduceMotion: v ? 'on' : 'off' }),
-      }),
-      h(Toggle, {
-        label: 'Colorblind Palette',
-        checked: settings.palette === 'colorblind',
-        onChange: (v) => update({ palette: v ? 'colorblind' : 'default' }),
-      }),
-      h(Toggle, {
-        label: 'Flap trail',
-        checked: settings.flapTrail ?? false,
-        onChange: (v) => update({ flapTrail: v }),
-      }),
-      h('p', { className: 'settings-note' },
-        'Adds ghost echoes after each flap. May reduce performance on older devices.',
-      ),
-      h(Toggle, {
-        label: 'Camera bob',
-        checked: settings.cameraBob ?? false,
-        onChange: (v) => update({ cameraBob: v }),
-      }),
-      h('p', { className: 'settings-note' },
-        'Subtle camera tilt that follows the bird. Off by default — may cause motion discomfort. Disabled when Reduce Motion is on.',
+
+      // ── Audio ──────────────────────────────────────────
+      h(Section, { title: '🔊 Audio' },
+        h(Toggle, {
+          label: '🔊 Sound',
+          checked: settings.sound,
+          onChange: (v) => update({ sound: v }),
+          tip: 'Flap, score, and death sound effects. iOS silent switch overrides this system-wide.',
+        }),
+        h(Toggle, {
+          label: '🎵 Music',
+          checked: settings.music,
+          onChange: (v) => update({ music: v }),
+          tip: 'Background music. Plays softer on the title screen.',
+        }),
       ),
 
-      // Phase 16 v1.5 — Difficulty preset
-      h('div', { className: 'settings-row settings-pickerrow' },
-        h('span', { className: 'settings-row-label' }, 'Difficulty'),
-        h('div', { className: 'settings-picker', role: 'group', 'aria-label': 'Difficulty preset' },
-          (['easy', 'normal', 'hard'] as const).map((d) =>
-            h(Button, {
-              key: d,
-              className: 'mode-btn' + (settings.difficulty === d ? ' active' : ''),
-              'aria-pressed': settings.difficulty === d,
-              onClick: () => update({ difficulty: d as DifficultyPreset }),
-            }, d.charAt(0).toUpperCase() + d.slice(1)),
+      // ── Accessibility ──────────────────────────────────
+      h(Section, { title: '♿ Accessibility' },
+        h(Toggle, {
+          label: '🌀 Reduce Motion',
+          checked: reduceMotionOn,
+          onChange: (v) => update({ reduceMotion: v ? 'on' : 'off' }),
+          tip: 'Disables screen shake, particles, sky cycle, camera bob, and bird wing-flap animation.',
+        }),
+        h(Toggle, {
+          label: '🎨 Colorblind Palette',
+          checked: settings.palette === 'colorblind',
+          onChange: (v) => update({ palette: v ? 'colorblind' : 'default' }),
+          tip: 'Switches the bird and pipes to a deuteranopia-safe palette.',
+        }),
+      ),
+
+      // ── Visual polish ──────────────────────────────────
+      h(Section, { title: '✨ Visual' },
+        h(Toggle, {
+          label: '👻 Flap trail',
+          checked: settings.flapTrail ?? false,
+          onChange: (v) => update({ flapTrail: v }),
+          tip: 'Adds ghost echoes after each flap. May reduce performance on older devices.',
+        }),
+        h(Toggle, {
+          label: '🎥 Camera bob',
+          checked: settings.cameraBob ?? false,
+          onChange: (v) => update({ cameraBob: v }),
+          tip: 'Subtle camera tilt following the bird. Off by default — may cause motion discomfort. Disabled when Reduce Motion is on.',
+        }),
+        h('div', {
+          className: 'settings-row settings-pickerrow',
+          title: 'Auto picks Low/Medium/High based on your device. Reload required for changes to apply.',
+        },
+          h('span', { className: 'settings-row-label' }, '⚙️ Quality'),
+          h('div', { className: 'settings-picker', role: 'group', 'aria-label': 'Render quality' },
+            (['auto', 'low', 'medium', 'high'] as const).map((q) =>
+              pickerButton(settings.quality, q as QualityTier, q.charAt(0).toUpperCase() + q.slice(1), (id) => update({ quality: id })),
+            ),
           ),
         ),
       ),
-      h('p', { className: 'settings-note' },
-        'Easy = wider gaps + slower scroll. Default for new players. Hard scales the other way.',
-      ),
 
-      // Phase 17 v1.5 — Bird shape (hidden when image is set)
-      settings.birdImage === null ? h('div', { className: 'settings-row settings-pickerrow' },
-        h('span', { className: 'settings-row-label' }, 'Bird shape'),
-        h('div', { className: 'settings-picker settings-picker-shapes', role: 'group', 'aria-label': 'Bird shape' },
-          (
-            [
-              { id: 'sphere',  label: 'Sphere'  },
-              { id: 'cube',    label: 'Cube'    },
-              { id: 'pyramid', label: 'Pyramid' },
-              { id: 'bird',    label: '🐦'      },
-              { id: 'cat',     label: '🐱'      },
-              { id: 'dog',     label: '🐶'      },
-              { id: 'frog',    label: '🐸'      },
-            ] as const
-          ).map(({ id, label }) =>
-            h(Button, {
-              key: id,
-              className: 'mode-btn' + (settings.birdShape === id ? ' active' : ''),
-              'aria-pressed': settings.birdShape === id,
-              'aria-label': id,
-              onClick: () => update({ birdShape: id as BirdShape }),
-            }, label),
+      // ── Gameplay ───────────────────────────────────────
+      h(Section, { title: '🎮 Gameplay' },
+        h('div', {
+          className: 'settings-row settings-pickerrow',
+          title: 'Easy = wider gaps + slower scroll + gentler gravity. Default for new players. Hard scales the other way.',
+        },
+          h('span', { className: 'settings-row-label' }, '🎯 Difficulty'),
+          h('div', { className: 'settings-picker', role: 'group', 'aria-label': 'Difficulty preset' },
+            (['easy', 'normal', 'hard'] as const).map((d) =>
+              pickerButton(settings.difficulty, d as DifficultyPreset, d.charAt(0).toUpperCase() + d.slice(1), (id) => update({ difficulty: id })),
+            ),
           ),
         ),
-      ) : null,
-
-      // Phase 17 v1.5 — Custom bird image
-      h('div', { className: 'settings-row settings-imagerow' },
-        h('span', { className: 'settings-row-label' }, 'Bird image'),
-        h('div', { className: 'settings-imageactions' },
-          h('input', {
-            ref: fileInputRef,
-            type: 'file',
-            accept: 'image/*',
-            'aria-label': 'Upload bird image',
-            onChange: handleFile,
-            className: 'settings-fileinput',
-          }),
-          settings.birdImage !== null
-            ? h(Button, { onClick: clearImage, className: 'settings-clearimage' }, 'Clear')
-            : null,
-        ),
       ),
-      imageError !== null
-        ? h('p', { className: 'settings-note settings-error' }, imageError)
-        : h('p', { className: 'settings-note' },
-            'Upload your favourite picture to use as the bird. Resized to 256×256 and saved locally.'),
+
+      // ── Bird customization ─────────────────────────────
+      h(Section, { title: '🐦 Bird' },
+        settings.birdImage === null ? h('div', {
+          className: 'settings-row settings-pickerrow',
+          title: 'Pick a body shape or an animal emoji. Wings hide for emoji.',
+        },
+          h('span', { className: 'settings-row-label' }, 'Shape'),
+          h('div', { className: 'settings-picker settings-picker-shapes', role: 'group', 'aria-label': 'Bird shape' },
+            (
+              [
+                { id: 'sphere',  label: 'Sphere'  },
+                { id: 'cube',    label: 'Cube'    },
+                { id: 'pyramid', label: 'Pyramid' },
+                { id: 'bird',    label: '🐦'      },
+                { id: 'cat',     label: '🐱'      },
+                { id: 'dog',     label: '🐶'      },
+                { id: 'frog',    label: '🐸'      },
+              ] as const
+            ).map(({ id, label }) =>
+              pickerButton(settings.birdShape, id as BirdShape, label, (i) => update({ birdShape: i })),
+            ),
+          ),
+        ) : null,
+        h('div', {
+          className: 'settings-row settings-imagerow',
+          title: 'Upload your favourite picture to use as the bird. Resized to 256×256 and saved locally.',
+        },
+          h('span', { className: 'settings-row-label' }, '🖼️ Image'),
+          h('div', { className: 'settings-imageactions' },
+            h('input', {
+              ref: fileInputRef,
+              type: 'file',
+              accept: 'image/*',
+              'aria-label': 'Upload bird image',
+              onChange: handleFile,
+              className: 'settings-fileinput',
+            }),
+            settings.birdImage !== null
+              ? h(Button, { onClick: clearImage, className: 'settings-clearimage' }, 'Clear')
+              : null,
+          ),
+        ),
+        imageError !== null
+          ? h('p', { className: 'settings-note settings-error' }, imageError)
+          : null,
+      ),
     ),
   )
 }

@@ -1,4 +1,5 @@
 import type { DifficultyPreset } from '../constants'
+import type { QualityTier } from '../render/createComposer'
 
 const STORAGE_KEY = 'flappy-3d:v1'
 
@@ -24,6 +25,7 @@ export interface SettingsV4 extends SettingsV3 {
   difficulty: DifficultyPreset  // Phase 16 v1.5; default 'easy' (fresh) or 'normal' (existing migrated)
   birdShape: BirdShape           // Phase 17 v1.5; default 'sphere'
   birdImage: string | null       // Phase 17 v1.5; data URL (PNG, ≤256×256), null = use shape
+  quality: QualityTier           // Phase 18 v1.6; default 'auto' (auto-tier by device)
 }
 
 export interface LeaderboardEntry {
@@ -50,6 +52,7 @@ const DEFAULT_SETTINGS_V4: SettingsV4 = {
   difficulty: 'easy',  // fresh-install default — easier for new players (v1.5)
   birdShape: 'sphere',
   birdImage: null,
+  quality: 'auto',     // resolves to low/medium/high based on device capability
 }
 
 interface SaveV1 {

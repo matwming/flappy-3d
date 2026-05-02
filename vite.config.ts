@@ -13,7 +13,7 @@ export default defineConfig({
       workbox: {
         skipWaiting: true,
         clientsClaim: true,
-        globPatterns: ['**/*.{js,css,html,png,svg,ico,mp3}'],
+        globPatterns: ['**/*.{js,css,html,png,svg,ico,mp3,woff2}'],
         maximumFileSizeToCacheInBytes: 5_000_000,
         runtimeCaching: [
           {
