@@ -25,7 +25,12 @@
 
 - [x] **Phase 9: Mode Infrastructure** — gameMachine `mode` context, StorageManager v3 (per-mode leaderboards + v2 migration), Title mode picker UI ✓ (2026-04-29)
 - [x] **Phase 10: Time-Attack Mode** — 60s countdown timer in HUD, mode-aware leaderboard, GameOver shows time-attack PB ✓ (2026-04-29)
-- [x] **Phase 11: Daily-Seed Mode** — Seeded RNG (mulberry32) for deterministic obstacle layout per UTC date, daily attempt tracking, optional share-result ✓ (2026-05-01)
+- [x] **Phase 11: Daily-Seed Mode** — Seeded RNG (mulberry32) for deterministic obstacle layout per UTC date, daily attempt tracking, optional share-result ✓ (2026-05-02)
+
+### v1.3 — Atmosphere
+
+- [ ] **Phase 12: Cloud Parallax Layer** — 4-6 inline-SVG clouds scrolling at 0.5× speed between sky shader and mountains; motion-gate optional (decoration, not animation juice)
+- [ ] **Phase 13: Day/Night Cycle on Sky Shader** — animate sky shader top/bottom colors over time or score; gated by `prefersReducedMotion`
 
 ---
 
@@ -236,6 +241,36 @@ Plans:
 
 ---
 
+## v1.3 Phase Details
+
+### Phase 12: Cloud Parallax Layer
+**Goal**: After Phase 12, the sky has 4-6 inline-SVG clouds scrolling at half the foreground speed, sitting between the sky shader and the mountains. Adds depth without art-asset dependencies. Title screen gets visible benefit immediately (clouds always scroll); gameplay also.
+**Depends on**: Phase 6 (demo-pipes ScrollSystem extension proved the title-state scroll pattern works)
+**Requirements**: ATMOS-01, ATMOS-02
+**Seeds consumed**: SEED-001
+**Success Criteria**:
+  1. 4-6 cloud meshes scroll at 0.5× scrollSpeed in title + playing + dying states; despawn off left, respawn off right (similar to ObstaclePair pool, simpler since no collision)
+  2. Cloud sprites are inline SVG-as-data-URL, baked into the JS bundle (no `public/` HTTP fetch); ≤2KB total cloud-asset overhead in gzipped JS
+  3. Cloud color/opacity tuned for both default (sky-blue background) AND colorblind palettes — desaturated white/gray with `transparent: true`, `depthWrite: false`
+  4. Endless / Time-Attack / Daily modes all show clouds; clouds NOT motion-gated (decoration, not animation juice — same call as Phase 6 demo pipes per BEAUTY-02)
+**Plans**: TBD
+**UI hint**: no (Three.js scene only)
+
+### Phase 13: Day/Night Cycle on Sky Shader
+**Goal**: After Phase 13, the sky shader animates between 4-5 keyframe colors (morning blue → afternoon → sunset → dusk) over a 60-second cycle OR per score milestone. Adds atmospheric progression without changing scene geometry.
+**Depends on**: Phase 12 (clouds in place to catch sunset color)
+**Requirements**: ATMOS-03, ATMOS-04
+**Seeds consumed**: SEED-002
+**Success Criteria**:
+  1. Sky `ShaderMaterial` uniforms `uTopColor` and `uBottomColor` lerp between 4-5 keyframe color pairs; cycle continuously OR step on score milestones (planning-time decision)
+  2. Animation gated by `prefersReducedMotion(storage)`: when reduced-motion, sky holds default morning-blue colors (no cycling)
+  3. Keyframe palette WCAG-friendly with bird (orange/yellow) and pipes (green/cycling); avoid sunsets that wash out into bird color
+  4. Cycle reset on `roundStarted` to keep title screen + first-round visuals consistent
+**Plans**: TBD
+**UI hint**: no (Three.js shader only)
+
+---
+
 ## Requirement Coverage
 
 **v1 requirements:** 62 / 62 mapped, 0 orphaned
@@ -268,7 +303,9 @@ Plans:
 | MODE-01..03 (3) | Phase 9 |
 | MODE-04..06 (3) | Phase 10 |
 | MODE-07..09 (3) | Phase 11 |
+| ATMOS-01..02 (2) | Phase 12 |
+| ATMOS-03..04 (2) | Phase 13 |
 
 ---
 
-*Last updated: 2026-05-01 — v1.2 Modes milestone added (Phases 9-11), v1.1 marked code-complete*
+*Last updated: 2026-05-02 — v1.3 Atmosphere milestone added (Phases 12-13), v1.2 Modes complete*

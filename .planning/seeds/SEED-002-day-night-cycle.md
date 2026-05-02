@@ -1,6 +1,6 @@
 ---
 id: SEED-002
-status: dormant
+status: consumed-in-v1.3
 planted: 2026-04-29
 planted_during: v1.1 Beauty Pass (post-Phase 8)
 trigger_when: "atmospheric / mood / progression-tied visual milestone OR when score-progression rewards become a theme"

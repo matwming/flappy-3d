@@ -23,14 +23,22 @@ Visual polish shipped on top of v1. Three phases (6, 7, 8) all delivered:
 
 12 BEAUTY-* requirements all coded. Final bundle: 196KB / 250KB budget. v1.1.0 tag pending user sign-off (Phase 7 visual issues are non-blocking for tag).
 
-### v1.2 Milestone — Modes (PLANNED 2026-05-01)
+### v1.2 Milestone — Modes (CODE-COMPLETE 2026-05-02)
 
-Time-attack + daily-seed modes layered on top of endless. Three phases (9, 10, 11):
-- Phase 9 — Mode infrastructure: gameMachine `mode` context, StorageManager v3 (per-mode leaderboards + v2 migration), Title mode picker
-- Phase 10 — Time-attack mode (60s countdown, HUD timer, mode-aware leaderboard)
-- Phase 11 — Daily-seed mode (deterministic obstacle layout per UTC date, daily attempts, optional share-result)
+Time-attack + daily-seed modes layered on top of endless. Three phases (9, 10, 11) all delivered:
+- Phase 9 — Mode infrastructure: gameMachine `mode` context, StorageManager v3 (per-mode leaderboards + v2 migration), Title mode picker ✓
+- Phase 10 — Time-attack mode (60s countdown, HUD timer, mode-aware leaderboard) ✓
+- Phase 11 — Daily-seed mode (deterministic obstacle layout per UTC date, daily attempts, Share button) ✓
 
-9 MODE-* requirements (MODE-01..09). Seeds SEED-004 + SEED-005 consumed. Constraints inherited from v1: bundle ≤250KB, motion-gated effects, no new heavy libs.
+9 MODE-* requirements coded. Bundle: 190.48KB / 250KB. Seeds SEED-004 + SEED-005 consumed.
+
+### v1.3 Milestone — Atmosphere (PLANNED 2026-05-02)
+
+Cloud parallax + day/night cycle. Two phases (12, 13):
+- Phase 12 — Cloud parallax layer (4-6 inline-SVG clouds scrolling between sky and mountains)
+- Phase 13 — Day/night cycle on sky shader (animated keyframe lerp, motion-gated)
+
+4 ATMOS-* requirements (ATMOS-01..04). Seeds SEED-001 + SEED-002 consumed. Smallest bundle add of any milestone (~2-3KB). After v1.3, remaining dormant seed: SEED-003 (3D scene polish — bird rim light + wing flap + camera bob).
 
 ### Active
 

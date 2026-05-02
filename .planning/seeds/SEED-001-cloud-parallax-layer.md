@@ -1,6 +1,6 @@
 ---
 id: SEED-001
-status: dormant
+status: consumed-in-v1.3
 planted: 2026-04-29
 planted_during: v1.1 Beauty Pass (post-Phase 8)
 trigger_when: "next visual polish milestone OR atmosphere/depth-focused milestone OR when sprite/SVG art assets become available"

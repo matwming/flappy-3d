@@ -182,6 +182,19 @@ Time-attack + daily-seed modes layered on top of endless. Adds mode picker, per-
 
 ---
 
+## v1.3 — Atmosphere
+
+Cloud parallax + day/night cycle. Two phases (12, 13). Seeds SEED-001 + SEED-002 consumed.
+
+### Sky / clouds (ATMOS)
+
+- [ ] **ATMOS-01**: 4-6 cloud meshes scroll at 0.5× scrollSpeed in all states except `gameOver`/`paused`/`title` (clouds always scroll on title for ambient life); cloud sprites are inline SVG-as-data-URL baked into JS bundle (≤2KB total cloud-asset overhead)
+- [ ] **ATMOS-02**: Cloud meshes use `MeshBasicMaterial` with `transparent: true`, `depthWrite: false`; color tuned for default + colorblind palettes (desaturated white/gray); positioned at z≈-7 (between sky shader at z=-10 and mountains)
+- [ ] **ATMOS-03**: Sky `ShaderMaterial` uniforms `uTopColor` and `uBottomColor` lerp between 4-5 keyframe color pairs over a continuous 60s cycle (or step on score milestones — planning-time decision)
+- [ ] **ATMOS-04**: Sky color animation gated by `prefersReducedMotion(storage)`: when reduced-motion, sky holds default morning-blue colors (no animation); cycle resets on `roundStarted`
+
+---
+
 ## v2 / Deferred
 
 These are valuable but deliberately out of v1 scope. Add post-launch.
@@ -313,3 +326,7 @@ Populated by `gsd-roadmapper` on 2026-04-28. Every v1 REQ-ID maps to exactly one
 | MODE-07 | Phase 11 | Pending |
 | MODE-08 | Phase 11 | Pending |
 | MODE-09 | Phase 11 | Pending |
+| ATMOS-01 | Phase 12 | Pending |
+| ATMOS-02 | Phase 12 | Pending |
+| ATMOS-03 | Phase 13 | Pending |
+| ATMOS-04 | Phase 13 | Pending |
