@@ -30,7 +30,7 @@
 ### v1.3 — Atmosphere
 
 - [x] **Phase 12: Cloud Parallax Layer** — 5 inline-SVG cloud sprites at z=-7 scrolling at 0.5× speed, state-gated (title/playing/dying), reset on roundStarted ✓ (2026-05-02; 198.66KB gzip)
-- [ ] **Phase 13: Day/Night Cycle on Sky Shader** — animate sky shader top/bottom colors over time or score; gated by `prefersReducedMotion`
+- [x] **Phase 13: Day/Night Cycle on Sky Shader** — animate sky shader top/bottom colors over time or score; gated by `prefersReducedMotion` (completed 2026-05-02)
 
 ---
 

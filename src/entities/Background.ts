@@ -8,12 +8,10 @@ import {
   MeshBasicMaterial,
   CylinderGeometry,
   ConeGeometry,
-  Color,
   Scene,
 } from 'three'
+import { SKY_KEYFRAMES, SKY_CYCLE_DURATION_S } from '../constants'
 
-const SKY_TOP_COLOR = new Color(0xd0eeff)
-const SKY_BOTTOM_COLOR = new Color(0x87ceeb)
 const MOUNTAIN_COLOR = 0x4a5568
 const TREE_FOLIAGE_COLOR = 0x2d5a27
 const TREE_TRUNK_COLOR = 0x4a3527
@@ -39,6 +37,7 @@ export class Background {
   private skyMesh: Mesh<PlaneGeometry, ShaderMaterial>
   private mountainGroup: Group
   private treeGroup: Group
+  private cycleElapsed: number = 0
 
   constructor(scene: Scene) {
     this.skyMesh = this.createSky()
@@ -58,12 +57,34 @@ export class Background {
     if (this.treeGroup.position.x < -20) this.treeGroup.position.x += 20
   }
 
+  // ATMOS-03 / ATMOS-04: lerp sky shader colors over a continuous cycle.
+  // Skips when reduced-motion is active — sky holds whatever color it last had.
+  cycleSky(dt: number, isReducedMotion: boolean): void {
+    if (isReducedMotion) return
+    this.cycleElapsed = (this.cycleElapsed + dt) % SKY_CYCLE_DURATION_S
+    const segmentDuration = SKY_CYCLE_DURATION_S / SKY_KEYFRAMES.length
+    const idx = Math.floor(this.cycleElapsed / segmentDuration)
+    const t = (this.cycleElapsed % segmentDuration) / segmentDuration
+    const cur = SKY_KEYFRAMES[idx]!
+    const nxt = SKY_KEYFRAMES[(idx + 1) % SKY_KEYFRAMES.length]!
+    this.skyMesh.material.uniforms.uTopColor!.value.lerpColors(cur.top, nxt.top, t)
+    this.skyMesh.material.uniforms.uBottomColor!.value.lerpColors(cur.bottom, nxt.bottom, t)
+  }
+
+  resetSkyCycle(): void {
+    this.cycleElapsed = 0
+    const k0 = SKY_KEYFRAMES[0]!
+    this.skyMesh.material.uniforms.uTopColor!.value.copy(k0.top)
+    this.skyMesh.material.uniforms.uBottomColor!.value.copy(k0.bottom)
+  }
+
   private createSky(): Mesh<PlaneGeometry, ShaderMaterial> {
     const geometry = new PlaneGeometry(40, 30)
+    const k0 = SKY_KEYFRAMES[0]!
     const material = new ShaderMaterial({
       uniforms: {
-        uTopColor: { value: SKY_TOP_COLOR },
-        uBottomColor: { value: SKY_BOTTOM_COLOR },
+        uTopColor: { value: k0.top.clone() },
+        uBottomColor: { value: k0.bottom.clone() },
       },
       vertexShader: SKY_VERTEX,
       fragmentShader: SKY_FRAGMENT,

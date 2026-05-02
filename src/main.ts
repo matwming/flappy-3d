@@ -140,6 +140,8 @@ if (!WebGL.isWebGL2Available()) {
     },
   })
   loop.add({ step: (dt: number) => bird.stepGhosts(dt) })
+  // Phase 13: animate sky shader colors over a 60s cycle (motion-gated)
+  loop.add({ step: (dt: number) => background.cycleSky(dt, prefersReducedMotion(storage)) })
   loop.add({
     step: (dt: number) => {
       const s = actor.getSnapshot().value
@@ -206,6 +208,7 @@ if (!WebGL.isWebGL2Available()) {
     spawner.resetColorIndex()
     timer.reset()
     clouds.reset()
+    background.resetSkyCycle()
 
     const currentMode = actor.getSnapshot().context.mode
     if (currentMode === 'daily') {

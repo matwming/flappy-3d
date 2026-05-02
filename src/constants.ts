@@ -1,3 +1,15 @@
+import { Color } from 'three'
+
+// Phase 13 — day/night cycle keyframes (ATMOS-03)
+// 4 keyframes evenly spaced at 0s / 15s / 30s / 45s; loops back to 0 at 60s
+export const SKY_KEYFRAMES = [
+  { top: new Color(0x7ec8e3), bottom: new Color(0xbce6f0) }, // 0s  — morning (current default)
+  { top: new Color(0x5dabd0), bottom: new Color(0xa8d5e8) }, // 15s — midday
+  { top: new Color(0xff9966), bottom: new Color(0xffd6b3) }, // 30s — sunset
+  { top: new Color(0x3a4a8c), bottom: new Color(0x7a5a9c) }, // 45s — dusk
+] as const
+export const SKY_CYCLE_DURATION_S = 60
+
 export const GRAVITY = -25
 export const FLAP_IMPULSE = 8.5
 export const MAX_FALL_SPEED = -12
