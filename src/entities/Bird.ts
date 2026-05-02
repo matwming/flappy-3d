@@ -10,7 +10,7 @@ import {
   MeshBasicMaterial,
   Material,
   Texture,
-  TextureLoader,
+  CanvasTexture,
   SRGBColorSpace,
   Vector3,
   Box3,
@@ -23,6 +23,14 @@ const GHOST_COUNT = 3
 const GHOST_OPACITIES = [0.6, 0.4, 0.2] as const
 const GHOST_SCALES = [0.95, 0.90, 0.85] as const
 const GHOST_FADE_SPEED = 1 / 0.18 // opacity → 0 in 180ms
+
+const GEOMETRIC_SHAPES: ReadonlySet<BirdShape> = new Set(['sphere', 'cube', 'pyramid'])
+const EMOJI_FOR_SHAPE: Record<string, string> = {
+  bird: '🐦',
+  cat:  '🐱',
+  dog:  '🐶',
+  frog: '🐸',
+}
 
 export class Bird {
   readonly mesh: Mesh<BufferGeometry, Material>
@@ -82,55 +90,87 @@ export class Bird {
    * this after assigning bird.mesh.material = birdMaterial. */
   setBaseMaterial(mat: Material): void {
     this.baseMaterial = mat
-    if (this.currentImage === null) {
+    if (this.currentImage === null && GEOMETRIC_SHAPES.has(this.currentShape)) {
       this.mesh.material = mat
     }
   }
 
-  /** Phase 17: swap body geometry to a different shape preset. No-op if
-   * an image is currently overriding the body. Default scale (squash-stretch)
-   * is preserved. */
+  /** Swap body to a different shape preset. Geometric shapes use the toon
+   * (rim-lit) base material; emoji shapes use a CanvasTexture-on-plane.
+   * No-op if a custom uploaded image is currently overriding the body. */
   setShape(shape: BirdShape): void {
     this.currentShape = shape
-    if (this.currentImage !== null) return  // image-mode wins; will apply on clear
-    this.applyShapeGeometry()
+    if (this.currentImage !== null) return  // uploaded image wins; will apply on clear
+    this.applyShape()
   }
 
-  private applyShapeGeometry(): void {
+  private applyShape(): void {
     this.mesh.geometry.dispose()
-    this.mesh.geometry = createShapeGeometry(this.currentShape)
-    this.mesh.scale.set(1, 0.65, 0.8)  // restore default squash silhouette
+    this.disposeImageResources()
+
+    if (GEOMETRIC_SHAPES.has(this.currentShape)) {
+      this.mesh.geometry = createShapeGeometry(this.currentShape)
+      this.mesh.scale.set(1, 0.65, 0.8)  // squash silhouette
+      if (this.baseMaterial !== null) this.mesh.material = this.baseMaterial
+      this.leftWing.visible = true
+      this.rightWing.visible = true
+    } else {
+      // Emoji animal preset → flat plane with rendered emoji texture
+      const emoji = EMOJI_FOR_SHAPE[this.currentShape]
+      if (emoji === undefined) return
+      this.mesh.geometry = new PlaneGeometry(0.9, 0.9)
+      this.mesh.scale.set(1, 1, 1)
+      const tex = createEmojiCanvasTexture(emoji, 256)
+      this.imageTexture = tex
+      this.imageMaterial = new MeshBasicMaterial({ map: tex, transparent: true })
+      this.mesh.material = this.imageMaterial
+      this.leftWing.visible = false
+      this.rightWing.visible = false
+    }
   }
 
-  /** Phase 17: when dataURL is provided, replace body with a textured plane
-   * (so the image displays crisply); when null, restore selected shape +
-   * toon material. Wings hide in image-mode (they make less sense framing
-   * a personal photo). */
+  /** Apply a user-uploaded image as the body texture. Pass null to clear
+   * (restores the currently selected shape). */
   setImage(dataURL: string | null): void {
     this.currentImage = dataURL
     if (dataURL === null) {
-      this.applyShapeGeometry()
-      if (this.baseMaterial !== null) this.mesh.material = this.baseMaterial
-      this.disposeImageResources()
-      this.leftWing.visible = true
-      this.rightWing.visible = true
+      this.applyShape()
       return
     }
 
-    // Image mode: PlaneGeometry + MeshBasicMaterial(map)
+    // Image mode — flat plane with the uploaded image as a CanvasTexture.
+    // Why CanvasTexture (not TextureLoader): TextureLoader.load is async and
+    // returns a Texture with no image yet — on iOS Safari we observed the
+    // texture sometimes never finished uploading from a data URL. Drawing
+    // through HTMLImageElement → canvas → CanvasTexture is more robust.
     this.mesh.geometry.dispose()
-    this.mesh.geometry = new PlaneGeometry(0.8, 0.8)
-    this.mesh.scale.set(1, 1, 1)  // no squash on a textured plane
-
+    this.mesh.geometry = new PlaneGeometry(0.9, 0.9)
+    this.mesh.scale.set(1, 1, 1)
     this.disposeImageResources()
-    const tex = new TextureLoader().load(dataURL)
+    this.leftWing.visible = false
+    this.rightWing.visible = false
+
+    const canvas = document.createElement('canvas')
+    canvas.width = canvas.height = 256
+    const ctx = canvas.getContext('2d')
+    if (ctx === null) return
+    // Show a transparent placeholder until the image loads
+    const tex = new CanvasTexture(canvas)
     tex.colorSpace = SRGBColorSpace
     this.imageTexture = tex
     this.imageMaterial = new MeshBasicMaterial({ map: tex, transparent: true })
     this.mesh.material = this.imageMaterial
 
-    this.leftWing.visible = false
-    this.rightWing.visible = false
+    const img = new Image()
+    img.onload = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+      tex.needsUpdate = true
+    }
+    img.onerror = () => {
+      // Leave the placeholder transparent if decode fails
+    }
+    img.src = dataURL
   }
 
   private disposeImageResources(): void {
@@ -208,5 +248,24 @@ function createShapeGeometry(shape: BirdShape): BufferGeometry {
     case 'sphere':  return new SphereGeometry(0.35, 16, 10)
     case 'cube':    return new BoxGeometry(0.55, 0.55, 0.55)
     case 'pyramid': return new ConeGeometry(0.4, 0.7, 4)  // 4-sided cone = pyramid
+    default:        return new SphereGeometry(0.35, 16, 10)  // fallback for emoji shapes (caller uses plane)
   }
+}
+
+/** Render a single emoji centered on a transparent square canvas, return as
+ * a CanvasTexture for use as a Three.js material map. Synchronous — the canvas
+ * exists immediately, so the GPU upload happens on next render. */
+function createEmojiCanvasTexture(emoji: string, size: number): CanvasTexture {
+  const canvas = document.createElement('canvas')
+  canvas.width = canvas.height = size
+  const ctx = canvas.getContext('2d')
+  if (ctx !== null) {
+    ctx.font = `${size * 0.85}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+    ctx.fillText(emoji, size / 2, size / 2)
+  }
+  const tex = new CanvasTexture(canvas)
+  tex.colorSpace = SRGBColorSpace
+  return tex
 }

@@ -47,11 +47,12 @@ export interface DifficultyMultiplier {
   gap: number          // multiplied into BASE/MIN_GAP_HEIGHT (>1 = wider gap = easier)
   scroll: number       // multiplied into BASE/MAX_SCROLL_SPEED (<1 = slower = easier)
   spawn: number        // multiplied into BASE/MIN_SPAWN_INTERVAL (>1 = longer interval = easier)
+  gravity: number      // multiplied into GRAVITY (<1 = gentler fall = easier)
 }
 export const DIFFICULTY_MULTIPLIERS: Record<DifficultyPreset, DifficultyMultiplier> = {
-  easy:   { gap: 1.25, scroll: 0.85, spawn: 1.20 },
-  normal: { gap: 1.00, scroll: 1.00, spawn: 1.00 },
-  hard:   { gap: 0.85, scroll: 1.10, spawn: 0.90 },
+  easy:   { gap: 1.25, scroll: 0.85, spawn: 1.20, gravity: 0.75 },
+  normal: { gap: 1.00, scroll: 1.00, spawn: 1.00, gravity: 1.00 },
+  hard:   { gap: 0.85, scroll: 1.10, spawn: 0.90, gravity: 1.10 },
 }
 
 // Phase 7 — pipe color cycling (BEAUTY-08, D-14, D-18)

@@ -5,7 +5,7 @@ const STORAGE_KEY = 'flappy-3d:v1'
 // GameMode is duplicated here so StorageManager has zero dependency on src/machine/.
 // TypeScript structural typing makes this compatible with gameMachine.ts's GameMode.
 export type GameMode = 'endless' | 'timeAttack' | 'daily'
-export type BirdShape = 'sphere' | 'cube' | 'pyramid'
+export type BirdShape = 'sphere' | 'cube' | 'pyramid' | 'bird' | 'cat' | 'dog' | 'frog'
 
 export interface SettingsV2 {
   sound: boolean

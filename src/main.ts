@@ -79,7 +79,7 @@ if (!WebGL.isWebGL2Available()) {
 
   const loop = new GameLoop(renderer, scene, camera)
   const input = new InputManager(canvas)
-  const physics = new PhysicsSystem(bird, actor)
+  const physics = new PhysicsSystem(bird, actor, storage)
   const scrollSystem = new ScrollSystem(obstaclePool, actor, background, storage)
   const spawner = new ObstacleSpawner(obstaclePool, actor, storage)
   const scoreSystem = new ScoreSystem(obstaclePool, actor)

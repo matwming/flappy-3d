@@ -1,18 +1,21 @@
 import type { Actor } from 'xstate'
 import type { gameMachine } from '../machine/gameMachine'
-import { GRAVITY, FLAP_IMPULSE, MAX_FALL_SPEED, WORLD_CEILING_Y } from '../constants'
+import { GRAVITY, FLAP_IMPULSE, MAX_FALL_SPEED, WORLD_CEILING_Y, DIFFICULTY_MULTIPLIERS } from '../constants'
 import type { Bird } from '../entities/Bird'
+import type { StorageManager } from '../storage/StorageManager'
 
 type GameActor = Actor<typeof gameMachine>
 
 export class PhysicsSystem {
   private bird: Bird
   private actor: GameActor
+  private storage: StorageManager | null
   private flapQueued = false
 
-  constructor(bird: Bird, actor: GameActor) {
+  constructor(bird: Bird, actor: GameActor, storage: StorageManager | null = null) {
     this.bird = bird
     this.actor = actor
+    this.storage = storage
   }
 
   queueFlap(): void {
@@ -39,10 +42,14 @@ export class PhysicsSystem {
       this.flapQueued = false
     }
 
-    this.bird.velocity.y += GRAVITY * dt
+    const preset = this.storage?.getSettings().difficulty ?? 'normal'
+    const gravityMul = DIFFICULTY_MULTIPLIERS[preset].gravity
+    this.bird.velocity.y += GRAVITY * gravityMul * dt
 
-    if (this.bird.velocity.y < MAX_FALL_SPEED) {
-      this.bird.velocity.y = MAX_FALL_SPEED
+    // Scale max fall speed too so the gentler gravity actually shows
+    const maxFall = MAX_FALL_SPEED * gravityMul
+    if (this.bird.velocity.y < maxFall) {
+      this.bird.velocity.y = maxFall
     }
 
     this.bird.position.y += this.bird.velocity.y * dt

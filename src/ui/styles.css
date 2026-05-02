@@ -350,6 +350,9 @@ dialog.settings-modal::backdrop {
   flex-wrap: wrap;
 }
 .settings-picker .mode-btn { flex: 1; min-width: 0; }
+/* Bird-shape picker has 7 options including emoji animals — wrap so each
+   row has 3-4 evenly-sized buttons rather than a single 7-wide line. */
+.settings-picker-shapes .mode-btn { flex: 1 1 calc(33% - 6px); padding: 8px 4px; font-size: 1.1rem; }
 .settings-imagerow .settings-imageactions {
   display: flex;
   gap: 8px;

@@ -67,49 +67,47 @@ export function SettingsModal({
     (settings.reduceMotion === 'auto' &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches)
 
-  function handleFile(e: Event) {
+  async function handleFile(e: Event) {
     setImageError(null)
     const target = e.target as HTMLInputElement
     const file = target.files?.[0]
     if (!file) return
     if (!file.type.startsWith('image/')) {
       setImageError('Please pick an image file.')
+      target.value = ''
       return
     }
 
-    // Resize to 256×256 then store as base64 PNG to keep localStorage small
-    const reader = new FileReader()
-    reader.onload = () => {
-      const dataUrl = reader.result
-      if (typeof dataUrl !== 'string') return
-      const img = new Image()
-      img.onload = () => {
-        const canvas = document.createElement('canvas')
-        canvas.width = 256
-        canvas.height = 256
-        const ctx = canvas.getContext('2d')
-        if (!ctx) {
-          setImageError("Couldn't read the image. Try another file.")
-          return
-        }
-        // Cover-fit so the image fills the square
-        const ratio = Math.max(canvas.width / img.width, canvas.height / img.height)
-        const w = img.width * ratio
-        const hh = img.height * ratio
-        ctx.drawImage(img, (canvas.width - w) / 2, (canvas.height - hh) / 2, w, hh)
-        const resized = canvas.toDataURL('image/png')
-        if (resized.length > MAX_IMAGE_BYTES) {
-          setImageError('Image is too large after resize — pick something simpler.')
-          return
-        }
-        update({ birdImage: resized })
+    // createImageBitmap accepts a File/Blob directly and decodes natively,
+    // dodging HTMLImageElement's flaky onerror behaviour with data URLs.
+    // Available on all modern browsers + iOS Safari 15+.
+    try {
+      const bitmap = await createImageBitmap(file)
+      const canvas = document.createElement('canvas')
+      canvas.width = 256
+      canvas.height = 256
+      const ctx = canvas.getContext('2d')
+      if (ctx === null) {
+        setImageError("Couldn't read the image. Try another file.")
+        return
       }
-      img.onerror = () => setImageError("Couldn't decode the image.")
-      img.src = dataUrl
+      // Cover-fit so the image fills the square
+      const ratio = Math.max(canvas.width / bitmap.width, canvas.height / bitmap.height)
+      const w = bitmap.width * ratio
+      const hh = bitmap.height * ratio
+      ctx.drawImage(bitmap, (canvas.width - w) / 2, (canvas.height - hh) / 2, w, hh)
+      bitmap.close()
+      const resized = canvas.toDataURL('image/png')
+      if (resized.length > MAX_IMAGE_BYTES) {
+        setImageError('Image is too large after resize — pick something simpler.')
+        return
+      }
+      update({ birdImage: resized })
+    } catch {
+      setImageError("Couldn't decode the image. Try another file.")
+    } finally {
+      target.value = ''  // allow re-uploading the same file later
     }
-    reader.onerror = () => setImageError("Couldn't read the file.")
-    reader.readAsDataURL(file)
-    target.value = ''  // allow re-uploading the same file later
   }
 
   function clearImage() {
@@ -191,14 +189,25 @@ export function SettingsModal({
       // Phase 17 v1.5 — Bird shape (hidden when image is set)
       settings.birdImage === null ? h('div', { className: 'settings-row settings-pickerrow' },
         h('span', { className: 'settings-row-label' }, 'Bird shape'),
-        h('div', { className: 'settings-picker', role: 'group', 'aria-label': 'Bird shape' },
-          (['sphere', 'cube', 'pyramid'] as const).map((s) =>
+        h('div', { className: 'settings-picker settings-picker-shapes', role: 'group', 'aria-label': 'Bird shape' },
+          (
+            [
+              { id: 'sphere',  label: 'Sphere'  },
+              { id: 'cube',    label: 'Cube'    },
+              { id: 'pyramid', label: 'Pyramid' },
+              { id: 'bird',    label: '🐦'      },
+              { id: 'cat',     label: '🐱'      },
+              { id: 'dog',     label: '🐶'      },
+              { id: 'frog',    label: '🐸'      },
+            ] as const
+          ).map(({ id, label }) =>
             h(Button, {
-              key: s,
-              className: 'mode-btn' + (settings.birdShape === s ? ' active' : ''),
-              'aria-pressed': settings.birdShape === s,
-              onClick: () => update({ birdShape: s as BirdShape }),
-            }, s.charAt(0).toUpperCase() + s.slice(1)),
+              key: id,
+              className: 'mode-btn' + (settings.birdShape === id ? ' active' : ''),
+              'aria-pressed': settings.birdShape === id,
+              'aria-label': id,
+              onClick: () => update({ birdShape: id as BirdShape }),
+            }, label),
           ),
         ),
       ) : null,
