@@ -15,7 +15,7 @@ test('Phase 7 runtime — capture console errors + score popup spawn', async ({ 
     }
   })
 
-  await page.goto('https://matwming.github.io/flappy-3d/', { waitUntil: 'networkidle' })
+  await page.goto('https://quietbuildlab.github.io/flappy-3d/', { waitUntil: 'networkidle' })
 
   // Wait for game to be ready
   await page.waitForTimeout(1500)

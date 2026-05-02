@@ -1,6 +1,6 @@
 # Flappy 3D — Ship Summary
 
-**Live URL:** https://matwming.github.io/flappy-3d/
+**Live URL:** https://quietbuildlab.github.io/flappy-3d/
 **Code-complete:** v1.0 + v1.1 + v1.2 + v1.3 + v1.4 — 2026-05-02
 **Bundle:** 199.43 KB gzip (50 KB under 250 KB budget)
 **Lighthouse PWA:** 1.00 / 1.00 (last measured at v1.1)

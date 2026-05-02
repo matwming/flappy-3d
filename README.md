@@ -89,7 +89,7 @@ Run these checks before tagging a release. Each maps to a Phase 5 Success Criter
 
 ### SC-1: Memory stability (PERF-05)
 
-1. Open https://matwming.github.io/flappy-3d/ in Chrome desktop (DEV build: `npm run dev`)
+1. Open https://quietbuildlab.github.io/flappy-3d/ in Chrome desktop (DEV build: `npm run dev`)
 2. Open DevTools → Console
 3. Play 10 death + restart cycles
 4. Observe `[mem probe] round=N geometries=X textures=Y` log lines (DEV build only)
@@ -99,7 +99,7 @@ Alternate (any browser): DevTools → Memory → take Heap Snapshot before and a
 
 ### SC-2: iOS audio — real device (AUD-01, AUD-02)
 
-1. Open https://matwming.github.io/flappy-3d/ in Safari on a real iOS device (iOS 16+)
+1. Open https://quietbuildlab.github.io/flappy-3d/ in Safari on a real iOS device (iOS 16+)
 2. Tap the screen to start a game
 3. Confirm flap, score, and death sounds play immediately (not synth oscillators)
 4. In Safari Web Inspector (Mac → Develop menu → your device), run: `Howler.ctx.state` — expected: `"running"`
@@ -120,7 +120,7 @@ Alternate (any browser): DevTools → Memory → take Heap Snapshot before and a
 
 ### SC-4: No stopped-actor warnings, no listener accumulation
 
-1. Open https://matwming.github.io/flappy-3d/ in Chrome
+1. Open https://quietbuildlab.github.io/flappy-3d/ in Chrome
 2. Open DevTools Console (filter: Warnings + Errors)
 3. Play 20 death + restart cycles
 4. **Pass:** Zero "Event sent to stopped actor" warnings

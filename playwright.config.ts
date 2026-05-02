@@ -7,7 +7,7 @@ export default defineConfig({
   retries: 0,
   reporter: 'list',
   use: {
-    baseURL: 'https://matwming.github.io/flappy-3d/',
+    baseURL: 'https://quietbuildlab.github.io/flappy-3d/',
     trace: 'off',
   },
   projects: [

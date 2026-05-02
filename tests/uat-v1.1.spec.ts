@@ -1,6 +1,6 @@
 import { test, expect, Page } from '@playwright/test'
 
-const URL = 'https://matwming.github.io/flappy-3d/'
+const URL = 'https://quietbuildlab.github.io/flappy-3d/'
 
 // Helper: dispatch a flap (pointerup on canvas → InputManager).
 async function flap(page: Page) {
