@@ -195,6 +195,18 @@ Cloud parallax + day/night cycle. Two phases (12, 13). Seeds SEED-001 + SEED-002
 
 ---
 
+## v1.4 — Polish (3D scene)
+
+Final character + camera polish. Consumes SEED-003. Two phases (14, 15).
+
+### Bird + camera (POLISH)
+
+- [ ] **POLISH-01**: Bird toon material extends with rim-light contribution (subtle edge glow); strength configurable via uniform; preserves WCAG-AA contrast against sky in default + colorblind palettes
+- [ ] **POLISH-02**: Bird mesh gains 2 small wing geometries (Plane or thin Box) as children; on each `FLAP`, wings rotate via GSAP timeline (~80ms); motion-gated via `prefersReducedMotion(storage)`
+- [ ] **POLISH-03**: New "Camera bob" Settings toggle (default OFF) — when ON AND `prefersReducedMotion(storage)` is false, camera y-offset eases toward `bird.velocity.y * factor` per frame; resets to original on `roundStarted`
+
+---
+
 ## v2 / Deferred
 
 These are valuable but deliberately out of v1 scope. Add post-launch.
@@ -330,3 +342,6 @@ Populated by `gsd-roadmapper` on 2026-04-28. Every v1 REQ-ID maps to exactly one
 | ATMOS-02 | Phase 12 | Pending |
 | ATMOS-03 | Phase 13 | Pending |
 | ATMOS-04 | Phase 13 | Pending |
+| POLISH-01 | Phase 14 | Pending |
+| POLISH-02 | Phase 14 | Pending |
+| POLISH-03 | Phase 15 | Pending |

@@ -32,13 +32,21 @@ Time-attack + daily-seed modes layered on top of endless. Three phases (9, 10, 1
 
 9 MODE-* requirements coded. Bundle: 190.48KB / 250KB. Seeds SEED-004 + SEED-005 consumed.
 
-### v1.3 Milestone — Atmosphere (PLANNED 2026-05-02)
+### v1.3 Milestone — Atmosphere (CODE-COMPLETE 2026-05-02)
 
-Cloud parallax + day/night cycle. Two phases (12, 13):
-- Phase 12 — Cloud parallax layer (4-6 inline-SVG clouds scrolling between sky and mountains)
-- Phase 13 — Day/night cycle on sky shader (animated keyframe lerp, motion-gated)
+Cloud parallax + day/night cycle. Two phases (12, 13) both shipped:
+- Phase 12 — Cloud parallax layer (5 inline-SVG clouds at z=-7, 0.5× scroll) ✓
+- Phase 13 — Day/night cycle on sky shader (60s keyframe lerp, motion-gated) ✓
 
-4 ATMOS-* requirements (ATMOS-01..04). Seeds SEED-001 + SEED-002 consumed. Smallest bundle add of any milestone (~2-3KB). After v1.3, remaining dormant seed: SEED-003 (3D scene polish — bird rim light + wing flap + camera bob).
+4 ATMOS-* requirements coded. Bundle: 198.90KB / 250KB. Seeds SEED-001 + SEED-002 consumed.
+
+### v1.4 Milestone — Polish (PLANNED 2026-05-02)
+
+Final character + camera polish. Consumes the last dormant seed (SEED-003). Two phases (14, 15):
+- Phase 14 — Bird Polish: rim lighting on toon material + animated wing meshes (rotation tween on flap)
+- Phase 15 — Camera Depth (opt-in): subtle camera y-bob following bird velocity, double-gated (Settings toggle default OFF + prefersReducedMotion)
+
+3 POLISH-* requirements (POLISH-01..03). After v1.4, the seed pool is fully consumed (5 of 5 seeds shipped across v1.2/v1.3/v1.4). Future milestones will need new ideation, not seed-driven planning.
 
 ### Active
 

@@ -1,6 +1,6 @@
 ---
 id: SEED-003
-status: dormant
+status: consumed-in-v1.4
 planted: 2026-04-29
 planted_during: v1.1 Beauty Pass (post-Phase 8)
 trigger_when: "3D scene polish milestone OR character-animation milestone OR when willing to take mobile-perf risk for visual upgrades"

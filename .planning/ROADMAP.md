@@ -32,6 +32,11 @@
 - [x] **Phase 12: Cloud Parallax Layer** — 5 inline-SVG cloud sprites at z=-7 scrolling at 0.5× speed, state-gated (title/playing/dying), reset on roundStarted ✓ (2026-05-02; 198.66KB gzip)
 - [x] **Phase 13: Day/Night Cycle on Sky Shader** — animate sky shader top/bottom colors over time or score; gated by `prefersReducedMotion` (completed 2026-05-02)
 
+### v1.4 — Polish (3D scene)
+
+- [ ] **Phase 14: Bird Polish** — rim lighting on toon material + animated wing meshes (rotation tween on flap)
+- [ ] **Phase 15: Camera Depth (opt-in)** — subtle camera y-bob following bird velocity; double-gated behind new Settings toggle (default OFF) + `prefersReducedMotion`
+
 ---
 
 ## Phase Details
@@ -271,6 +276,36 @@ Plans:
 
 ---
 
+## v1.4 Phase Details
+
+### Phase 14: Bird Polish
+**Goal**: After Phase 14, the bird looks more characterful — rim lighting picks up the silhouette against the sky, and small wing meshes animate on each flap. Pure additive on top of v1.3.
+**Depends on**: Phase 3 (toon material), Phase 6 (GSAP squashStretch pattern)
+**Requirements**: POLISH-01, POLISH-02
+**Seeds consumed**: SEED-003 (partial — A + B)
+**Success Criteria**:
+  1. Bird toon material has a rim-light fragment shader contribution (subtle edge glow); strength configurable via uniform; preserves WCAG-AA contrast against sky in default + colorblind palettes
+  2. Bird mesh gains 2 small wing geometries (Plane or thin Box) as children; positioned at the bird's flanks
+  3. On each `FLAP`, wings rotate via GSAP timeline (~80ms, similar to squashStretch); motion-gated via `prefersReducedMotion(storage)`
+  4. No mobile-perf regression: 60fps maintained on iPhone 12 / Pixel 6 class device
+**Plans**: TBD
+**UI hint**: no (Three.js scene + shader)
+
+### Phase 15: Camera Depth (opt-in)
+**Goal**: After Phase 15, players can opt into a subtle camera y-bob that follows bird velocity, adding parallax depth to the playfield. Default OFF; double-gated for motion sensitivity.
+**Depends on**: Phase 14 (bird polish lands first)
+**Requirements**: POLISH-03
+**Seeds consumed**: SEED-003 (final — C)
+**Success Criteria**:
+  1. New Settings toggle "Camera bob" (default OFF); persists in StorageManager v3 settings
+  2. When toggle ON AND `prefersReducedMotion(storage)` is false, camera y-offset interpolates toward `bird.velocity.y * factor` (e.g., 0.05) per frame; smooth easing
+  3. Camera position resets to original on `roundStarted` (no lingering offset between rounds)
+  4. No mobile-perf regression on iPhone 12 / Pixel 6
+**Plans**: TBD
+**UI hint**: yes (new Settings toggle row)
+
+---
+
 ## Requirement Coverage
 
 **v1 requirements:** 62 / 62 mapped, 0 orphaned
@@ -305,7 +340,9 @@ Plans:
 | MODE-07..09 (3) | Phase 11 |
 | ATMOS-01..02 (2) | Phase 12 |
 | ATMOS-03..04 (2) | Phase 13 |
+| POLISH-01..02 (2) | Phase 14 |
+| POLISH-03 (1) | Phase 15 |
 
 ---
 
-*Last updated: 2026-05-02 — v1.3 Atmosphere milestone added (Phases 12-13), v1.2 Modes complete*
+*Last updated: 2026-05-02 — v1.4 Polish milestone added (Phases 14-15), consumes final SEED-003*
