@@ -20,16 +20,14 @@ async function openSettings(page: import('@playwright/test').Page) {
 test.describe('Flappy 3D — v1.5 UAT (Approachability + Customization)', () => {
   test('Phase 16 — Difficulty defaults to Easy on fresh install (UI state)', async ({ page }) => {
     await openSettings(page)
-    // StorageManager writes lazily — fresh install has nothing in localStorage
-    // until a setting changes. Verify the UI defaults instead: the "Easy"
-    // button should be aria-pressed="true".
-    const easyBtn = page.locator('.settings-row').filter({ hasText: 'Difficulty' }).locator('button:has-text("Easy")')
+    const easyBtn = page.locator('.settings-picker[aria-label="Difficulty preset"]').locator('button:has-text("Easy")')
     await expect(easyBtn).toHaveAttribute('aria-pressed', 'true')
   })
 
   test('Phase 16 — Difficulty toggle persists Hard preset', async ({ page }) => {
     await openSettings(page)
-    await page.locator('.settings-picker').first().locator('button:has-text("Hard")').evaluate((el) => (el as HTMLButtonElement).click())
+    await page.locator('.settings-picker[aria-label="Difficulty preset"]').locator('button:has-text("Hard")')
+      .evaluate((el) => (el as HTMLButtonElement).click())
     await page.waitForTimeout(120)
     const persisted = await page.evaluate(() => {
       const raw = localStorage.getItem('flappy-3d:v1')
@@ -40,16 +38,15 @@ test.describe('Flappy 3D — v1.5 UAT (Approachability + Customization)', () => 
 
   test('Phase 17 — Bird shape defaults to sphere (UI state)', async ({ page }) => {
     await openSettings(page)
-    const sphereBtn = page.locator('.settings-row').filter({ hasText: 'Bird shape' }).locator('button:has-text("Sphere")')
+    const sphereBtn = page.locator('.settings-picker-shapes').locator('button:has-text("Sphere")')
     await expect(sphereBtn).toHaveAttribute('aria-pressed', 'true')
   })
 
   test('Phase 17 — Bird shape persists when changed to Cube', async ({ page }) => {
     await openSettings(page)
-    // Find the Bird shape picker row by its label text and click "Cube"
-    const shapeRow = page.locator('.settings-row').filter({ hasText: 'Bird shape' }).first()
-    await expect(shapeRow).toBeVisible()
-    await shapeRow.locator('button:has-text("Cube")').evaluate((el) => (el as HTMLButtonElement).click())
+    const shapePicker = page.locator('.settings-picker-shapes').first()
+    await expect(shapePicker).toBeVisible()
+    await shapePicker.locator('button:has-text("Cube")').evaluate((el) => (el as HTMLButtonElement).click())
     await page.waitForTimeout(120)
     const persisted = await page.evaluate(() => {
       const raw = localStorage.getItem('flappy-3d:v1')
@@ -60,11 +57,9 @@ test.describe('Flappy 3D — v1.5 UAT (Approachability + Customization)', () => 
 
   test('Phase 17 — Bird image defaults to null (Clear button absent)', async ({ page }) => {
     await openSettings(page)
-    // When no image is set, the "Clear" button is not rendered (see SettingsModal.tsx).
     const clearBtn = page.locator('.settings-clearimage')
     await expect(clearBtn).toHaveCount(0)
-    // And the Bird shape picker should be visible (it hides when an image is set)
-    await expect(page.locator('.settings-row').filter({ hasText: 'Bird shape' })).toBeVisible()
+    await expect(page.locator('.settings-picker-shapes')).toBeVisible()
   })
 
   test('Phase 17 — Bird image file input is present in Settings', async ({ page }) => {
@@ -98,7 +93,7 @@ test.describe('Flappy 3D — v1.5 UAT (Approachability + Customization)', () => 
     // load() applies v3→v4 migration in-memory: difficulty='normal'. SettingsModal
     // calls getSettings() which goes through that migration path. Verify Normal
     // button is the active one.
-    const normalBtn = page.locator('.settings-row').filter({ hasText: 'Difficulty' }).locator('button:has-text("Normal")')
+    const normalBtn = page.locator('.settings-picker[aria-label="Difficulty preset"]').locator('button:has-text("Normal")')
     await expect(normalBtn).toHaveAttribute('aria-pressed', 'true')
   })
 })
